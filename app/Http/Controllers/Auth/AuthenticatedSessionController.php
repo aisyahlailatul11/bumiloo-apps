@@ -12,11 +12,17 @@ use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
 {
+    /**
+     * Display the login view.
+     */
     public function create(): View
     {
         return view('auth.login');
     }
 
+    /**
+     * Handle an incoming authentication request.
+     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
@@ -24,7 +30,19 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        // Redirect kaku berdasarkan role (menghindari cache 'intended' dari role lain)
+        // 1. Amankan jika role kosong di database agar tidak error kosong polos
+        if (empty($user->role)) {
+            // Paksa logout jika akun tidak punya role jelas
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            
+            return redirect('/login')->withErrors([
+                'email' => 'Akun Anda belum memiliki role akses. Silakan hubungi IT Admin.',
+            ]);
+        }
+
+        // 2. Redirect kaku berdasarkan role (Menghindari nyangkut di kamar role lain)
         if ($user->role === 'Admin') {
             return redirect()->route('admin.dashboard'); 
         }
@@ -46,6 +64,9 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Destroy an authenticated session (Logout).
+     */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();
@@ -53,7 +74,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        // Redirect ke login agar user benar-benar keluar dari area dashboard
+        // Redirect ke login agar user benar-benar keluar dari area dashboard Bumiloo
         return redirect('/login');
     }
 }

@@ -8,7 +8,7 @@ use App\Http\Controllers\BumilController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
-// 1. Rute Home/Landing Page
+// 1. Rute Home / Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
@@ -16,7 +16,7 @@ Route::get('/', function () {
 // 2. Middleware Auth (Semua rute di dalam sini wajib login)
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // REDIRECTOR DASHBOARD
+    // REDIRECTOR DASHBOARD (Pintu utama pembagian kamar setelah login)
     Route::get('/dashboard', function () {
         $role = auth()->user()->role;
         if ($role === 'Admin') return redirect()->route('admin.dashboard');
@@ -33,44 +33,41 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // ==========================================
-    // --- GRUP ROUTE ADMIN ---
+    // --- GRUP ROUTE ADMIN (Disatukan di sini) ---
     // ==========================================
     Route::prefix('admin')->group(function () {
+        // Halaman Utama Admin
         Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
-        // Master Data
+        // Master Data Admin
         Route::prefix('master')->group(function () {
             Route::get('/pasien', [AdminController::class, 'dataPasien'])->name('master.pasien');
             Route::get('/bidan', [AdminController::class, 'dataBidan'])->name('master.bidan');
             Route::get('/hak-akses', [AdminController::class, 'hakAkses'])->name('master.hakakses');
         });
 
-        // Fitur Jadwal (Lengkap: View, Simpan, Edit, Hapus)
+        // Fitur Jadwal Kegiatan Admin
         Route::get('/jadwal', [AdminController::class, 'jadwalIndex'])->name('jadwal.index');
         Route::post('/jadwal', [AdminController::class, 'jadwalStore'])->name('jadwal.store');
         Route::put('/jadwal/{id}', [AdminController::class, 'jadwalUpdate'])->name('jadwal.update');
         Route::delete('/jadwal/{id}', [AdminController::class, 'jadwalDestroy'])->name('jadwal.destroy');
-    });
-    // Di dalam grup route admin
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
-    // ... rute yang sudah ada
-    
-    // Tambahkan rute ini:
-    Route::get('/edukasi', function () {
-        return view('admin.edukasi'); // Pastikan file views/admin/edukasi.blade.php ada
-    })->name('admin.edukasi');
 
-    Route::get('/laporan', function () {
-        return view('admin.laporan'); 
-    })->name('admin.laporan');
-});
+        // Fitur Edukasi & Laporan Admin
+        Route::get('/edukasi', function () {
+            return view('admin.edukasi'); 
+        })->name('admin.edukasi');
+
+        Route::get('/laporan', function () {
+            return view('admin.laporan'); 
+        })->name('admin.laporan');
+    });
 
     // ==========================================
     // --- GRUP ROUTE BIDAN ---
     // ==========================================
     Route::prefix('bidan')->group(function () {
         Route::get('/dashboard', [BidanController::class, 'index'])->name('bidan.dashboard');
-        // Tambahkan rute bidan lainnya di sini nanti
+        // Tambahkan rute internal bidan lainnya di bawah sini nanti
     });
 
     // ==========================================
@@ -78,13 +75,14 @@ Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     // ==========================================
     Route::prefix('bumil')->group(function () {
         Route::get('/dashboard', [BumilController::class, 'index'])->name('bumil.dashboard');
+        // Tambahkan rute internal bumil lainnya di bawah sini nanti
     });
 
-    // Fitur Pendaftaran Bumil
+    // Fitur Pendaftaran Bumil (Di luar prefix bumil karena diakses sebelum punya dashboard)
     Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
-    // PROFILE ROUTES (Agar navbar Breeze/Jetstream tidak error)
+    // PROFILE ROUTES (Bawaan Breeze agar tidak error)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

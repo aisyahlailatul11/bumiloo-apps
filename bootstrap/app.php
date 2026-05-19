@@ -18,14 +18,27 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->redirectTo(
             guests: '/login',
             users: function ($request) {
-                // Ini logic sakti biar gak salah kamar lagi
                 $user = auth()->user();
-                if ($user && $user->role === 'Admin') {
-                    return '/admin/dashboard';
-                } elseif ($user && $user->role === 'Bidan') {
-                    return '/bidan/dashboard';
+                
+                // Jika user entah bagaimana tidak punya role, tendang ke login
+                if (!$user || empty($user->role)) {
+                    return '/login';
                 }
-                return '/dashboard'; // Default jika role tidak cocok
+
+                // Logic sakti pembagian kamar Bumiloo berdasarkan Role
+                if ($user->role === 'Admin') {
+                    return '/admin/dashboard';
+                } 
+                
+                if ($user->role === 'Bidan') {
+                    return '/bidan/dashboard';
+                } 
+                
+                if ($user->role === 'Bumil') {
+                    return '/bumil/dashboard';
+                }
+
+                return '/'; // Default terakhir jika benar-benar mentok
             }
         );
     })

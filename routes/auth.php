@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+// --- RUTE UNTUK GUEST / PENGUNJUNG YANG BELUM LOGIN ---
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
@@ -35,6 +36,7 @@ Route::middleware('guest')->group(function () {
         ->name('password.store');
 });
 
+// --- RUTE UNTUK USER YANG SUDAH LOGIN (DIBATASI MIDDLEWARE AUTH BREEZE) ---
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
@@ -53,7 +55,10 @@ Route::middleware('auth')->group(function () {
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-
-    Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
-        ->name('logout');
 });
+
+// --- RUTE UTAMAKAN KELUAR (LOGOUT) ---
+// Sengaja ditaruh di luar grup middleware auth bawaan Breeze
+// Supaya proses logout tidak terhadang validasi session kaku/unverified
+Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
+    ->name('logout');

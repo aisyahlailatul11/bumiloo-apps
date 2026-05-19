@@ -70,7 +70,7 @@ class AdminController extends Controller
 
         $jadwals = Jadwal::latest()->get();
 
-        return view('jadwal.index', compact('pasien', 'jadwals', 'editJadwal'));
+        return view('admin.jadwal.index', compact('pasien', 'jadwals', 'editJadwal'));
     }
 
     public function jadwalStore(Request $request)
