@@ -49,9 +49,25 @@ class AdminController extends Controller
      */
     public function hakAkses()
     {
-        $users = User::all();
-        return view('master.hakakses', compact('users'));
+        $roles = \App\Models\User::all();
+        return view('admin.master.hakakses', compact('roles'));
     }
+    // Fungsi untuk halaman View Detail
+public function viewHakAkses($id)
+{
+    // Hanya mengambil SATU data role yang cocok dengan ID
+    $role = \App\Models\User::findOrFail($id); 
+    return view('admin.master.view', compact('role')); 
+}
+
+// Fungsi untuk halaman Edit
+public function editHakAkses($id)
+{
+    // Hanya mengambil SATU data role yang cocok dengan ID
+    $role = \App\Models\User::findOrFail($id);
+
+    return view('admin.master.edit', compact('role')); 
+}
 
     /**
      * FITUR JADWAL KONSULTASI
