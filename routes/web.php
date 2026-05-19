@@ -44,9 +44,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/pasien', [AdminController::class, 'dataPasien'])->name('master.pasien');
             Route::get('/bidan', [AdminController::class, 'dataBidan'])->name('master.bidan');
             Route::get('/hak-akses', [AdminController::class, 'hakAkses'])->name('master.hakakses');
+            Route::get('/hak-akses/create', [AdminController::class, 'createHakAkses'])->name('hakakses.create');
+            Route::get('/hak-akses/{id}/view', [AdminController::class, 'viewHakAkses'])->name('hakakses.view');
+            Route::get('/hak-akses/{id}/edit', [AdminController::class, 'editHakAkses'])->name('hakakses.edit');
         });
+<<<<<<< Updated upstream
 
         // Fitur Jadwal Kegiatan Admin
+=======
+        
+        // Fitur Jadwal (Lengkap: View, Simpan, Edit, Hapus)
+>>>>>>> Stashed changes
         Route::get('/jadwal', [AdminController::class, 'jadwalIndex'])->name('jadwal.index');
         Route::post('/jadwal', [AdminController::class, 'jadwalStore'])->name('jadwal.store');
         Route::put('/jadwal/{id}', [AdminController::class, 'jadwalUpdate'])->name('jadwal.update');
