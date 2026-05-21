@@ -45,16 +45,8 @@ Route::prefix('admin')->group(function () {
     Route::prefix('master')->group(function () {
         
         // --- FITUR PASIEN ---
-        // URL: /admin/master/pasien
-        Route::get('/pasien', [AdminController::class, 'dataPasien'])->name('master.pasien');
-        // URL: /admin/master/pasien/{id}/edit
-        Route::get('/pasien/{id}/edit', function ($id) {
-            return "Halaman Edit Pasien ID: " . $id . " (Demo Mode)";
-        })->name('pasien.edit');
-        // URL: /admin/master/pasien/{id}/destroy
-        Route::delete('/pasien/{id}/destroy', function ($id) {
-            return redirect()->back()->with('success', 'Data pasien berhasil dihapus! (Demo Mode)');
-        })->name('pasien.destroy');
+        Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
+        Route::get('/pasien/{id}/edit', [AdminController::class, 'editPasien'])->name('master.pasien.edit');
         
         // --- FITUR BIDAN ---
         // URL: /admin/master/bidan

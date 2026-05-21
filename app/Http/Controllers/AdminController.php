@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Jadwal;
 use App\Models\User;
+use App\Models\Pendaftaran;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -53,6 +54,15 @@ class AdminController extends Controller
         ];
     }
     return view('admin.master.dataBidan', compact('b'));
+}
+public function masterPasien()
+{
+    // Cukup ambil semua data dari tb_pendaftaran
+    $pasiens = Pendaftaran::all(); 
+    
+    $totalPasien = $pasiens->count();
+
+    return view('admin.master.dataPasien', compact('pasiens', 'totalPasien'));
 }
 
     /**

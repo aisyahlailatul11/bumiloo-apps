@@ -12,7 +12,7 @@ class Pendaftaran extends Model
     protected $table = 'tb_pendaftaran';
 
     protected $fillable = [
-        'user_id', // Tambahkan ini agar bisa disimpan
+        'user_id', 
         'nik',
         'nama',
         'tempat_lahir',
@@ -30,7 +30,7 @@ class Pendaftaran extends Model
         'hpht'
     ];
 
-    // Opsional: Tambahkan relasi balik ke User
+    // Relasi ke User (Jika ingin mengambil data akun yang mendaftar)
     public function user()
     {
         return $this->belongsTo(User::class);
