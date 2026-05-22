@@ -179,16 +179,29 @@
 
                     <div class="nav-links">
                         @if (Route::has('login'))
-                        {{-- Jika USER BELUM LOGIN, tampilkan pilihan Masuk atau Daftar --}}
-                        @guest
-                        <a href="{{ route('login') }}" class="btn-bumiloo btn-primary-bml">Log in</a>
-                        @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="btn-bumiloo btn-outline-bml">Register</a>
-                        @endif
-                        @endguest
+                            
+                            {{-- 🟢 KONDISI 1: JIKA USER SUDAH LOGIN --}}
+                            {{-- Biar ga kosong melompong, kita kasih tombol otomatis masuk ke gerbang utama /dashboard --}}
+                            @auth
+                                <a href="{{ url('/dashboard') }}" class="btn-bumiloo btn-primary-bml" style="display: inline-flex !important; align-items: center; gap: 8px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" style="width: 16px; height: 16px; fill: currentColor;" viewBox="0 0 24 24">
+                                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                                    </svg>
+                                    Masuk ke Aplikasi
+                                </a>
+                            @endauth
+
+                            {{-- 🟡 KONDISI 2: JIKA USER BELUM LOGIN (TAMU) --}}
+                            {{-- Tombol asli kelompokmu yang sempat hilang bakal nongol lagi di sini --}}
+                            @guest
+                                <a href="{{ route('login') }}" class="btn-bumiloo btn-primary-bml">Log in</a>
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}" class="btn-bumiloo btn-outline-bml">Register</a>
+                                @endif
+                            @endguest
+
                         @endif
                     </div>
-                </div>
 
                 <div class="visual-side">
                     <div class="image-frame">
