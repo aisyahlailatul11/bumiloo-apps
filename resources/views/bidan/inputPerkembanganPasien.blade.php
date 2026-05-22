@@ -135,7 +135,6 @@
 function validasiFormPerkembangan(event) {
     const form = document.getElementById('formPerkembangan');
     
-    // PERBAIKAN: Mendaftarkan field-field baru ke dalam sistem pengecekan wajib isi
     const kolomWajib = [
         'tanggal_pemeriksaan', 'waktu_pemeriksaan', 'usia_kehamilan', 
         'trimester', 'kehamilan_ke', 'hpht', 'hpl',
@@ -150,14 +149,14 @@ function validasiFormPerkembangan(event) {
         const input = form.querySelector(`[name="${namaKolom}"]`);
         if (input && input.value.trim() === '') {
             adaYangKosong = true;
-            input.style.borderColor = '#dc3545'; // Beri warna border merah jika kosong
+            input.style.borderColor = '#dc3545'; 
         } else if (input) {
-            input.style.borderColor = ''; // Kembalikan warna default jika diisi
+            input.style.borderColor = ''; 
         }
     });
 
     if (adaYangKosong) {
-        event.preventDefault(); // Gagalkan submit form
+        event.preventDefault(); 
         alert("Kolom tidak boleh kosong (Kecuali Catatan Tambahan)!");
         return false;
     }
@@ -165,7 +164,6 @@ function validasiFormPerkembangan(event) {
     return true;
 }
 
-// Menghilangkan pop-up alert sukses bawaan session flash secara otomatis setelah 4 detik
 setTimeout(() => {
     let alertSukses = document.querySelector('.alert');
     if (alertSukses) {

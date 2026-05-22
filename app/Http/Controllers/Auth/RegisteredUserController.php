@@ -38,7 +38,7 @@ class RegisteredUserController extends Controller
             'password' => [
                 'required', 
                 'confirmed', 
-                \Illuminate\Validation\Rules\Password::max(8)  // Minimal 8 karakter
+                \Illuminate\Validation\Rules\Password::min(8)  // Minimal 8 karakter
                     ->mixedCase()                              // Wajib ada Huruf Besar & Kecil
                     ->numbers()                                // Wajib ada Angka
                     ->symbols()                                // Wajib ada Simbol/Karakter Khusus
