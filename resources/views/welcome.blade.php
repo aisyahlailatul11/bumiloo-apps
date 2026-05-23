@@ -13,150 +13,150 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
         <style>
-            /* Mengunci mati seluruh layar biar ga ada scroll miring atau mental ke atas */
-            html, body {
-                margin: 0 !important;
-                padding: 0 !important;
-                width: 100vw !important;
-                height: 100vh !important;
-                overflow: hidden !important;
-                background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 50%, #FFF5F7 100%) !important;
-            }
+    /* Mengunci mati seluruh layar biar ga ada scroll miring atau mental ke atas */
+    html, body {
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        overflow: hidden !important;
+        background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 50%, #FFF5F7 100%) !important;
+    }
 
-            * { box-sizing: border-box !important; font-family: 'Poppins', sans-serif; }
+    * { box-sizing: border-box !important; font-family: 'Poppins', sans-serif; }
 
-            /* KUNCI TENGAH ABSOLUT: Dijamin card berada tepat di tengah-tengah layar laptop */
-            .main-wrapper {
-                position: absolute !important;
-                top: 50% !important;
-                left: 50% !important;
-                transform: translate(-50%, -50%) !important;
-                width: 90%;
-                max-width: 1024px;
-                z-index: 10;
-            }
+    /* KUNCI TENGAH ABSOLUT: Ukuran max-width diperkecil agar pas di laptop */
+    .main-wrapper {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 85%;
+        max-width: 850px; /* 💡 FIXED: Diperkecil dari 1024px agar card tidak kebesaran */
+        z-index: 10;
+    }
 
-            /* --- ANIMASI BACKGROUND BLUR --- */
-            .bg-circle {
-                position: absolute;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(248,117,170,0.15) 0%, rgba(248,117,170,0) 70%);
-                z-index: 1;
-                animation: floatCircle 8s infinite ease-in-out;
-            }
-            .circle-1 { width: 450px; height: 450px; top: -100px; left: -100px; }
-            .circle-2 { width: 550px; height: 550px; bottom: -150px; right: -150px; animation-delay: 2s; }
+    /* --- ANIMASI BACKGROUND BLUR --- */
+    .bg-circle {
+        position: absolute;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(248,117,170,0.15) 0%, rgba(248,117,170,0) 70%);
+        z-index: 1;
+        animation: floatCircle 8s infinite ease-in-out;
+    }
+    .circle-1 { width: 400px; height: 400px; top: -100px; left: -100px; }
+    .circle-2 { width: 500px; height: 500px; bottom: -150px; right: -150px; animation-delay: 2s; }
 
-            /* --- CARD UTAMA: Grid Kanan-Kiri Figma Pas --- */
-            .welcome-card {
-                background: rgba(255, 255, 255, 0.92) !important;
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.6) !important;
-                border-radius: 40px !important;
-                box-shadow: 0 35px 70px -15px rgba(248, 117, 170, 0.2) !important;
-                display: grid !important;
-                grid-template-columns: 1fr !important;
-                overflow: hidden !important;
-                animation: fadeInUp 1s ease-out;
-            }
+    /* --- CARD UTAMA: Lengkungan disesuaikan --- */
+    .welcome-card {
+        background: rgba(255, 255, 255, 0.92) !important;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.6) !important;
+        border-radius: 32px !important; /* 💡 Diperhalus dari 40px agar lebih proporsional */
+        box-shadow: 0 25px 60px -15px rgba(248, 117, 170, 0.15) !important;
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        overflow: hidden !important;
+        animation: fadeInUp 1s ease-out;
+    }
 
-            @media (min-width: 768px) {
-                .welcome-card { grid-template-columns: 1.15fr 0.85fr !important; }
-            }
+    @media (min-width: 768px) {
+        .welcome-card { grid-template-columns: 1.15fr 0.85fr !important; }
+    }
 
-            /* --- SISI KIRI: KONTEN & LOGO CENTER --- */
-            .content-side {
-                padding: 60px 45px !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important; 
-                text-align: center !important; 
-                justify-content: center !important;
-            }
+    /* --- SISI KIRI: PADDING DIPERKECIL --- */
+    .content-side {
+        padding: 40px 35px !important; /* 💡 FIXED: Diturunkan dari 60px agar ruangnya pas */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important; 
+        text-align: center !important; 
+        justify-content: center !important;
+    }
 
-            .brand-logo {
-                max-height: 80px !important; 
-                width: auto !important;
-                margin-bottom: 25px !important; 
-                display: block !important;
-                animation: bounceSoft 3s infinite ease-in-out;
-            }
+    .brand-logo {
+        max-height: 70px !important; /* 💡 Diperkecil dikit dari 80px */
+        width: auto !important;
+        margin-bottom: 20px !important; 
+        display: block !important;
+        animation: bounceSoft 3s infinite ease-in-out;
+    }
 
-            .headline {
-                font-family: 'Playfair Display', serif !important;
-                font-size: 32px !important;
-                line-height: 1.3 !important;
-                color: #1E3A5F !important;
-                margin-bottom: 16px !important;
-                font-weight: 700 !important;
-            }
-            
-            .headline span { color: #F875AA !important; font-style: italic !important; font-weight: 500 !important; }
+    .headline {
+        font-family: 'Playfair Display', serif !important;
+        font-size: 26px !important; /* 💡 FIXED: Diperkecil dari 32px agar teks tidak raksasa */
+        line-height: 1.3 !important;
+        color: #1E3A5F !important;
+        margin-bottom: 14px !important;
+        font-weight: 700 !important;
+    }
+    
+    .headline span { color: #F875AA !important; font-style: italic !important; font-weight: 500 !important; }
 
-            .paragraph {
-                font-size: 14px !important;
-                color: #64748B !important;
-                line-height: 1.7 !important;
-                margin-bottom: 35px !important;
-                max-width: 440px !important;
-            }
+    .paragraph {
+        font-size: 13px !important; /* 💡 Diperkecil dari 14px */
+        color: #64748B !important;
+        line-height: 1.6 !important;
+        margin-bottom: 25px !important; /* 💡 Dipersempit jaraknya */
+        max-width: 400px !important;
+    }
 
-            /* --- TOMBOL BALIK KE ASLI --- */
-            .nav-links { display: flex !important; gap: 14px !important; flex-wrap: wrap !important; justify-content: center !important; }
+    /* --- TOMBOL NAVIGASI --- */
+    .nav-links { display: flex !important; gap: 12px !important; flex-wrap: wrap !important; justify-content: center !important; }
 
-            .btn-bumiloo {
-                padding: 12px 30px !important;
-                border-radius: 16px !important;
-                font-size: 14px !important;
-                font-weight: 700 !important;
-                text-decoration: none !important;
-                transition: 0.3s !important;
-                display: inline-block !important;
-            }
+    .btn-bumiloo {
+        padding: 10px 26px !important; /* 💡 Padding disesuaikan lebih ramping */
+        border-radius: 14px !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        text-decoration: none !important;
+        transition: 0.3s !important;
+        display: inline-block !important;
+    }
 
-            .btn-primary-bml {
-                background-color: #f875aa !important;
-                color: white !important;
-                box-shadow: 0 8px 20px -5px rgba(248, 117, 170, 0.4) !important;
-            }
-            .btn-primary-bml:hover { transform: translateY(-2px) !important; background-color: #E91E8C !important; }
+    .btn-primary-bml {
+        background-color: #f875aa !important;
+        color: white !important;
+        box-shadow: 0 6px 15px -4px rgba(248, 117, 170, 0.4) !important;
+    }
+    .btn-primary-bml:hover { transform: translateY(-2px) !important; background-color: #E91E8C !important; }
 
-            .btn-outline-bml {
-                border: 2px solid #f875aa !important;
-                color: #f875aa !important;
-                background-color: transparent !important;
-            }
-            .btn-outline-bml:hover { background-color: rgba(248, 117, 170, 0.08) !important; transform: translateY(-2px) !important; }
+    .btn-outline-bml {
+        border: 2px solid #f875aa !important;
+        color: #f875aa !important;
+        background-color: transparent !important;
+    }
+    .btn-outline-bml:hover { background-color: rgba(248, 117, 170, 0.08) !important; transform: translateY(-2px) !important; }
 
-            /* --- SISI KANAN: FRAME FOTO SANGAT BESAR --- */
-            .visual-side {
-                background: linear-gradient(135deg, #FFF5F7 0%, #FFE4E1 100%) !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 40px !important;
-            }
+    /* --- SISI KANAN: FRAME FOTO SEIMBANG --- */
+    .visual-side {
+        background: linear-gradient(135deg, #FFF5F7 0%, #FFE4E1 100%) !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 30px !important;
+    }
 
-            /* UKURAN BESAR PRESISI: Dinaikkan ke 370px biar padat seimbang */
-            .image-frame {
-                width: 370px !important;
-                height: 370px !important;
-                border-radius: 50% !important;
-                background-color: #FFFFFF !important;
-                border: 12px solid rgba(255, 255, 255, 0.7) !important;
-                box-shadow: 0 25px 50px rgba(248, 117, 170, 0.18) !important;
-                overflow: hidden !important;
-                animation: pulseImage 5s infinite ease-in-out;
-            }
+    /* UKURAN SEIMBANG: Diturunkan agar pas dengan card baru */
+    .image-frame {
+        width: 280px !important; /* 💡 FIXED: Diturunkan dari 370px agar seimbang dan pas */
+        height: 280px !important;
+        border-radius: 50% !important;
+        background-color: #FFFFFF !important;
+        border: 8px solid rgba(255, 255, 255, 0.7) !important;
+        box-shadow: 0 20px 40px rgba(248, 117, 170, 0.12) !important;
+        overflow: hidden !important;
+        animation: pulseImage 5s infinite ease-in-out;
+    }
 
-            .image-frame img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
+    .image-frame img { width: 100% !important; height: 100% !important; object-fit: cover !important; }
 
-            /* --- ANIMASI KEYFRAMES --- */
-            @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-            @keyframes floatCircle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-            @keyframes bounceSoft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-            @keyframes pulseImage { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
-        </style>
+    /* --- ANIMASI KEYFRAMES --- */
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes floatCircle { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+    @keyframes bounceSoft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    @keyframes pulseImage { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
+</style>
     </head>
     <body>
 

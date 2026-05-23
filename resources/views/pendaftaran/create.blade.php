@@ -82,7 +82,7 @@
                     </div>
                     <div>
                         <label class="font-bold text-gray-700 ml-1">Nama</label>
-                        <input type="text" name="nama" value="{{ old('nama') }}" required placeholder="Masukkan Nama Lengkap" class="w-full mt-2 px-6 py-4 rounded-2xl input-custom">
+                        <input type="text" value="{{ auth()->user()->name }}" readonly class="form-control">
                         <x-input-error :messages="$errors->get('nama')" class="mt-1" />
                     </div>
                     <div>
