@@ -25,5 +25,9 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('fatimah123'), // 💡 Password login bidan
             'role' => 'Bidan',
         ]);
+
+        $this->call([
+            BidanSeeder::class,
+        ]);
     }
 }

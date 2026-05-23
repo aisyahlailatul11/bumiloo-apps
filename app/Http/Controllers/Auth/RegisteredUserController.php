@@ -34,7 +34,6 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             
-            // 🛠️ VALIDASI PASSWORD: Sesuai Ketentuan Ketat Kelompokmu
             'password' => [
                 'required', 
                 'confirmed', 

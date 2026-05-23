@@ -9,13 +9,14 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InputPasienController;
 use App\Http\Controllers\PerkembanganController;
+use Illuminate\Support\Facades\DB;
 
-// 1. Rute Home / Landing Page
+//Rute Home / Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// 2. Middleware Auth (Semua rute di dalam sini wajib login)
+//Middleware Auth (Semua rute di dalam sini wajib login)
 Route::middleware(['auth', 'verified'])->group(function () {
     
     // REDIRECTOR DASHBOARD (Pintu utama pembagian kamar setelah login)
@@ -24,8 +25,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         if ($role === 'Admin') return redirect()->route('admin.dashboard');
         if ($role === 'Bidan') return redirect()->route('bidan.dashboard');
         
-        // Khusus Ibu Hamil: Cek pendaftaran
-        $sudahDaftar = \Illuminate\Support\Facades\DB::table('tb_pendaftaran')
+        // Khusus Ibu Hamil: Cek apakah sudah mengisi rekam medis pendaftaran
+        $sudahDaftar = DB::table('tb_pendaftaran')
             ->where('user_id', auth()->id())
             ->exists();
             
@@ -33,6 +34,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ? redirect()->route('bumil.dashboard') 
             : redirect()->route('pendaftaran.create');
     })->name('dashboard');
+
+    //RUTE FORM PENDAFTARAN IBU HAMIL 
+    Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
+    Route::get('/pendaftaran/buat', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
+    Route::post('/pendaftaran/simpan', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
+
+    //RUTE DASHBOARD IBU HAMIL (Jika sudah sukses daftar)
+    Route::get('/bumil/dashboard', function () {
+        return view('bumil.dashboard'); // Sesuaikan dengan nama file blade dashboard bumilmu
+    })->name('bumil.dashboard');
 
     // ==========================================
     // --- GRUP ROUTE ADMIN ---
