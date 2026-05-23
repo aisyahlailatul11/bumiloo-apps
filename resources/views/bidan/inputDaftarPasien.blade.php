@@ -7,8 +7,6 @@
     .psn-table-box { width: 100% !important; border-collapse: collapse !important; min-width: 1700px !important; } 
     .psn-table-box th { background-color: #F875AA !important; color: white !important; padding: 14px 12px !important; font-weight: 600 !important; font-size: 13px !important; border: none !important; text-align: left !important; white-space: nowrap !important; }
     .psn-table-box td { padding: 14px 12px !important; font-size: 13px !important; border-bottom: 1px solid #E2E8F0 !important; background-color: #FFFFFF !important; color: #333333 !important; white-space: nowrap !important; }
-    
-    /* Efek Baris Zebra Standar Pasien Normal */
     .psn-row-normal:nth-child(even) td { background-color: #FFF5F7 !important; }
 </style>
 
@@ -51,7 +49,7 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">Umur</label>
-                <input type="number" name="umur" id="umur" class="form-control" placeholder="Otomatis Terhitung" readonly>
+                <input type="number" name="umur" id="umur" class="form-control" placeholder="" readonly>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Golongan Darah</label>
@@ -72,7 +70,7 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">No. HP</label>
-                <input type="text" name="no_hp" class="form-control" placeholder="Nomor HP" required>
+                <input type="text" name="no_hp" class="form-control" placeholder="Masukkan Nomor HP" required>
             </div>
         </div>
         
@@ -84,8 +82,10 @@
                     <option value="SD">SD</option>
                     <option value="SMP">SMP</option>
                     <option value="SMA">SMA</option>
-                    <option value="Diploma">Diploma</option>
-                    <option value="S1">S1</option>
+                    <option value="Diploma">D3</option>
+                    <option value="S1">S1/D4</option>
+                    <option value="S2">S2</option>
+                    <option value="S3">S3</option>
                 </select>
             </div>
             <div class="col-md-6">
@@ -93,8 +93,7 @@
                 <select name="agama" class="form-select" required>
                     <option value="">-- Pilih Agama --</option>
                     <option value="Islam">Islam</option>
-                    <option value="Kristen Katolik">Kristen Katolik</option>
-                    <option value="Kristen Protestan">Kristen Protestan</option>
+                    <option value="Kristen">Kristen</option>
                     <option value="Hindu">Hindu</option>
                     <option value="Konghucu">Konghucu</option>
                     <option value="Budha">Budha</option>
@@ -103,13 +102,24 @@
         </div>
         
         <div class="row mb-4">
-            <div class="col-md-6">
+            <div class="col-md-6" x-data="{ job: '' }">
                 <label class="form-label">Pekerjaan</label>
-                <input type="text" name="pekerjaan" class="form-control" placeholder="Pekerjaan" required>
+                <select name="pekerjaan" x-model="job" required 
+                class="form-select">
+                <option value="" disabled selected>-- Pilih Pekerjaan --</option>
+                <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                <option value="PNS">PNS</option>
+                <option value="Wiraswasta">Wiraswasta</option>
+                <option value="Lainnya">Lainnya</option>
+            </select>
+            <input x-show="job === 'Lainnya'" type="text" name="pekerjaan_lainnya"
+               placeholder="Masukkan Pekerjaan" 
+               class="form-control mt-3 rounded-2xl border border-pink-200 bg-white">
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nama Suami</label>
-                <input type="text" name="nama_suami" class="form-control" placeholder="Nama Suami" required>
+                <input type="text" name="nama_suami" class="form-control" 
+                placeholder="Nama Suami" required>
             </div>
         </div>
 
@@ -176,7 +186,6 @@
 </div>
 
 <script>
-// 1. Ambil data pasien saat baris tabel di-klik (Gunakan routing dinamis Laravel)
 function isiForm(id) {
     fetch('/bidan/pasien/' + id)
         .then(response => {
@@ -199,7 +208,6 @@ function isiForm(id) {
             document.querySelector('[name="pekerjaan"]').value = data.pekerjaan;
             document.querySelector('[name="nama_suami"]').value = data.nama_suami;
 
-            // ON-kan Tombol Selanjutnya secara otomatis
             const btnSelanjutnya = document.getElementById('btnSelanjutnya');
             if (btnSelanjutnya) {
                 btnSelanjutnya.classList.remove('btn-secondary', 'disabled');
@@ -207,7 +215,6 @@ function isiForm(id) {
                 btnSelanjutnya.style.color = 'white';
             }
 
-            // Ubah teks tombol "+ Tambah" menjadi "Perbarui Data"
             const btnSimpan = document.getElementById('btnSimpan');
             if (btnSimpan) {
                 btnSimpan.innerHTML = '<i class="fas fa-save"></i> Perbarui Data';
@@ -222,11 +229,9 @@ function isiForm(id) {
         });
 }
 
-// 2. Navigasi Tombol Selanjutnya
 function keHalamanSelanjutnya() {
     const idPasien = document.getElementById('id_pasien').value;
     
-    // PERBAIKAN: Mengarahkan nama route ke 'bidan.inputPerkembanganPasien' (yang bertipe GET)
     if (idPasien) {
         window.location.href = "{{ route('bidan.inputPerkembanganPasien') }}?pasien_id=" + idPasien;
     } else {
@@ -234,7 +239,6 @@ function keHalamanSelanjutnya() {
     }
 }
 
-// 3. Tombol Reset Form
 function resetFormPasien() {
     const form = document.getElementById('formPasien');
     if(form) form.reset();
@@ -246,14 +250,12 @@ function resetFormPasien() {
         noPasienInput.value = "{{ $noPasienOtomatis ?? '' }}";
     }
 
-    // Kembalikan tombol selanjutnya ke kondisi OFF
     const btnSelanjutnya = document.getElementById('btnSelanjutnya');
     if (btnSelanjutnya) {
         btnSelanjutnya.className = 'btn btn-secondary disabled';
         btnSelanjutnya.style.backgroundColor = '';
     }
 
-    // Kembalikan tombol simpan ke kondisi "+ Tambah"
     const btnSimpan = document.getElementById('btnSimpan');
     if (btnSimpan) {
         btnSimpan.innerHTML = '<i class="fas fa-plus"></i> Tambah';
@@ -261,7 +263,6 @@ function resetFormPasien() {
     }
 }
 
-// 4. Validasi bawaan form html
 function validasiFormBumil(event) {
     const form = document.getElementById('formPasien');
     if (!form.checkValidity()) {
@@ -272,13 +273,11 @@ function validasiFormBumil(event) {
     return true; 
 } 
 
-// 5. Fitur Hitung Umur Otomatis & Cek Kelengkapan Mengetik Manual
 document.addEventListener('DOMContentLoaded', function() {
     const inputTanggalLahir = document.getElementById('tanggal_lahir');
     const inputUmur = document.getElementById('umur');
     const seluruhInputForm = document.querySelectorAll('#formPasien input[required], #formPasien select[required]');
 
-    // Fungsi pemantau ketikan manual (Pasien Baru)
     function periksaKelengkapanForm() {
         let semuaSudahIsi = true;
         seluruhInputForm.forEach(input => {
@@ -302,7 +301,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Pasang dengerin event ngetik di form
     seluruhInputForm.forEach(input => {
         input.addEventListener('input', periksaKelengkapanForm);
         input.addEventListener('change', periksaKelengkapanForm);
@@ -342,6 +340,10 @@ document.addEventListener('DOMContentLoaded', function() {
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 @endif
+
+@if(session('edited_id'))
+        isiForm("{{ session('edited_id') }}");
+    @endif
 
 <script>
     setTimeout(() => {
