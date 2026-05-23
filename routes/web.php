@@ -40,11 +40,26 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/pendaftaran/buat', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
     Route::post('/pendaftaran/simpan', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
-    //RUTE DASHBOARD IBU HAMIL (Jika sudah sukses daftar)
-    Route::get('/bumil/dashboard', function () {
-        return view('bumil.dashboard'); // Sesuaikan dengan nama file blade dashboard bumilmu
-    })->name('bumil.dashboard');
+    // ==========================================
+    // --- GRUP ROUTE IBU HAMIL (BUMIL) ---
+    // ==========================================
+    Route::prefix('bumil')->group(function () {
 
+    Route::get('/dashboard', [BumilController::class, 'index'])
+        ->name('bumil.dashboard');
+
+    // RIWAYAT PERKEMBANGAN
+    Route::get('/riwayat-perkembangan', [BumilController::class, 'riwayatPerkembangan'])
+        ->name('bumil.riwayatPerkembangan');
+
+    // DETAIL PEMERIKSAAN
+    Route::get('/riwayat-perkembangan/detail/{id}', [BumilController::class, 'detailRiwayatPerkembangan'])
+        ->name('bumil.detailRiwayatPerkembangan');
+
+    // HPL
+    Route::get('/hpl', [BumilController::class, 'hpl'])
+    ->name('bumil.hpl');
+});
     // ==========================================
     // --- GRUP ROUTE ADMIN ---
     // ==========================================
