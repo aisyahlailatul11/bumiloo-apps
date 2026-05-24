@@ -10,13 +10,18 @@ class InputPasienController extends Controller
     // 1. Menampilkan halaman form & tabel pasien
     public function indexPasien()
     {
+        // Urutkan berdasarkan data yang paling baru dimasukkan agar bidan gampang melihatnya
         $pasien = Pasien::latest()->get(); 
+
+        // Membuat No Pasien otomatis di awal halaman (Misal: 00005)
         $totalPasien = Pasien::count() + 1;
         $noPasienOtomatis = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
 
+        // Mengarahkan ke file blade inputDaftarPasien di folder bidan
         return view('bidan.inputDaftarPasien', compact('pasien', 'noPasienOtomatis'));
     }
 
+    // 2. Menyimpan data baru ATAU mengupdate data lama saat tombol diklik
     public function storePasien(Request $request)
     {
         // Validasi: NIK harus 16 digit dan tidak boleh kembar di database
@@ -31,7 +36,7 @@ class InputPasienController extends Controller
             'alamat' => 'required',
             'no_hp' => 'required',
         ], [
-            'nik.unique' => 'NIK sudah terpakai!',
+            'nik.unique' => 'NIK ini sudah terdaftar di sistem Bumiloo!',
             'nik.digits' => 'NIK harus berjumlah 16 digit angka.',
             'nik.required' => 'Kolom NIK wajib diisi.',
             'nama_pasien.required' => 'Nama Pasien wajib diisi.',
@@ -69,9 +74,8 @@ class InputPasienController extends Controller
         // Jika yang diedit/diperbarui adalah PASIEN LAMA, langsung oper otomatis ke menu selanjutnya
         // Jika yang diedit/diperbarui adalah PASIEN LAMA, langsung oper otomatis ke menu selanjutnya
 if ($request->id) {
-    return redirect()->back()
-    ->with('sukses', 'Data Ibu Hamil Berhasil Diperbarui!')
-    ->with('edited_id', $pasienSimpan->id);
+    return redirect()->route('bidan.inputPerkembanganPasien', ['pasien_id' => $pasienSimpan->id])
+                     ->with('sukses', 'Data Ibu Hamil Berhasil Diperbarui!');
 }
 
 // Jika pasien BARU, biarkan tetap di halaman ini agar pop-up sukses muncul di atas tabel
