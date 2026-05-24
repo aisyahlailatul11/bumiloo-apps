@@ -14,60 +14,44 @@ class PendaftaranController extends Controller
     }
 
     public function store(Request $request)
-{
-    // 1. ATURAN VALIDASI (Menentukan syarat field wajib dan panjang karakter)
-    $validated = $request->validate([
-        // Syarat NIK: Wajib diisi, harus unik di tb_pendaftaran, panjangnya minimal 16 dan maksimal 16 digit
-        'nik' => 'required|unique:tb_pendaftaran|digits:16', 
-        
-        // Field lain yang wajib diisi (required)
-        'nama' => 'required',
-        'tempat_lahir' => 'required',
-        'tgl_lahir' => 'required|date',
-        'umur' => 'required|integer',
-        'alamat' => 'required',
-        'no_hp' => 'required',
-        'agama' => 'required',
-        'pendidikan' => 'required',
-        'gol_darah' => 'required',
-        'pekerjaan' => 'required',
-        'nama_suami' => 'required',
-        'tgllahir_suami' => 'required|date',
-        'usia_suami' => 'required|integer',
-        'hpht' => 'required|date',
-    ], [
-        // 2. KUSTOMISASI PERINGATAN / PESAN ERROR (Tampil kalau inputan salah)
-        'nik.required' => 'NIK wajib diisi dan tidak boleh kosong.',
-        'nik.unique' => 'NIK ini sudah terdaftar di sistem Bumiloo.',
-        'nik.digits' => 'Format salah! Nomor NIK harus tepat berukuran 16 digit.', // Ini peringatan untuk aturan 16 digitnya!
-        
-        'nama.required' => 'Nama lengkap ibu hamil wajib diisi.',
-        'tempat_lahir.required' => 'Tempat lahir wajib diisi.',
-        'tgl_lahir.required' => 'Tanggal lahir wajib ditentukan.',
-        'umur.required' => 'Umur wajib diisi.',
-        'alamat.required' => 'Alamat lengkap tempat tinggal wajib diisi.',
-        'no_hp.required' => 'Nomor HP aktif wajib diisi.',
-        'agama.required' => 'Agama wajib dipilih.',
-        'pendidikan.required' => 'Pendidikan terakhir wajib dipilih.',
-        'gol_darah.required' => 'Golongan darah wajib dipilih.',
-        'pekerjaan.required' => 'Pekerjaan wajib diisi atau dipilih.',
-        'nama_suami.required' => 'Nama suami wajib diisi.',
-        'tgllahir_suami.required' => 'Tanggal lahir suami wajib ditentukan.',
-        'usia_suami.required' => 'Usia suami wajib diisi.',
-        'hpht.required' => 'Tanggal HPHT wajib ditentukan untuk menghitung usia kehamilan.',
-    ]);
+    {
+        // 1. Validasi Data
+        $validated = $request->validate([
+            'nik' => 'required|unique:tb_pendaftaran,nik|digits:16', 
+            'nama' => 'required|string|max:255',
+            'tempat_lahir' => 'required|string',
+            'tgl_lahir' => 'required|date',
+            'umur' => 'required|integer',
+            'alamat' => 'required|string',
+            'no_hp' => 'required|string|max:20',
+            'agama' => 'required|string',
+            'pendidikan' => 'required|string',
+            'gol_darah' => 'required|string',
+            'pekerjaan' => 'required|string',
+            'nama_suami' => 'required|string|max:255',
+            'tgllahir_suami' => 'required|date',
+            'usia_suami' => 'required|integer',
+            'hpht' => 'required|date',
+        ], [
+            'nik.unique' => 'NIK ini sudah terdaftar di sistem Bumiloo.',
+            'nik.digits' => 'NIK harus tepat 16 digit.',
+            // Tambahkan pesan error lain jika perlu
+        ]);
 
-    // Mengambil ID user ibu hamil yang sedang login
-    $validated['user_id'] = Auth::id();
+        // 2. Logika Pekerjaan
+        // Kita gunakan $request->pekerjaan karena sudah tervalidasi
+        // Jika pilih 'Lainnya', kita ganti nilainya dengan input 'pekerjaan_lainnya'
+        if ($request->pekerjaan === 'Lainnya') {
+            $validated['pekerjaan'] = $request->input('pekerjaan_lainnya', 'Lainnya');
+        }
 
-    if ($request->pekerjaan === 'lainnya') {
-        $validated['pekerjaan'] = $request->pekerjaan_lainnya;
+        // 3. Tambahkan user_id
+        $validated['user_id'] = Auth::id();
+
+        // 4. Simpan ke Database
+        Pendaftaran::create($validated);
+
+        // 5. Arahkan ke Dashboard
+        return redirect()->route('bumil.dashboard')->with('success', 'Pendaftaran rekam medis berhasil disimpan!');
     }
-
-    // Eksekusi simpan ke database lewat Eloquent Model
-    Pendaftaran::create($validated);
-
-    // Arahkan dengan selamat ke dashboard ibu hamil
-    return redirect()->route('bumil.dashboard')->with('success', 'Pendaftaran rekam medis berhasil disimpan!');
-}
 }

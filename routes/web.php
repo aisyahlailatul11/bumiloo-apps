@@ -16,24 +16,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// 2. Middleware Auth (Semua rute di dalam sini wajib login)
+// 2. Middleware Auth
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // REDIRECTOR DASHBOARD (Pintu utama pembagian kamar setelah login)
+    // REDIRECTOR DASHBOARD
     Route::get('/dashboard', function () {
-        $role = auth()->user()->role;
-        if ($role === 'Admin') return redirect()->route('admin.dashboard');
-        if ($role === 'Bidan') return redirect()->route('bidan.dashboard');
+        $user = auth()->user();
+
+        // Cek Role terlebih dahulu
+        if ($user->role === 'Admin') return redirect()->route('admin.dashboard');
+        if ($user->role === 'Bidan') return redirect()->route('bidan.dashboard');
         
         // Khusus Ibu Hamil: Cek pendaftaran
         $sudahDaftar = \Illuminate\Support\Facades\DB::table('tb_pendaftaran')
-            ->where('user_id', auth()->id())
+            ->where('user_id', $user->id)
             ->exists();
             
         return $sudahDaftar
             ? redirect()->route('bumil.dashboard')
             : redirect()->route('pendaftaran.create');
     })->name('dashboard');
+
+    // Pastikan rute-rute ini sudah terdaftar di bawah sini
+    // Contoh:
+    // Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
+});
 
     // ==========================================
     // --- GRUP ROUTE IBU HAMIL (BUMIL) ---
@@ -83,16 +90,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('/bidan/{id}/update', function ($id) {
                 return redirect()->back()->with('success', 'Data bidan berhasil diperbarui! (Demo Mode)');
             })->name('bidan.update');
-
-            // --- FITUR HAK AKSES ---
-            // URL: /admin/master/hak-akses
-            Route::get('/hak-akses', [AdminController::class, 'hakAkses'])->name('master.hakakses');
-            // URL: /admin/master/hak-akses/create
-            Route::get('/hak-akses/create', [AdminController::class, 'createHakAkses'])->name('hakakses.create');
-            // URL: /admin/master/hak-akses/{id}/view
-            Route::get('/hak-akses/{id}/view', [AdminController::class, 'viewHakAkses'])->name('hakakses.view');
-            // URL: /admin/master/hak-akses/{id}/edit
-            Route::get('/hak-akses/{id}/edit', [AdminController::class, 'editHakAkses'])->name('hakakses.edit');
         });
 
         // Fitur Jadwal Kegiatan Admin -> URL: /admin/jadwal
@@ -191,7 +188,6 @@ Route::get('/pengaturan/bantuan', function () {
     $role = auth()->user()->role;
     return view('partials.subsettings.bantuan', compact('role'));
 })->name('pengaturan.bantuan');
-});
 
 // Logout Route (Menggunakan Controller yang sudah kita perbaiki)
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

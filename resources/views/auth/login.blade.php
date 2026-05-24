@@ -79,6 +79,16 @@
                     <x-input-error :messages="$errors->get('password')" class="mt-1 ml-2" />
                 </div>
 
+                 <div>
+                    <label class="block text-[10px] font-bold text-gray-400 mb-1 ml-1 uppercase">Confirm Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">✅</span>
+                        <input type="password" name="password_confirmation" required 
+                        class="w-full pl-12 pr-4 py-2 border border-pink-200 bg-white rounded-[18px] focus:border-pink-400 focus:ring-0 outline-none transition-all shadow-sm shadow-pink-50" 
+                        placeholder="Ulangi password Anda">
+                    </div>
+                </div>
+
                 <div>
                     <label class="block text-[10px] font-bold text-gray-400 mb-1 ml-1 uppercase">Role</label>
                     <div class="relative">
