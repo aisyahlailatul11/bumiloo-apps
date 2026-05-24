@@ -9,7 +9,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InputPasienController;
 use App\Http\Controllers\PerkembanganController;
-use App\Http\Controllers\PengaturanController;
+use Illuminate\Support\Facades\DB;
 
 // 1. Rute Home / Landing Page
 Route::get('/', function () {
@@ -36,7 +36,31 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     // ==========================================
-    // --- GRUP ROUTE ADMIN (Disatukan di sini) ---
+    // --- GRUP ROUTE IBU HAMIL (BUMIL) ---
+    // ==========================================
+    Route::prefix('bumil')->group(function () {
+
+    Route::get('/dashboard', [BumilController::class, 'index'])
+        ->name('bumil.dashboard');
+
+    // RIWAYAT PERKEMBANGAN
+    Route::get('/riwayat-perkembangan', [BumilController::class, 'riwayatPerkembangan'])
+        ->name('bumil.riwayatPerkembangan');
+
+    // DETAIL PEMERIKSAAN
+    Route::get('/riwayat-perkembangan/detail/{id}', [BumilController::class, 'detailRiwayatPerkembangan'])
+        ->name('bumil.detailRiwayatPerkembangan');
+
+    // HPL
+    Route::get('/hpl', [BumilController::class, 'hpl'])
+    ->name('bumil.hpl');
+
+    // KONSULTASI PASIEN
+    Route::get('/konsultasi', [BidanKonsultasiController::class, 'indexBumil'])
+    ->name('bumil.konsultasi');
+});
+    // ==========================================
+    // --- GRUP ROUTE ADMIN ---
     // ==========================================
     Route::prefix('admin')->group(function () {
         
@@ -49,7 +73,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // --- FITUR PASIEN ---
             Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
             Route::get('/pasien/{id}/edit', [AdminController::class, 'editPasien'])->name('master.pasien.edit');
-            
+
             // --- FITUR BIDAN ---
             // URL: /admin/master/bidan
             Route::get('/bidan', [AdminController::class, 'dataBidan'])->name('master.dataBidan');

@@ -1,20 +1,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <style>
-/* 🌸 MINI-FOOTER CENTER TRANSPARAN */
+/* 🌸 FOOTER TETAP (RELATIVE) */
 .bumiloo-footer {
-    position: absolute !important;
-    bottom: 0 !important;
-    left: 0 !important;
     width: 100% !important;
     background: rgba(255, 255, 255, 0.4) !important;
-    /* Efek kaca tipis */
     backdrop-filter: blur(10px);
     border-top: 1px solid rgba(248, 117, 170, 0.15) !important;
     color: #1E3A5F !important;
-    /* Biru navy biar elegan */
-    padding: 12px 20px !important;
-    z-index: 100;
+    padding: 20px 20px !important;
+    margin-top: auto !important; /* INI KUNCI UTAMA: Mendorong footer ke bawah */
 }
 
 .footer-content {

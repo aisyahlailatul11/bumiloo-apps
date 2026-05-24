@@ -20,6 +20,7 @@
         <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700" rel="stylesheet" />
 
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 
 
@@ -374,6 +375,35 @@
                 </div>
             </div>
         </div>
+<<<<<<< HEAD
+        <div id="tentangKlinik" class="modal-overlay">
+    <div class="modal-box">
+        <a href="#" class="modal-close">&times;</a>
+        
+        <div class="modal-header">
+            <div style="width: 80px; height: 80px; background-color: #FFF5F7; border: 3px solid #FFE4E1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; box-shadow: 0 8px 20px rgba(248, 117, 170, 0.15);">
+                <i class="fas fa-user-md" style="font-size: 36px; color: #f875aa;"></i></div>
+            <h3>Praktik Bidan Mandiri Siti Fatimah</h3>
+            <span class="badge-akreditasi">Terakreditasi - A</span>
+        </div>
+
+        <div class="modal-body">
+            <p class="modal-bio">
+                "Bidan berpengalaman 15 tahun, spesialisasi ibu dan anak. Menyediakan layanan prenatal, postnatal, dan KB dengan sistem terintegrasi."
+            </p>
+            <div class="modal-info-row">
+                <strong><i class="fas fa-clock" style="color: #f875aa;"></i> Jadwal Praktik:</strong>
+                <span>Senin-Jumat (08:00 - 16:00 WIB)</span>
+            </div>
+            <div class="modal-info-row">
+                <strong><i class="fas fa-map-marker-alt" style="color: #f875aa;"></i> Alamat Klinik:</strong>
+                <span>Jl. Melati No. 5, Kecamatan Patrang, Kab. Jember</span>
+            </div>
+        </div>
+    </div>
+</div>
+=======
+>>>>>>> 02785db6db7727b3b78913b8140caeec5eba4f85
     </body>
 </html>
 
