@@ -35,4 +35,23 @@ class Pendaftaran extends Model
     {
         return $this->belongsTo(User::class);
     }
-}
+
+    // --- TARUH DI SINI (Di bawah fungsi user) ---
+    /**
+     * Accessor untuk menghitung usia kehamilan secara otomatis dari kolom hpht
+     */
+    public function getUsiaKehamilanAttribute()
+    {
+        if (!$this->hpht) {
+            return '0 Minggu';
+        }
+
+        $tanggalHpht = \Carbon\Carbon::parse($this->hpht);
+        $sekarang = \Carbon\Carbon::now();
+        
+        // Menghitung selisih minggu dari HPHT sampai sekarang
+        $selisihMinggu = $tanggalHpht->diffInWeeks($sekarang);
+
+        return $selisihMinggu . ' Minggu';
+    }
+} // <-- Ini kurung kurawal tutup paling akhir dari class Pendaftaran

@@ -22,117 +22,105 @@
         <h5 class="fw-bold text-pink mb-3">Data Pemeriksaan</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <label class="form-label">Tanggal Pemeriksaan <span class="text-danger">*</span></label>
-                <input type="date" name="tanggal_pemeriksaan" class="form-control" required>
+                <label class="form-label">Tanggal Pemeriksaan</label>
+                <input type="date" name="tanggal_pemeriksaan" class="form-control">
             </div>
             <div class="col-md-6">
-                <label class="form-label">Waktu Pemeriksaan <span class="text-danger">*</span></label>
-                <input type="time" name="waktu_pemeriksaan" class="form-control" required>
+                <label class="form-label">Waktu Pemeriksaan</label>
+                <input type="time" name="waktu_pemeriksaan" class="form-control">
             </div>
         </div>
 
         <h5 class="fw-bold text-pink mb-3">Data Kehamilan</h5>
         <div class="row mb-3">
             <div class="col-md-4">
-                <label class="form-label">Usia Kehamilan <span class="text-danger">*</span></label>
-                <select name="usia_kehamilan" id="select_usia_kehamilan" class="form-select" required>
-                    <option value="">-- Usia Kehamilan --</option>
-                    @for ($i = 1; $i <= 40; $i++)
-                        <option value="{{ $i }}">{{ $i }} minggu</option>
-                    @endfor
-                </select>
+                <label class="form-label">Usia Kehamilan</label>
+                <input type="text" name="usia_kehamilan" class="form-control" placeholder="Minggu / Hari">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Trimester</label>
-                <input type="number" name="trimester" id="select_trimester" class="form-control" style="background-color: #e9ecef; pointer-events: none;" tabindex="-1" readonly required>
+                <input type="number" name="trimester" class="form-control" placeholder="1 / 2 / 3">
             </div>
             <div class="col-md-4">
-                <label class="form-label">Kehamilan Ke- (Gravida) <span class="text-danger">*</span></label>
-                <select name="kehamilan_ke" class="form-select" required>
-                    <option value="">-- Kehamilan Ke- --</option>
-                    @for ($i = 1; $i <= 13; $i++)
-                        <option value="{{ $i }}">{{ $i }}</option>
-                    @endfor
-                </select>
+                <label class="form-label">Kehamilan Ke- (Gravida)</label>
+                <input type="number" name="kehamilan_ke" class="form-control" placeholder="Contoh: 1">
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label class="form-label">HPHT</label>
+                <input type="date" name="hpht" class="form-control">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">HPL</label>
+                <input type="date" name="hpl" class="form-control">
             </div>
         </div>
 
         <h5 class="fw-bold text-pink mb-3">Riwayat Kesehatan</h5>
         <div class="row mb-3">
             <div class="col-md-6">
-                <label class="form-label">Riwayat Penyakit <span class="text-danger">*</span></label>
-                <select id="select_riwayat_penyakit" class="form-select mb-2">
-                    <option value="-">-- Riwayat Penyakit --</option>
-                    <option value="-">Tidak Ada (-)</option>
-                    <option value="Hipertensi">Hipertensi</option>
-                    <option value="Diabetes">Diabetes</option>
-                    <option value="Jantung">Jantung</option>
-                    <option value="Paru-Paru">Paru-Paru</option>
-                    <option value="Kanker">Kanker</option>
-                    <option value="Lainnya">Lainnya...</option>
-                </select>
-                <input type="text" name="riwayat_penyakit" id="input_riwayat_penyakit" 
-                       class="form-control" value="-" readonly 
-                       placeholder="Pilih 'Lainnya' untuk mengetik manual" style="background-color: #e9ecef;" required>
+                <label class="form-label">Riwayat Penyakit</label>
+                <input type="text" name="riwayat_penyakit" class="form-control" placeholder="Tulis (-) jika tidak ada">
             </div>
             <div class="col-md-6">
-                <label class="form-label">Riwayat Alergi <span class="text-danger">*</span></label>
-                <input type="text" name="riwayat_alergi" class="form-control" placeholder="Tulis (-) jika tidak ada" required>
+                <label class="form-label">Riwayat Alergi</label>
+                <input type="text" name="riwayat_alergi" class="form-control" placeholder="Tulis (-) jika tidak ada">
             </div>
         </div>
 
         <h5 class="fw-bold text-pink mb-3">Hasil Pemeriksaan</h5>
         <div class="row mb-3">
             <div class="col-md-3">
-                <label class="form-label">Berat Badan (kg) <span class="text-danger">*</span></label>
-                <input type="number" step="0.01" name="berat_badan" id="berat_badan" class="form-control" required>
+                <label class="form-label">Berat Badan (kg)</label>
+                <input type="number" step="0.01" name="berat_badan" class="form-control">
             </div>
             <div class="col-md-3">
-                <label class="form-label">Tinggi Badan (cm) <span class="text-danger">*</span></label>
-                <input type="number" step="0.01" name="tinggi_badan" id="tinggi_badan" class="form-control" required>
+                <label class="form-label">Tinggi Badan (cm)</label>
+                <input type="number" step="0.01" name="tinggi_badan" class="form-control">
             </div>
             <div class="col-md-3">
                 <label class="form-label">IMT (Indeks Massa Tubuh)</label>
-                <input type="number" step="0.01" name="imt" id="imt" class="form-control" placeholder="Otomatis" readonly style="background-color: #e9ecef;" required>
+                <input type="number" step="0.01" name="imt" class="form-control" placeholder="Otomatis / Manual">
             </div>
             <div class="col-md-3">
-                <label class="form-label">Tekanan Darah (mmHg) <span class="text-danger">*</span></label>
-                <input type="text" name="tekanan_darah" class="form-control" placeholder="Contoh: 120/80" required>
+                <label class="form-label">Tekanan Darah (mmHg)</label>
+                <input type="text" name="tekanan_darah" class="form-control">
             </div>
         </div>
         <div class="row mb-3">
             <div class="col-md-4">
-                <label class="form-label">Tinggi Fundus Uteri (cm) <span class="text-danger">*</span></label>
-                <input type="number" step="0.01" name="tinggi_fundus" class="form-control" required>
+                <label class="form-label">Tinggi Fundus Uteri (cm)</label>
+                <input type="number" name="tinggi_fundus" class="form-control">
             </div>
             <div class="col-md-4">
-                <label class="form-label">LILA (Lingkar Lengan Atas - cm) <span class="text-danger">*</span></label>
-                <input type="number" step="0.01" min="10" max="99.99" name="lila" class="form-control" placeholder="Contoh: 23.5" required>
+                <label class="form-label">LILA (Lingkar Lengan Atas - cm)</label>
+                <input type="number" step="0.01" name="lila" class="form-control">
             </div>
             <div class="col-md-4">
-                <label class="form-label">DJJ (x/menit) <span class="text-danger">*</span></label>
-                <input type="number" name="djj" class="form-control" required>
+                <label class="form-label">DJJ (x/menit)</label>
+                <input type="number" name="djj" class="form-control">
             </div>
         </div>
 
-        <h5 class="fw-bold text-pink mb-3">Keluhan <span class="text-danger">*</span></label>
-        <textarea name="keluhan" class="form-control mb-3" rows="3" placeholder="Tuliskan keluhan pasien" required></textarea>
+        <h5 class="fw-bold text-pink mb-3">Keluhan</h5>
+        <textarea name="keluhan" class="form-control mb-3" rows="3" placeholder="Tuliskan keluhan pasien"></textarea>
 
-        <h5 class="fw-bold text-pink mb-3">Tindakan / Saran Bidan <span class="text-danger">*</span></label>
+        <h5 class="fw-bold text-pink mb-3">Tindakan / Saran Bidan</h5>
         <textarea name="tindakan" class="form-control mb-3" rows="3" placeholder="Tuliskan saran atau tindakan"></textarea>
 
-        <h5 class="fw-bold text-pink mb-3">Obat yang Diberikan <span class="text-danger">*</span></label>
-        <textarea name="obat" class="form-control mb-3" rows="2" placeholder="Tuliskan obat yang diberikan" required></textarea>
+        <h5 class="fw-bold text-pink mb-3">Obat yang Diberikan</h5>
+        <textarea name="obat" class="form-control mb-3" rows="2" placeholder="Tuliskan obat yang diberikan"></textarea>
 
         <h5 class="fw-bold text-pink mb-3">Catatan Tambahan</h5>
-        <textarea name="catatan_tambahan" class="form-control mb-3" rows="2" placeholder="Catatan tambahan (Opsional)"></textarea>
+        <textarea name="catatan_tambahan" class="form-control mb-3" rows="2" placeholder="Catatan tambahan"></textarea>
 
         <div class="text-end gap-2 d-flex justify-content-end">
             <a href="{{ route('bidan.inputDaftarPasien') }}" class="btn btn-secondary">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
             
-            <button type="reset" class="btn btn-warning text-dark" id="btnResetForm">
+            <button type="reset" class="btn btn-warning text-dark">
                 <i class="fas fa-undo me-1"></i> Reset
             </button>
             
@@ -144,88 +132,12 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const inputBB = document.getElementById('berat_badan');
-    const inputTB = document.getElementById('tinggi_badan');
-    const inputIMT = document.getElementById('imt');
-    const selectPenyakit = document.getElementById('select_riwayat_penyakit');
-    const inputPenyakit = document.getElementById('input_riwayat_penyakit');
-    const selectUsiaKehamilan = document.getElementById('select_usia_kehamilan');
-    const inputTrimester = document.getElementById('select_trimester');
-    const btnReset = document.getElementById('btnResetForm');
-
-    if (selectUsiaKehamilan && inputTrimester) {
-        selectUsiaKehamilan.addEventListener('change', function() {
-            const minggu = parseInt(this.value);
-            if (!minggu) {
-                inputTrimester.value = "";
-            } else if (minggu >= 1 && minggu <= 12) {
-                inputTrimester.value = "1";
-            } else if (minggu >= 13 && minggu <= 27) {
-                inputTrimester.value = "2";
-            } else if (minggu >= 28) {
-                inputTrimester.value = "3";
-            }
-        });
-    }
-    if (selectPenyakit && inputPenyakit) {
-        selectPenyakit.addEventListener('change', function() {
-            if (this.value === 'Lainnya') {
-                inputPenyakit.readOnly = false;
-                inputPenyakit.value = '';
-                inputPenyakit.style.backgroundColor = '#ffffff'; 
-                inputPenyakit.placeholder = 'Silakan ketik riwayat penyakit di sini...';
-                inputPenyakit.focus(); 
-            } else {
-                inputPenyakit.readOnly = true;
-                inputPenyakit.value = this.value;
-                inputPenyakit.style.backgroundColor = '#e9ecef';
-                inputPenyakit.placeholder = "Pilih 'Lainnya' untuk mengetik";
-            }
-        });
-    }
-
-    function hitungIMT() {
-        const bb = parseFloat(inputBB.value);
-        const tb = parseFloat(inputTB.value) / 100; 
-        if (bb > 0 && tb > 0) {
-            const imt = bb / (tb * tb);
-            inputIMT.value = imt.toFixed(2);
-        } else {
-            inputIMT.value = '';
-        }
-    }
-
-    if (inputBB && inputTB) {
-        inputBB.addEventListener('input', hitungIMT); 
-        inputTB.addEventListener('input', hitungIMT); 
-    }
-
-    if (btnReset) {
-        btnReset.addEventListener('click', function() {
-            setTimeout(() => {
-                hitungIMT();
-                if (inputPenyakit) {
-                    inputPenyakit.readOnly = true;
-                    inputPenyakit.value = '-';
-                    inputPenyakit.style.backgroundColor = '#e9ecef';
-                }
-                if (inputTrimester) {
-                    inputTrimester.value = '';
-                }
-            }, 10);
-        });
-    }
-
-    hitungIMT();
-});
-
 function validasiFormPerkembangan(event) {
     const form = document.getElementById('formPerkembangan');
     
     const kolomWajib = [
         'tanggal_pemeriksaan', 'waktu_pemeriksaan', 'usia_kehamilan', 
-        'trimester', 'kehamilan_ke',
+        'trimester', 'kehamilan_ke', 'hpht', 'hpl',
         'riwayat_penyakit', 'riwayat_alergi',
         'berat_badan', 'tinggi_badan', 'imt', 'tekanan_darah', 
         'tinggi_fundus', 'lila', 'djj', 'keluhan', 'tindakan', 'obat'
@@ -246,10 +158,10 @@ function validasiFormPerkembangan(event) {
     if (adaYangKosong) {
         event.preventDefault(); 
         alert("Kolom tidak boleh kosong (Kecuali Catatan Tambahan)!");
-        return false; 
+        return false;
     }
 
-    return true; 
+    return true;
 }
 
 setTimeout(() => {

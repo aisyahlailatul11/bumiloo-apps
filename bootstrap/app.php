@@ -20,10 +20,12 @@ return Application::configure(basePath: dirname(__DIR__))
             users: function ($request) {
                 $user = auth()->user();
                 
+                // Jika user entah bagaimana tidak punya role, tendang ke login
                 if (!$user || empty($user->role)) {
                     return '/login';
                 }
 
+                // Logic sakti pembagian kamar Bumiloo berdasarkan Role
                 if ($user->role === 'Admin') {
                     return '/admin/dashboard';
                 } 
@@ -32,12 +34,11 @@ return Application::configure(basePath: dirname(__DIR__))
                     return '/bidan/dashboard';
                 } 
                 
-                // 💡 UTAMA: Belokkan arahnya ke '/dashboard' (Pintu cek pendaftaran di web.php kamu)
                 if ($user->role === 'Bumil') {
-                    return '/dashboard'; 
+                    return '/bumil/dashboard';
                 }
 
-                return '/';
+                return '/'; // Default terakhir jika benar-benar mentok
             }
         );
     })
