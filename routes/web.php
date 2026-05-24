@@ -56,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->name('bumil.hpl');
 
     // KONSULTASI PASIEN
-    Route::get('/konsultasi', [BidanKonsultasiController::class, 'indexBumil'])
+    Route::get('/konsultasi', [PasienKonsultasiController::class, 'indexBumil'])
     ->name('bumil.konsultasi');
 });
     // ==========================================
