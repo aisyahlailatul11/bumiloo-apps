@@ -54,6 +54,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // HPL
     Route::get('/hpl', [BumilController::class, 'hpl'])
     ->name('bumil.hpl');
+
+    // KONSULTASI PASIEN
+    Route::get('/konsultasi', [BidanKonsultasiController::class, 'indexBumil'])
+    ->name('bumil.konsultasi');
 });
     // ==========================================
     // --- GRUP ROUTE ADMIN ---
