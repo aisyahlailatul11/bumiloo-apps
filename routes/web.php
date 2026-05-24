@@ -84,16 +84,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::put('/bidan/{id}/update', function ($id) {
                 return redirect()->back()->with('success', 'Data bidan berhasil diperbarui! (Demo Mode)');
             })->name('bidan.update');
-
-            // --- FITUR HAK AKSES ---
-            // URL: /admin/master/hak-akses
-            Route::get('/hak-akses', [AdminController::class, 'hakAkses'])->name('master.hakakses');
-            // URL: /admin/master/hak-akses/create
-            Route::get('/hak-akses/create', [AdminController::class, 'createHakAkses'])->name('hakakses.create');
-            // URL: /admin/master/hak-akses/{id}/view
-            Route::get('/hak-akses/{id}/view', [AdminController::class, 'viewHakAkses'])->name('hakakses.view');
-            // URL: /admin/master/hak-akses/{id}/edit
-            Route::get('/hak-akses/{id}/edit', [AdminController::class, 'editHakAkses'])->name('hakakses.edit');
         });
 
         // Fitur Jadwal Kegiatan Admin -> URL: /admin/jadwal

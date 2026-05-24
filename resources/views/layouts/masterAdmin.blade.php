@@ -49,7 +49,6 @@
                     <ul class="nav flex-column ms-4">
                         <li><a href="{{ route('master.pasien') }}" class="nav-link"><i class="fas fa-users"></i> Data Pasien</a></li>
                         <li><a href="{{ route('master.bidan') }}" class="nav-link"><i class="fas fa-user-nurse"></i> Data Bidan</a></li>
-                        <li><a href="{{ route('master.hakakses') }}" class="nav-link"><i class="fas fa-shield-alt"></i> Hak Akses</a></li>
                     </ul>
                 </div>
             </li>
