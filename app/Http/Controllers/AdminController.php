@@ -133,4 +133,10 @@ public function masterPasien()
         
         return redirect()->route('jadwal.index')->with('success', 'Jadwal konsultasi berhasil dihapus!');
     }
+
+    public function edukasiIndex()
+    {
+        // Contoh: Mengembalikan view edukasi
+        return view('admin.edukasi.inputEdukasi'); 
+    }
 }

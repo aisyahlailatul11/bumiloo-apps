@@ -39,7 +39,6 @@
                 <div id="dropdown-menu" class="hidden pl-8 mt-1 space-y-1 bg-pink-500/30 rounded-lg overflow-hidden transition-all duration-300">
                     <a href="{{ route('master.pasien') }}" class="block p-2 text-xs hover:text-pink-200">Data Pasien</a>
                     <a href="{{ route('master.bidan') }}" class="block p-2 text-xs hover:text-pink-200">Data Bidan</a>
-                    <a href="{{ route('master.hakakses') }}" class="block p-2 text-xs hover:text-pink-200">Hak Akses</a>
                 </div>
             </div>
 
