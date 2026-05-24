@@ -62,7 +62,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     ->name('bumil.hpl');
 
     // KONSULTASI ONLINE (Sudah dibenarkan menggunakan BidanKonsultasiController)
-        Route::get('/konsultasi', [PasienKonsultasiController::class, 'indexBumil'])->name('bumil.konsultasi');
+    Route::get('/konsultasi', [PasienKonsultasiController::class, 'indexBumil'])->name('bumil.konsultasi');
         
     // Rute POST untuk memproses tombol pesawat/kirim chat ke database
     Route::post('/konsultasi/kirim', [BidanKonsultasiController::class, 'kirimPesan'])->name('bumil.konsultasi.kirim');
