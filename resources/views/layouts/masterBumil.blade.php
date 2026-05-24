@@ -202,7 +202,5 @@
 
     @yield('scripts')
 
-    @include('partials.footer')
 </body>
-
 </html>
