@@ -9,6 +9,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InputPasienController;
 use App\Http\Controllers\PerkembanganController;
+use App\Http\Controllers\PasienKonsultasiController;
 use Illuminate\Support\Facades\DB;
 
 //Rute Home / Landing Page
@@ -59,7 +60,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // HPL
     Route::get('/hpl', [BumilController::class, 'hpl'])
     ->name('bumil.hpl');
-});
+
+    // KONSULTASI ONLINE (Sudah dibenarkan menggunakan BidanKonsultasiController)
+        Route::get('/konsultasi', [PasienKonsultasiController::class, 'indexBumil'])->name('bumil.konsultasi');
+        
+    // Rute POST untuk memproses tombol pesawat/kirim chat ke database
+    Route::post('/konsultasi/kirim', [BidanKonsultasiController::class, 'kirimPesan'])->name('bumil.konsultasi.kirim');
+
+    });
+
     // ==========================================
     // --- GRUP ROUTE ADMIN ---
     // ==========================================
@@ -74,7 +83,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             // --- FITUR PASIEN ---
             Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
             Route::get('/pasien/{id}/edit', [AdminController::class, 'editPasien'])->name('master.pasien.edit');
-            
+
             // --- FITUR BIDAN ---
             // URL: /admin/master/bidan
             Route::get('/bidan', [AdminController::class, 'dataBidan'])->name('master.dataBidan');
