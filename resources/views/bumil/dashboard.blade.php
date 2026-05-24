@@ -126,7 +126,4 @@
 
     </div>{{-- /col-right --}}
 </div>
-<div class="mt-4">
-    @include('partials.footer')
-</div>
 @endsection

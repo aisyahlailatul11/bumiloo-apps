@@ -47,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function pendaftaran()
+    {
+        // Menyatakan bahwa 1 User memiliki 1 data pendaftaran, dihubungkan lewat 'user_id'
+        return $this->hasOne(Pendaftaran::class, 'user_id');
+    }
 }
