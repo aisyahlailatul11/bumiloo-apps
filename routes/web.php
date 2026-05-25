@@ -183,6 +183,7 @@ Route::get('/pengaturan/gantinomor', function () {
     $role = auth()->user()->role;
     return view('partials.subsettings.gantinomor', compact('role'));
 })->name('pengaturan.gantinomor');
+Route::post('/pengaturan/gantinomor', [PengaturanController::class, 'updateNoHp'])->name('update.nohp');
 
 Route::get('/pengaturan/bantuan', function () {
     $role = auth()->user()->role;
