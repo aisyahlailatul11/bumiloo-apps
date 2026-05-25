@@ -135,7 +135,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/input-perkembangan-pasien/store', [PerkembanganController::class, 'storePerkembangan'])->name('bidan.inputPerkembangan');
 
         // Halaman Jadwal Praktik Bidan
-        Route::get('/jadwal', function () { return view('bidan.jadwal'); })->name('bidan.jadwal');
+        Route::get('/jadwal', [AdminController::class, 'jadwalBidan'])->name('bidan.jadwal');
 
         // Halaman Utama Konsultasi
         Route::get('/konsultasi', function () {

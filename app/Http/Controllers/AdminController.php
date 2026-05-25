@@ -7,6 +7,7 @@ use App\Models\Jadwal;
 use App\Models\User;
 use App\Models\Pendaftaran;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -143,4 +144,33 @@ public function masterPasien()
         // Contoh: Mengembalikan view edukasi
         return view('admin.edukasi.inputEdukasi'); 
     }
+
+     public function jadwalBidan()
+{
+    $hariIni = Carbon::today()->toDateString();
+
+    $jadwalHariIniList = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)
+                               ->orderBy('jam', 'asc')
+                               ->get();
+
+    $countHariIni = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)->count();
+
+    $countKontrol = Jadwal::where('keterangan', 'LIKE', '%kontrol%')
+                          ->orWhere('keterangan', 'LIKE', '%pemeriksaan%')
+                          ->count();
+
+    $countImunisasi = Jadwal::where('keterangan', 'LIKE', '%imunisasi%')->count();
+
+    $countPersalinan = Jadwal::where('keterangan', 'LIKE', '%persalinan%')
+                             ->orWhere('keterangan', 'LIKE', '%melahirkan%')
+                             ->count();
+
+    return view('bidan.jadwal', compact(
+        'jadwalHariIniList', 
+        'countHariIni', 
+        'countKontrol', 
+        'countImunisasi', 
+        'countPersalinan'
+    ));
+}
 }
