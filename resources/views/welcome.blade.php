@@ -49,15 +49,19 @@
     <div class="main-wrapper">
         <div class="welcome-card">
             <div class="content-side">
-    <img src="{{ asset('images/logobumiloo.png') }}" onerror="this.src='https://cdn-icons-png.flaticon.com/512/2924/2924610.png'" alt="Logo" class="brand-logo">
-    <h1 class="headline">Setiap Langkah Kecil Anda,<br>Adalah <span>Keajaiban Besar.</span></h1>
-    <p class="paragraph">
-        Selamat datang di Bumiloo. Ruang aman terintegrasi untuk memantau kesehatan Ibu dan perkembangan janin Anda.
+    <img src="{{ asset('images/logobumiloo.png') }}" alt="Logo" class="brand-logo">
+    
+    <h1 class="headline" style="margin-bottom: 10px;">
+        Setiap Langkah Kecil Anda,<br>Adalah <span>Keajaiban Besar.</span>
+    </h1>
+    
+    <p class="paragraph" style="margin-bottom: 5px;">
+        Pendamping setia kesehatan ibu dan janin.
     </p>
-    <h2 class="sub-headline" style="margin-bottom: 5px;">Sistem Informasi Praktik Bidan Mandiri Siti Fatimah</h2>
-    <p style="font-size: 14px; color: #f875aa; font-weight: 500; margin-bottom: 25px; font-style: italic;">
-        "Selamat datang, Bunda. Kami siap mendampingi masa kehamilan Anda dengan sepenuh hati."
-    </p>
+
+    <h2 class="sub-headline" style="font-size: 15px; margin-bottom: 20px; color: #64748B;">
+        Praktik Bidan Mandiri Siti Fatimah, Jember
+    </h2>
                 
                 <div class="nav-links">
                     <a href="#tentangKlinik" class="btn-outline-bml" style="width: 50px; height: 50px; border-radius: 50% !important; display: flex; align-items: center; justify-content: center;"><i class="fas fa-clinic-medical"></i></a>

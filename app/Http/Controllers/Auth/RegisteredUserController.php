@@ -71,17 +71,21 @@ class RegisteredUserController extends Controller
         // Langsung login otomatis setelah berhasil daftar
         Auth::login($user);
 
-        //LOGIKA PENGALIHAN (REDIRECT) BERDASARKAN ROLE
         if ($user->role === 'Admin') {
             return redirect()->route('admin.dashboard');
-        } elseif ($user->role === 'Bidan') {
+        } 
+        
+        if ($user->role === 'Bidan') {
             return redirect()->route('bidan.dashboard');
-        } elseif ($user->role === 'Bumil') {
-            // ... (Kodingan atasnya tetap sama) ...
-        } elseif ($user->role === 'Bumil') {
-            return redirect()->route('pendaftaran.create')->with('success_register', 'Registrasi Akun Berhasil!');
+        } 
+        
+        if ($user->role === 'Ibu Hamil') {
+            // Ini yang akan mengirim pesan sukses ke halaman pendaftaran
+            return redirect()->route('pendaftaran.create')
+                             ->with('success_register', 'Akun berhasil dibuat! Silahkan lengkapi data diri ya.');
         }
 
+        // Jika role tidak dikenal, arahkan ke dashboard umum
         return redirect()->route('dashboard');
-    }
+}
 }

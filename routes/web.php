@@ -37,9 +37,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             : redirect()->route('pendaftaran.create');
     })->name('dashboard');
 
-    // Pastikan rute-rute ini sudah terdaftar di bawah sini
-    // Contoh:
-    // Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
+    Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
+    Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
+
+    Route::get('/bumil/dashboard', [App\Http\Controllers\BumilController::class, 'dashboard'])->name('bumil.dashboard');
 });
 
     // ==========================================
@@ -157,11 +158,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/dashboard', [BumilController::class, 'index'])->name('bumil.dashboard');
         // Tambahkan rute internal bumil lainnya di bawah sini nanti
     });
-
-
-    // Fitur Pendaftaran Bumil (Di luar prefix bumil karena diakses sebelum punya dashboard)
-    Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
-    Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
     // PROFILE ROUTES (Bawaan Breeze agar tidak error)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

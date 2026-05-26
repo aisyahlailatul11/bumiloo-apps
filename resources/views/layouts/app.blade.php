@@ -41,5 +41,25 @@
                 }
             });
         </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if(session('success_register'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil Registrasi!',
+            text: "{{ session('success_register') }}",
+            confirmButtonColor: '#F875AA'
+        });
+    @endif
+
+    @if(session('success_pendaftaran'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Data Tersimpan!',
+            text: "{{ session('success_pendaftaran') }}",
+            confirmButtonColor: '#F875AA'
+        });
+    @endif
+</script>
     </body>
 </html>
