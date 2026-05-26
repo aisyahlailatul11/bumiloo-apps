@@ -147,23 +147,25 @@ public function masterPasien()
 
      public function jadwalBidan()
 {
-    $hariIni = Carbon::today()->toDateString();
+    $hariIni = Carbon::now()->format('Y-m-d');
 
-    $jadwalHariIniList = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)
+    $jadwalHariIniList = Jadwal::where('tgl_pemeriksaan', $hariIni)
                                ->orderBy('jam', 'asc')
                                ->get();
 
-    $countHariIni = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)->count();
+    $countHariIni = $jadwalHariIniList->count(); 
 
-    $countKontrol = Jadwal::where('keterangan', 'LIKE', '%kontrol%')
-                          ->orWhere('keterangan', 'LIKE', '%pemeriksaan%')
-                          ->count();
+    $countKontrol = Jadwal::where(function($query) {
+                        $query->where(DB::raw('LOWER(keterangan)'), 'LIKE', '%kontrol%')
+                              ->orWhere(DB::raw('LOWER(keterangan)'), 'LIKE', '%pemeriksaan%');
+                    })->count();
 
-    $countImunisasi = Jadwal::where('keterangan', 'LIKE', '%imunisasi%')->count();
+    $countImunisasi = Jadwal::where(DB::raw('LOWER(keterangan)'), 'LIKE', '%imunisasi%')->count();
 
-    $countPersalinan = Jadwal::where('keterangan', 'LIKE', '%persalinan%')
-                             ->orWhere('keterangan', 'LIKE', '%melahirkan%')
-                             ->count();
+    $countPersalinan = Jadwal::where(function($query) {
+                           $query->where(DB::raw('LOWER(keterangan)'), 'LIKE', '%persalinan%')
+                                 ->orWhere(DB::raw('LOWER(keterangan)'), 'LIKE', '%melahirkan%');
+                       })->count();
 
     return view('bidan.jadwal', compact(
         'jadwalHariIniList', 
