@@ -3,28 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pasien; // Memanggil Model Pasien yang terhubung ke tabel daftar_pasien
+use App\Models\Pasien; 
 
 class InputPasienController extends Controller
 {
-    // 1. Menampilkan halaman form & tabel pasien
     public function indexPasien()
     {
-        // Urutkan berdasarkan data yang paling baru dimasukkan agar bidan gampang melihatnya
         $pasien = Pasien::latest()->get(); 
 
-        // Membuat No Pasien otomatis di awal halaman (Misal: 00005)
         $totalPasien = Pasien::count() + 1;
         $noPasienOtomatis = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
 
-        // Mengarahkan ke file blade inputDaftarPasien di folder bidan
         return view('bidan.inputDaftarPasien', compact('pasien', 'noPasienOtomatis'));
     }
 
-    // 2. Menyimpan data baru ATAU mengupdate data lama saat tombol diklik
     public function storePasien(Request $request)
     {
-        // Validasi: NIK harus 16 digit dan tidak boleh kembar di database
         $request->validate([
             'nik' => $request->id 
                 ? 'required|numeric|digits:16|unique:daftar_pasien,nik,' . $request->id 
@@ -36,13 +30,12 @@ class InputPasienController extends Controller
             'alamat' => 'required',
             'no_hp' => 'required',
         ], [
-            'nik.unique' => 'NIK ini sudah terdaftar di sistem Bumiloo!',
+            'nik.unique' => 'NIK sudah terpakai!',
             'nik.digits' => 'NIK harus berjumlah 16 digit angka.',
             'nik.required' => 'Kolom NIK wajib diisi.',
             'nama_pasien.required' => 'Nama Pasien wajib diisi.',
         ]);
 
-        // Kunci No Pasien: Kalau sedang EDIT pakai nomor lama, kalau BARU buat nomor urut baru
         if ($request->id) {
             $pasienLama = Pasien::findOrFail($request->id);
             $no_pasien = $pasienLama->no_pasien;
@@ -51,7 +44,11 @@ class InputPasienController extends Controller
             $no_pasien = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
         }
 
-        // Simpan data ke tabel database 'daftar_pasien'
+        $pekerjaan = $request->pekerjaan;
+        if ($pekerjaan === 'Lainnya') {
+            $pekerjaan = $request->pekerjaan_lainnya;
+            }
+
         $pasienSimpan = Pasien::updateOrCreate(
             ['id' => $request->id], 
             [
@@ -66,24 +63,21 @@ class InputPasienController extends Controller
                 'no_hp'          => $request->no_hp,
                 'pendidikan'     => $request->pendidikan,
                 'agama'          => $request->agama,
-                'pekerjaan'      => $request->pekerjaan,
+                'pekerjaan'      => $pekerjaan,
                 'nama_suami'     => $request->nama_suami,
             ]
         );
 
-        // Jika yang diedit/diperbarui adalah PASIEN LAMA, langsung oper otomatis ke menu selanjutnya
-        // Jika yang diedit/diperbarui adalah PASIEN LAMA, langsung oper otomatis ke menu selanjutnya
 if ($request->id) {
-    return redirect()->route('bidan.inputPerkembanganPasien', ['pasien_id' => $pasienSimpan->id])
-                     ->with('sukses', 'Data Ibu Hamil Berhasil Diperbarui!');
+    return redirect()->route('bidan.inputDaftarPasien', ['pasien_id' => $pasienSimpan->id])
+                     ->with('sukses', 'Data Ibu Hamil Berhasil Diperbarui!')
+                     ->with('edited_id', $pasienSimpan->id);
 }
 
-// Jika pasien BARU, biarkan tetap di halaman ini agar pop-up sukses muncul di atas tabel
-return redirect()->route('bidan.inputDaftarPasien')->with('sukses', 'Data Ibu Hamil Berhasil Disimpan!');
+        return redirect()->route('bidan.inputDaftarPasien')->with('sukses', 'Data Ibu Hamil Berhasil Disimpan!');
     }
 
-    // 3. API Fetch JSON untuk fitur onclick tabel
-    public function showPasien($id)
+     public function showPasien($id)
     {
         $pasien = Pasien::findOrFail($id);
         return response()->json($pasien);
