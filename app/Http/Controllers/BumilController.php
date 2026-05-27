@@ -27,4 +27,26 @@ class BumilController extends Controller
         // 3. Tampilkan halaman dashboard dan kirim datanya
         return view('bumil.dashboard', compact('data'));
     }
+    public function riwayatPerkembangan()
+{
+    $pendaftaran = DB::table('tb_pendaftaran')
+        ->where('user_id', Auth::id())
+        ->first();
+
+    $riwayats = DB::table('tb_perkembangan')
+        ->where('user_id', Auth::id())
+        ->get();
+
+    $terakhir = $riwayats->last();
+
+    return view('bumil.riwayatPerkembangan', compact(
+        'pendaftaran',
+        'riwayats',
+        'terakhir'
+    ));
+}
+    public function hpl()
+    {
+        return view('bumil.hpl');
+    }
 }
