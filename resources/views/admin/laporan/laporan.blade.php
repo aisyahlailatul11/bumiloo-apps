@@ -140,35 +140,54 @@
 </div>
 
 {{-- TABEL --}}
-<div class="card border-0 shadow-sm p-4" id="print-table">
-    <h6 class="fw-bold mb-3 d-print-none">Tabel Pasien</h6>
-    <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle small" style="width: 100%;">
+<div class="card border-0 shadow-sm p-4" id="tabelLaporan">
+    <h6 class="fw-bold mb-3">Tabel Pasien</h6>
+    <div class="table-responsive" style="overflow-x: auto;">
+        <table class="table table-striped table-hover align-middle small" 
+               style="min-width: 2000px;">
             <thead style="background-color:#f875aa; color:white;">
                 <tr>
-                    <th>ID</th><th>Nama</th><th>Tgl</th><th>Waktu</th><th>UK</th><th>Tri</th><th>Ke-</th><th>Layanan</th>
-                    <th>BB</th><th>TB</th><th>IMT</th><th>T.Darah</th><th>Fundus</th><th>LILA</th><th>DJJ</th>
-                    <th>Riwayat</th><th>Alergi</th><th>Keluhan</th><th>Tindakan</th><th>Obat</th><th>Catatan</th>
+                    <th style="white-space:nowrap;">ID Pasien</th>
+                    <th style="white-space:nowrap;">Nama</th>
+                    <th style="white-space:nowrap;">Tgl Pemeriksaan</th>
+                    <th style="white-space:nowrap;">Waktu</th>
+                    <th style="white-space:nowrap;">Usia Kehamilan</th>
+                    <th style="white-space:nowrap;">Trimester</th>
+                    <th style="white-space:nowrap;">Kehamilan Ke</th>
+                    <th style="white-space:nowrap;">Jenis Layanan</th>
+                    <th style="white-space:nowrap;">BB (kg)</th>
+                    <th style="white-space:nowrap;">TB (cm)</th>
+                    <th style="white-space:nowrap;">IMT</th>
+                    <th style="white-space:nowrap;">Tek. Darah</th>
+                    <th style="white-space:nowrap;">T. Fundus</th>
+                    <th style="white-space:nowrap;">LILA</th>
+                    <th style="white-space:nowrap;">DJJ</th>
+                    <th style="white-space:nowrap;">Riwayat Penyakit</th>
+                    <th style="white-space:nowrap;">Riwayat Alergi</th>
+                    <th style="white-space:nowrap;">Keluhan</th>
+                    <th style="white-space:nowrap;">Tindakan</th>
+                    <th style="white-space:nowrap;">Obat</th>
+                    <th style="white-space:nowrap;">Catatan</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($data as $row)
                 <tr>
-                    <td>{{ $row->pasien_id }}</td>
-                    <td>{{ $row->pasien->nama_pasien ?? '-' }}</td>
-                    <td>{{ \Carbon\Carbon::parse($row->tanggal_pemeriksaan)->format('d/m/Y') }}</td>
-                    <td>{{ $row->waktu_pemeriksaan }}</td>
-                    <td>{{ $row->usia_kehamilan }}</td>
-                    <td>{{ $row->trimester }}</td>
-                    <td>{{ $row->kehamilan_ke }}</td>
-                    <td>{{ $row->jenis_layanan ?? '-' }}</td>
-                    <td>{{ $row->berat_badan }}</td>
-                    <td>{{ $row->tinggi_badan }}</td>
-                    <td>{{ $row->imt }}</td>
-                    <td>{{ $row->tekanan_darah }}</td>
-                    <td>{{ $row->tinggi_fundus }}</td>
-                    <td>{{ $row->lila }}</td>
-                    <td>{{ $row->djj }}</td>
+                    <td style="white-space:nowrap;">{{ $row->pasien_id }}</td>
+                    <td style="white-space:nowrap;">{{ $row->pasien->nama_pasien ?? '-' }}</td>
+                    <td style="white-space:nowrap;">{{ \Carbon\Carbon::parse($row->tanggal_pemeriksaan)->format('d/m/Y') }}</td>
+                    <td style="white-space:nowrap;">{{ $row->waktu_pemeriksaan }}</td>
+                    <td style="white-space:nowrap;">{{ $row->usia_kehamilan }} mgg</td>
+                    <td style="white-space:nowrap;">{{ $row->trimester }}</td>
+                    <td style="white-space:nowrap;">{{ $row->kehamilan_ke }}</td>
+                    <td style="white-space:nowrap;">{{ $row->jenis_layanan ?? '-' }}</td>
+                    <td style="white-space:nowrap;">{{ $row->berat_badan }}</td>
+                    <td style="white-space:nowrap;">{{ $row->tinggi_badan }}</td>
+                    <td style="white-space:nowrap;">{{ $row->imt }}</td>
+                    <td style="white-space:nowrap;">{{ $row->tekanan_darah }}</td>
+                    <td style="white-space:nowrap;">{{ $row->tinggi_fundus }}</td>
+                    <td style="white-space:nowrap;">{{ $row->lila }}</td>
+                    <td style="white-space:nowrap;">{{ $row->djj }}</td>
                     <td>{{ $row->riwayat_penyakit ?? '-' }}</td>
                     <td>{{ $row->riwayat_alergi ?? '-' }}</td>
                     <td>{{ $row->keluhan ?? '-' }}</td>
@@ -177,7 +196,12 @@
                     <td>{{ $row->catatan_tambahan ?? '-' }}</td>
                 </tr>
                 @empty
-                <tr><td colspan="21" class="text-center">Belum ada data pemeriksaan</td></tr>
+                <tr>
+                    <td colspan="21" class="text-center text-muted py-4">
+                        <i class="fas fa-inbox fa-2x mb-2 d-block"></i>
+                        Belum ada data pemeriksaan
+                    </td>
+                </tr>
                 @endforelse
             </tbody>
         </table>
