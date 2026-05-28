@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Perkembangan extends Model
 {
-       protected $table = 'perkembangan';
+    protected $table = 'perkembangan';
 
     protected $fillable = [
         'pasien_id',
@@ -27,6 +27,12 @@ class Perkembangan extends Model
         'keluhan',
         'tindakan',
         'obat',
-        'catatan_tambahan'
+        'catatan_tambahan',
+        'jenis_layanan'
     ];
+
+    public function pasien()
+    {
+        return $this->belongsTo(\App\Models\DaftarPasien::class, 'pasien_id');
+    }
 }

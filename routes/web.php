@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InputPasienController;
 use App\Http\Controllers\PerkembanganController;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\LaporanController;
 
 // 1. Rute Home / Landing Page
 Route::get('/', function () {
@@ -104,9 +105,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             return view('admin.edukasi');
         })->name('admin.edukasi');
 
-        Route::get('/laporan', function () {
-            return view('admin.laporan');
-        })->name('admin.laporan');
+        Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
+        Route::get('/laporan/pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.pdf');
+        Route::get('/laporan/excel', [LaporanController::class, 'exportExcel'])->name('admin.laporan.excel');
     });
 
     // ==========================================
