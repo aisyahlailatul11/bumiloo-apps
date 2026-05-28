@@ -145,30 +145,43 @@ public function masterPasien()
         return view('admin.edukasi.inputEdukasi'); 
     }
 
-     public function jadwalBidan()
+    public function jadwalBidan()
 {
-    $hariIni = Carbon::now()->format('Y-m-d');
+    // Ambil tanggal hari ini
+    $hariIni = Carbon::today();
 
-    $jadwalHariIniList = Jadwal::where('tgl_pemeriksaan', $hariIni)
+    // Ambil jadwal dengan tanggal pemeriksaan = hari ini
+    $jadwalHariIniList = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)
                                ->orderBy('jam', 'asc')
                                ->get();
 
     $countHariIni = $jadwalHariIniList->count(); 
 
-    $countKontrol = Jadwal::where(function($query) {
-                        $query->where(DB::raw('LOWER(keterangan)'), 'LIKE', '%kontrol%')
-                              ->orWhere(DB::raw('LOWER(keterangan)'), 'LIKE', '%pemeriksaan%');
-                    })->count();
+    $jadwalKontrolList = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)
+                               ->where(function($query) {
+                                   $query->where(DB::raw('LOWER(keterangan)'), 'LIKE', '%kontrol%')
+                                         ->orWhere(DB::raw('LOWER(keterangan)'), 'LIKE', '%pemeriksaan%');
+                               })->get();
+    $countKontrol = $jadwalKontrolList->count();
 
-    $countImunisasi = Jadwal::where(DB::raw('LOWER(keterangan)'), 'LIKE', '%imunisasi%')->count();
+    $jadwalImunisasiList = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)
+                                 ->where(DB::raw('LOWER(keterangan)'), 'LIKE', '%imunisasi%')
+                                 ->get();
+    $countImunisasi = $jadwalImunisasiList->count();
 
-    $countPersalinan = Jadwal::where(function($query) {
-                           $query->where(DB::raw('LOWER(keterangan)'), 'LIKE', '%persalinan%')
-                                 ->orWhere(DB::raw('LOWER(keterangan)'), 'LIKE', '%melahirkan%');
-                       })->count();
+   $jadwalPersalinanList = Jadwal::whereDate('tgl_pemeriksaan', $hariIni)
+    ->where(function($query) {
+        $query->where(DB::raw('LOWER(keterangan)'), 'LIKE', '%persalinan%')
+              ->orWhere(DB::raw('LOWER(keterangan)'), 'LIKE', '%melahirkan%');
+    })->get();
+
+    $countPersalinan = $jadwalPersalinanList->count();
 
     return view('bidan.jadwal', compact(
         'jadwalHariIniList', 
+        'jadwalKontrolList',
+        'jadwalImunisasiList',
+        'jadwalPersalinanList',
         'countHariIni', 
         'countKontrol', 
         'countImunisasi', 
