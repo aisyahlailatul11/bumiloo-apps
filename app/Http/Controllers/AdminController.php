@@ -7,24 +7,55 @@ use App\Models\Jadwal;
 use App\Models\User;
 use App\Models\Pendaftaran;
 use Illuminate\Support\Facades\DB;
+use App\Models\Pasien;
+use App\Models\Perkembangan;
 use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    /**
-     * Dashboard Utama Admin
-     */
+    
     public function index()
-    {
-        // PERBAIKAN: Ubah dari 'dashboard' menjadi 'admin.dashboard'
-        // Agar Laravel memanggil resources/views/admin/dashboard.blade.php
-        
-        $totalPasien = User::where('role', 'Ibu Hamil')->count();
-        $totalBidan = User::where('role', 'Bidan')->count();
-        $totalKunjungan = 23; // Sementara hardcode atau ambil dari tabel kunjungan jika ada
+{
+    $hariIni = \Carbon\Carbon::today();
 
-        return view('admin.dashboard', compact('totalPasien', 'totalBidan', 'totalKunjungan'));
+    // Jumlah kunjungan hari ini
+    $jumlahKunjunganHariIni = \App\Models\Perkembangan::whereDate('tanggal_pemeriksaan', $hariIni)->count();
+
+    // Jumlah persalinan hari ini
+    $jumlahPersalinanHariIni = \App\Models\Perkembangan::whereDate('tanggal_pemeriksaan', $hariIni)
+        ->where('jenis_layanan', 'Persalinan')
+        ->count();
+
+    // Data untuk pie chart (jumlah ibu hamil per trimester)
+    $perTrimester = [
+        \App\Models\Perkembangan::where('trimester', 1)->count(),
+        \App\Models\Perkembangan::where('trimester', 2)->count(),
+        \App\Models\Perkembangan::where('trimester', 3)->count(),
+    ];
+
+    // Data untuk line chart kunjungan per bulan
+    $perBulan = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $perBulan[] = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $i)->count();
     }
+
+    // Data untuk line chart persalinan per bulan
+    $perBulanPersalinan = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $perBulanPersalinan[] = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $i)
+            ->where('jenis_layanan', 'Persalinan')
+            ->count();
+    }
+
+    return view('admin.dashboard', compact(
+        'jumlahKunjunganHariIni',
+        'jumlahPersalinanHariIni',
+        'perTrimester',
+        'perBulan',
+        'perBulanPersalinan'
+    ));
+}
+
 
     /**
      * Menampilkan Data Pasien
