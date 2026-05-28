@@ -141,10 +141,15 @@ Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])
         // Halaman Jadwal Praktik Bidan
         Route::get('/jadwal', [AdminController::class, 'jadwalBidan'])->name('bidan.jadwal');
 
-        // Halaman Utama Konsultasi
-        Route::get('/konsultasi', function () {
-            return view('bidan.konsultasi', ['konsultasis' => collect([])]);
-        })->name('bidan.konsultasi');
+        // KONSULTASI BIDAN
+        Route::get('/bidan/konsultasi', [BidanController::class, 'konsultasi'])
+            ->name('bidan.konsultasi');
+
+        Route::get('/bidan/konsultasi/{user_id}', [BidanController::class, 'detailKonsultasi'])
+            ->name('bidan.konsultasi.detail');
+
+        Route::post('/bidan/konsultasi/{user_id}/kirim', [BidanController::class, 'kirimKonsultasi'])
+            ->name('bidan.konsultasi.kirim');
 
         // Halaman Laporan / Rekam Medis
         Route::get('/laporan', function () { return view('bidan.laporan'); })->name('bidan.laporan');
