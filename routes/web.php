@@ -56,7 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/riwayat-perkembangan', [BumilController::class, 'riwayatPerkembangan'])
         ->name('bumil.riwayatPerkembangan');
 
-    // DETAIL PEMERIKSAAN
+    // DETAIL PEMERIKSAAN   
     Route::get('/riwayat-perkembangan/detail/{id}', [BumilController::class, 'detailRiwayatPerkembangan'])
         ->name('bumil.detailRiwayatPerkembangan');
 

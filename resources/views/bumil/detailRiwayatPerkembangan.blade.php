@@ -9,18 +9,18 @@
         <div>
             <span class="me-3">
                 <i class="fa fa-calendar"></i>
-                {{ \Carbon\Carbon::parse($riwayat->tanggal_pemeriksaan)->format('d F Y') }}
+                {{ $riwayat->tanggal_pemeriksaan ? \Carbon\Carbon::parse($riwayat->tanggal_pemeriksaan)->translatedFormat('d F Y') : '-' }}
             </span>
 
             <span>
                 <i class="fa fa-clock"></i>
-                {{ $riwayat->waktu_pemeriksaan }} WIB
+                {{ $riwayat->waktu_pemeriksaan ?? '-' }} WIB
             </span>
         </div>
 
         <div>
             Pemeriksaan oleh :
-            <span class="text-pink">Bidan</span>
+            <span class="text-pink">{{ $riwayat->nama_bidan ?? 'Bidan Siti Fatimah' }}</span>
         </div>
     </div>
 
@@ -30,9 +30,9 @@
             <div class="text-center flex-fill">
                 <p class="fw-bold mb-1">Usia Kehamilan Saat Ini</p>
                 <h4 class="text-pink fw-bold">
-                    {{ $riwayat->usia_kehamilan }} Minggu
+                    {{ $riwayat->usia_kehamilan ?? '-' }} Minggu
                 </h4>
-                <h5 class="text-pink">Trimester {{ $riwayat->trimester }}</h5>
+                <h5 class="text-pink">Trimester {{ $riwayat->trimester ?? '-' }}</h5>
             </div>
 
             <div class="text-center flex-fill border-start">
@@ -65,7 +65,7 @@
             <div class="card border-0 shadow-sm mt-3" style="border-radius:16px;">
                 <div class="card-body">
                     <h5 class="text-pink fw-bold text-center">Tindakan / Saran Bidan</h5>
-                    <p>{!! nl2br(e($riwayat->tindakan ?? '-')) !!}</p>
+                    <p>{!! nl2br(e($riwayat->tindakan_saran ?? $riwayat->tindakan ?? '-')) !!}</p>
                 </div>
             </div>
 
@@ -85,31 +85,31 @@
                     <table class="table table-borderless">
                         <tr>
                             <td>Berat Badan</td>
-                            <td>: {{ $riwayat->berat_badan }} kg</td>
+                            <td>: {{ $riwayat->berat_badan ?? '-' }} kg</td>
                         </tr>
                         <tr>
                             <td>Tinggi Badan</td>
-                            <td>: {{ $riwayat->tinggi_badan }} cm</td>
+                            <td>: {{ $riwayat->tinggi_badan ?? '-' }} cm</td>
                         </tr>
                         <tr>
                             <td>Tekanan Darah</td>
-                            <td>: {{ $riwayat->tekanan_darah }} mmHg</td>
+                            <td>: {{ $riwayat->tekanan_darah ?? '-' }} mmHg</td>
                         </tr>
                         <tr>
                             <td>IMT</td>
-                            <td>: {{ $riwayat->imt }}</td>
+                            <td>: {{ $riwayat->imt ?? '-' }}</td>
                         </tr>
                         <tr>
                             <td>Tinggi Fundus Uteri</td>
-                            <td>: {{ $riwayat->tinggi_fundus }} cm</td>
+                            <td>: {{ $riwayat->tinggi_fundus_uteri ?? $riwayat->tinggi_fundus ?? '-' }} cm</td>
                         </tr>
                         <tr>
                             <td>Denyut Jantung Janin</td>
-                            <td>: {{ $riwayat->djj }} x/menit</td>
+                            <td>: {{ $riwayat->denyut_jantung_janin ?? $riwayat->djj ?? '-' }} x/menit</td>
                         </tr>
                         <tr>
                             <td>LILA</td>
-                            <td>: {{ $riwayat->lila }} cm</td>
+                            <td>: {{ $riwayat->lila ?? '-' }} cm</td>
                         </tr>
                     </table>
                 </div>

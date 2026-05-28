@@ -121,7 +121,7 @@
 
     <h5 class="fw-bold text-pink mb-3">Riwayat Pemeriksaan</h5>
 
-    <div class="table-responsive">
+    <div class="table-responsive shadow-sm" style="border-radius:16px; overflow:hidden;">
         <table class="table table-bordered text-center align-middle">
             <thead style="background:#f875aa; color:white;">
                 <tr>
@@ -137,20 +137,36 @@
                 @forelse($riwayats as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ \Carbon\Carbon::parse($item->tanggal_pemeriksaan)->format('d F Y') }}</td>
-                    <td>{{ $item->usia_kehamilan }} Minggu</td>
-                    <td>{{ $item->keluhan }}</td>
-                    <td>{{ $item->tindakan }}</td>
+
                     <td>
+                        {{ \Carbon\Carbon::parse($item->tanggal_pemeriksaan)->format('d F Y') }}
+                    </td>
+
+                    <td>
+                        {{ $item->usia_kehamilan }} Minggu
+                    </td>
+
+                    <td>
+                        {{ $item->keluhan }}
+                    </td>
+
+                    <td>
+                        {{ $item->tindakan }}
+                    </td>
+
+                    <td class="text-center">
                         <a href="{{ route('bumil.detailRiwayatPerkembangan', $item->id) }}"
-                            class="btn btn-sm text-white" style="background:#f875aa;">
+                            class="btn text-white px-3 py-1" style="background-color:#f472b6; border-radius:10px;">
                             Detail
                         </a>
                     </td>
                 </tr>
+
                 @empty
                 <tr>
-                    <td colspan="6" class="text-muted">Belum ada riwayat pemeriksaan</td>
+                    <td colspan="6" class="text-center">
+                        Belum ada riwayat pemeriksaan
+                    </td>
                 </tr>
                 @endforelse
             </tbody>

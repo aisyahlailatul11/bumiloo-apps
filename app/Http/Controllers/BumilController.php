@@ -33,16 +33,41 @@ class BumilController extends Controller
         ->where('user_id', Auth::id())
         ->first();
 
-    $riwayats = DB::table('tb_perkembangan')
-        ->where('user_id', Auth::id())
+    if (!$pendaftaran) {
+        return back()->with('error', 'Data bumil tidak ditemukan.');
+    }
+
+    $riwayats = DB::table('perkembangan')
+        ->where('pasien_id', $pendaftaran->id)
+        ->orderBy('tanggal_pemeriksaan', 'desc')
         ->get();
 
-    $terakhir = $riwayats->last();
+    $terakhir = $riwayats->first();
 
     return view('bumil.riwayatPerkembangan', compact(
         'pendaftaran',
         'riwayats',
         'terakhir'
+    ));
+}
+public function detailRiwayatPerkembangan($id)
+{
+    $pendaftaran = DB::table('tb_pendaftaran')
+        ->where('user_id', Auth::id())
+        ->first();
+
+    $riwayat = DB::table('perkembangan')
+        ->where('id', $id)
+        ->where('pasien_id', $pendaftaran->id)
+        ->first();
+
+    if (!$riwayat) {
+        abort(404);
+    }
+
+    return view('bumil.detailRiwayatPerkembangan', compact(
+        'riwayat',
+        'pendaftaran'
     ));
 }
     public function hpl()
