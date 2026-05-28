@@ -30,25 +30,22 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        // 1. Amankan jika role kosong di database agar tidak error kosong polos
+        // 1. Amankan jika role kosong
         if (empty($user->role)) {
-            // Paksa logout jika akun tidak punya role jelas
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             
-            return redirect('/login')->withErrors([
-                'email' => 'Akun Anda belum memiliki role akses. Silakan hubungi IT Admin.',
-            ]);
+            return redirect('/login')->with('error', 'Akun Anda belum memiliki role akses');
         }
 
-        // 2. Redirect kaku berdasarkan role (Menghindari nyangkut di kamar role lain)
+        // 2. Redirect berdasarkan role dengan Alert
         if ($user->role === 'Admin') {
-            return redirect()->route('admin.dashboard'); 
+            return redirect()->route('admin.dashboard')->with('success', 'Selamat datang Admin!');
         }
 
         if ($user->role === 'Bidan') {
-            return redirect()->route('bidan.dashboard');
+            return redirect()->route('bidan.dashboard')->with('success', 'Selamat datang Bu Bidan!');
         }
 
         if ($user->role === 'Bumil') {
@@ -56,12 +53,16 @@ class AuthenticatedSessionController extends Controller
                 ->where('user_id', $user->id)
                 ->exists();
 
-            return $sudahDaftar 
-                ? redirect()->route('bumil.dashboard') 
-                : redirect()->route('pendaftaran.create');
-        }
+            if ($sudahDaftar) {
+                session()->flash('success', 'Halo Bunda, selamat datang kembali!');
+                return redirect()->route('bumil.dashboard');
+            } else {
+                session()->flash('info', 'Silakan lengkapi data pendaftaran.');
+                return redirect()->route('pendaftaran.create');
+            }
+        } // <--- KURUNG INI TADI KURANG!
 
-        return redirect('/');
+        return redirect()->route('login')->with('error', 'Role tidak dikenali.');
     }
 
     /**

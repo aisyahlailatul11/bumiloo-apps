@@ -52,6 +52,6 @@ class PendaftaranController extends Controller
         Pendaftaran::create($validated);
 
         // 5. Arahkan ke Dashboard
-        return redirect()->route('bumil.dashboard')->with('success_pendaftaran', 'Data diri berhasil disimpan! Selamat datang di dashboard.');
+        return redirect()->route('bumil.dashboard')->with('success', 'Data pendaftaran berhasil disimpan! Selamat datang, Bunda.');
     }
 }

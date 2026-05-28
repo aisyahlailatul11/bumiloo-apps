@@ -135,6 +135,6 @@
                 </div>
             </div>
         </div>
-
+        @include('partials.alerts')
     </div>
 </x-guest-layout>

@@ -108,4 +108,5 @@
             </clipPath>
         </defs>
     </svg>
+    @include('partials.alerts')
 </x-guest-layout>
