@@ -416,8 +416,9 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-comments"></i> <span>Konsultasi</span>
+                <a href="{{ route('bumil.konsultasi') }}" class="nav-link">
+                    <i class="fas fa-comments"></i>
+                    <span>Konsultasi</span>
                 </a>
             </li>
             <li class="nav-item">

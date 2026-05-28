@@ -27,6 +27,33 @@ class BumilController extends Controller
         // 3. Tampilkan halaman dashboard dan kirim datanya
         return view('bumil.dashboard', compact('data'));
     }
+   public function konsultasi()
+{
+    $pesans = DB::table('konsultasis')
+        ->where('user_id', Auth::id())
+        ->orderBy('created_at', 'asc')
+        ->get();
+
+    return view('bumil.konsultasi', compact('pesans'));
+}
+
+public function kirimKonsultasi(Request $request)
+{
+    $request->validate([
+        'pesan' => 'required'
+    ]);
+
+    DB::table('konsultasis')->insert([
+        'user_id' => Auth::id(),
+        'bidan_id' => null,
+        'pesan' => $request->pesan,
+        'sender' => 'bumil',
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return redirect()->route('bumil.konsultasi');
+}
     public function riwayatPerkembangan()
 {
     $pendaftaran = DB::table('tb_pendaftaran')
