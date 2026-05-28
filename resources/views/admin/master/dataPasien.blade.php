@@ -62,15 +62,7 @@
                                title="Buat Jadwal Pemeriksaan Pasien"
                                onmouseover="this.style.backgroundColor='#3ec456'" onmouseout="this.style.backgroundColor='#4CD964'">
                                 <span style="color: #FFFFFF; font-weight: 700; font-size: 18px;">+</span>
-                            </a>
-                            
-                            <a href="{{ route('master.pasien.edit', $p->id) }}" 
-                               style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: #FFCC00; border-radius: 12px; box-shadow: 0 4px 6px rgba(255, 204, 0, 0.2); text-decoration: none; transition: 0.2s;" 
-                               title="Edit Data Pasien"
-                               onmouseover="this.style.backgroundColor='#e6b800'" onmouseout="this.style.backgroundColor='#FFCC00'">
-                                <span style="color: #FFFFFF; font-size: 16px;">✎</span>
-                            </a>
-                            
+                            </a>   
                         </div>
                     </td>
                 </tr>

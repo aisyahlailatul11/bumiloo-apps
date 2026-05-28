@@ -81,7 +81,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             
             // --- FITUR PASIEN ---
             Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
-            Route::get('/pasien/{id}/edit', [AdminController::class, 'editPasien'])->name('master.pasien.edit');
 
             // --- FITUR BIDAN ---
             // URL: /admin/master/bidan
