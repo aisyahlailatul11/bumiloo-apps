@@ -114,4 +114,18 @@ public function kirimKonsultasi(Request $request, $user_id)
 
     return redirect()->route('bidan.konsultasi.detail', $user_id);
 }
+public function requestOffline($user_id)
+{
+    DB::table('konsultasis')->insert([
+        'user_id' => $user_id,
+        'bidan_id' => Auth::id(),
+        'pesan' => 'Bunda disarankan untuk melakukan konsultasi offline/pemeriksaan langsung. Silakan klik tombol Ajukan Jadwal Offline untuk mengajukan jadwal.',
+        'sender' => 'bidan',
+        'tipe_pesan' => 'request_offline',
+        'created_at' => now(),
+        'updated_at' => now(),
+    ]);
+
+    return back()->with('success', 'Pesan request konsultasi offline berhasil dikirim.');
+}
 }

@@ -76,10 +76,10 @@
                     <div class="d-flex justify-content-end mb-3">
 
                         <div class="p-3 text-dark" style="
-                                    max-width:70%;
-                                    background:#fbcfe8;
-                                    border-radius:18px 18px 0 18px;
-                                ">
+                        max-width:70%;
+                        background:#fbcfe8;
+                        border-radius:18px 18px 0 18px;
+                    ">
 
                             <p class="mb-1">
                                 {{ $chat->pesan }}
@@ -99,15 +99,39 @@
                     <div class="d-flex justify-content-start mb-3">
 
                         <div class="p-3 bg-white border" style="
-                                    max-width:70%;
-                                    border-radius:18px 18px 18px 0;
-                                ">
+                        max-width:70%;
+                        border-radius:18px 18px 18px 0;
+                    ">
+
+                            {{-- JIKA PESAN REQUEST OFFLINE --}}
+                            @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
+
+                            <p class="mb-3">
+                                {{ $chat->pesan }}
+                            </p>
+
+                            <form action="{{ route('bumil.ajukanJadwalOffline', $chat->id) }}" method="POST">
+
+                                @csrf
+
+                                <button type="submit" class="btn text-white"
+                                    style="background:#f687b3; border-radius:12px;">
+
+                                    Ajukan Jadwal Offline
+
+                                </button>
+
+                            </form>
+
+                            @else
 
                             <p class="mb-1">
                                 {{ $chat->pesan }}
                             </p>
 
-                            <small class="text-muted">
+                            @endif
+
+                            <small class="text-muted d-block mt-2">
                                 {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
                             </small>
 

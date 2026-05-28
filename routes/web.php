@@ -64,12 +64,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/hpl', [BumilController::class, 'hpl'])
     ->name('bumil.hpl');
 
-    // KONSULTASI PASIEN
-  Route::get('/konsultasi', [BumilController::class, 'konsultasi'])
+    // KONSULTASI BUMIL
+    Route::get('/konsultasi', [BumilController::class, 'konsultasi'])
     ->name('bumil.konsultasi');
 
-Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])
+    Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])
     ->name('bumil.konsultasi.kirim');
+    
+    Route::post('/bumil/ajukan-jadwal-offline/{chat_id}', [BumilController::class, 'ajukanJadwalOffline'])
+    ->name('bumil.ajukanJadwalOffline');
 });
     // ==========================================
     // --- GRUP ROUTE ADMIN ---
@@ -150,13 +153,13 @@ Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])
 
         Route::post('/bidan/konsultasi/{user_id}/kirim', [BidanController::class, 'kirimKonsultasi'])
             ->name('bidan.konsultasi.kirim');
-
+            
+        Route::post('/bidan/konsultasi/{user_id}/request-offline', [BidanController::class, 'requestOffline'])
+            ->name('bidan.konsultasi.requestOffline');
         // Halaman Laporan / Rekam Medis
         Route::get('/laporan', function () { return view('bidan.laporan'); })->name('bidan.laporan');
         Route::get('/laporan-bidan-demo', function () { return view('bidan.laporan'); })->name('bidan.laporanBidan');
 
-        // Halaman Room Chat Pasien
-        Route::get('/roomchat', function () { return view('bidan.roomchat'); })->name('bidan.roomchat');
     }); // <--- Mengunci Grup Bidan dengan aman
 
     // ==========================================

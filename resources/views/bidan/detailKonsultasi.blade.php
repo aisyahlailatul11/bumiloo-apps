@@ -63,6 +63,17 @@
                         </h6>
                         <small class="text-success">Online</small>
                     </div>
+
+                    <form action="{{ route('bidan.konsultasi.requestOffline', $user_id) }}" method="POST"
+                        class="ms-auto">
+
+                        @csrf
+
+                        <button type="submit" class="btn btn-sm text-white"
+                            style="background:#f687b3; border-radius:12px;">
+                            Request Konsultasi Offline
+                        </button>
+                    </form>
                 </div>
 
                 {{-- BODY CHAT --}}
