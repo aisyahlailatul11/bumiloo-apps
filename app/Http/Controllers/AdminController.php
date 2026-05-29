@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Pasien;
 use App\Models\Perkembangan;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\JadwalKontrol;
 
 class AdminController extends Controller
 {
@@ -128,20 +130,32 @@ public function masterPasien()
         'tgl_pemeriksaan' => 'required|date',
         'jam'             => 'required',
         'keterangan'      => 'required',
+        'nik' => 'unique:jadwals,nik,NULL,id,tgl_pemeriksaan,' . $request->tgl_pemeriksaan,
     ]);
 
-    Jadwal::create([
-        'nama_pasien'     => $request->nama, 
-        'nik'             => $request->nik,
-        'no_hp'           => $request->no_hp,
-        'tgl_lahir'       => $request->tgl_lahir,
-        'tgl_pemeriksaan' => $request->tgl_pemeriksaan,
-        'jam'             => $request->jam,
-        'keterangan'      => $request->keterangan,
-    ]);
+    //Simpan data jadwal ke database
+   $jadwal = Jadwal::create([
+    'nama_pasien'     => $request->nama,    // INI HARUS SAMA DENGAN NAMA KOLOM DI DB
+    'nik'             => $request->nik,
+    'no_hp'           => $request->no_hp,
+    'tgl_lahir'       => $request->tgl_lahir,
+    'tgl_pemeriksaan' => $request->tgl_pemeriksaan,
+    'jam'             => $request->jam,
+    'keterangan'      => $request->keterangan,
+]);
 
-    return redirect()->route('jadwal.index')->with('success', 'Jadwal konsultasi berhasil disimpan!');
+    $pendaftaran = \App\Models\Pendaftaran::where('nik', $request->nik)->first();
+
+// Baru ambil user dari pendaftaran tersebut
+if ($pendaftaran && $pendaftaran->user && $pendaftaran->user->email) {
+    \Illuminate\Support\Facades\Mail::to($pendaftaran->user->email)
+        ->send(new \App\Mail\JadwalKontrol($jadwal));
 }
+
+
+    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil disimpan!');
+}
+
     public function jadwalUpdate(Request $request, $id)
     {
         $jadwal = Jadwal::findOrFail($id);

@@ -16,4 +16,12 @@ class Jadwal extends Model
         'jam', 
         'keterangan'
     ];
+
+public function user()
+{
+    // Hubungkan Jadwal ke Pendaftaran dulu lewat NIK
+    // Lalu dari Pendaftaran baru ke User
+    return $this->hasOne(\App\Models\Pendaftaran::class, 'nik', 'nik')
+                ->latest(); // ambil pendaftaran terakhir
+}
 }

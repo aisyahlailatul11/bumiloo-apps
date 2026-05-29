@@ -33,7 +33,9 @@
 
         <form action="{{ isset($editJadwal) ? route('jadwal.update', $editJadwal->id) : route('jadwal.store') }}" method="POST" style="margin: 0; display: flex; flex-direction: column; width: 100%;">
             @csrf
-            @if(isset($editJadwal)) @method('PUT') @endif
+            @if(isset($editJadwal)) 
+            @method('PUT') 
+            @endif
 
             <div class="jwl-form-row">
                 <div class="jwl-form-group">
@@ -102,11 +104,13 @@
                         <th style="padding: 16px 20px; font-weight: 600;">NIK</th>
                         <th style="padding: 16px 20px; font-weight: 600;">Tgl Lahir</th>
                         <th style="padding: 16px 20px; font-weight: 600;">No. HP</th>
+                         <th style="padding: 16px 20px; font-weight: 600;">Email</th>
                         <th style="padding: 16px 20px; font-weight: 600;">Tgl Pemeriksaan</th>
                         <th style="padding: 16px 20px; font-weight: 600;">Jam</th>
                         <th style="padding: 16px 20px; font-weight: 600; text-align: center; border-top-right-radius: 14px; border-bottom-right-radius: 14px; width: 160px;">Aksi</th>
                     </tr>
                 </thead>
+                <p>Jumlah Data Jadwal: {{ $jadwals->count() }}</p>
                 <tbody>
                     @forelse($jadwals as $j)
                     <tr style="border-bottom: 1px solid #F1F5F9; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#FFF1F6'" onmouseout="this.style.backgroundColor='transparent'">
@@ -114,6 +118,7 @@
                         <td style="padding: 18px 20px;">{{ $j->nik }}</td>
                         <td style="padding: 18px 20px;">{{ $j->tgl_lahir }}</td>
                         <td style="padding: 18px 20px;">{{ $j->no_hp }}</td>
+                        <td style="padding: 18px 20px;">{{ $j->user?->user?->email ?? 'Tidak Ditemukan' }}
                         <td style="padding: 18px 20px; font-weight: 500; color: #F84F8F;">{{ date('d-m-Y', strtotime($j->tgl_pemeriksaan)) }}</td>
                         <td style="padding: 18px 20px; font-weight: 600;">{{ $j->jam }} WIB</td>
                         <td style="padding: 14px 20px; text-align: center;">
@@ -125,12 +130,14 @@
                         <span style="color: #FFFFFF; font-size: 16px;">✎</span>
                     </a>
                     
-                    <button type="button" onclick="confirmDelete('{{ $j->id }}')" 
-                style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: #E2E8F0; border-radius: 12px; box-shadow: 0 4px 6px rgba(226, 232, 240, 0.4); border: none; cursor: pointer; transition: 0.2s;" 
-                title="Hapus Jadwal Konsultasi"
-                onmouseover="this.style.backgroundColor='#CBD5E1'" onmouseout="this.style.backgroundColor='#E2E8F0'">
-            <span style="color: #EF4444; font-size: 20px; font-weight: bold; line-height: 1;">🗑</span>
-        </button>
+                    <button type="button" 
+        onclick="confirmDelete('{{ $j->id }}', '{{ $j->nama_pasien ?? 'Pasien' }}')" 
+        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: #E2E8F0; border-radius: 12px; box-shadow: 0 4px 6px rgba(226, 232, 240, 0.4); border: none; cursor: pointer; transition: 0.2s;" 
+        title="Hapus Jadwal Konsultasi"
+        onmouseover="this.style.backgroundColor='#CBD5E1'" 
+        onmouseout="this.style.backgroundColor='#E2E8F0'">
+    <span style="color: #EF4444; font-size: 20px; font-weight: bold; line-height: 1;">🗑</span>
+</button>
             </div>
         </td>
                     </tr>

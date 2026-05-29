@@ -16,45 +16,42 @@ use App\Http\Controllers\DaftarPasienController;
 use App\Http\Controllers\LaporanBidanController;
 use Illuminate\Support\Facades\DB;
 
-// 1. Rute Home / Landing Page
+// Rute Home / Landing Page
 Route::get('/', function () {
     return view('welcome');
 });
 
-// 2. Middleware Auth (Proteksi Login)
+// Middleware Auth (Proteksi Login)
 Route::middleware(['auth', 'verified'])->group(function () {
     
-    // REDIRECTOR DASHBOARD
+    // REDIRECTOR DASHBOARD (Biarkan tetap di sini)
     Route::get('/dashboard', function () {
         $user = auth()->user();
 
-        // Cek Role terlebih dahulu
         if ($user->role === 'Admin') return redirect()->route('admin.dashboard');
         if ($user->role === 'Bidan') return redirect()->route('bidan.dashboard');
         
-        // Khusus Ibu Hamil: Cek pendaftaran
-        $sudahDaftar = DB::table('tb_pendaftaran')
-            ->where('user_id', $user->id)
-            ->exists();
+        $sudahDaftar = DB::table('tb_pendaftaran')->where('user_id', $user->id)->exists();
             
         return $sudahDaftar
             ? redirect()->route('bumil.dashboard')
             : redirect()->route('pendaftaran.create');
     })->name('dashboard');
 
-    Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
-    Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
-
-    Route::get('/bumil/dashboard', [BumilController::class, 'dashboard'])->name('bumil.dashboard');
+    // Route Pendaftaran (Pindahkan ke dalam grup Bumil di bawah agar lebih rapi)
 });
 
 // ==========================================
 // --- GRUP ROUTE IBU HAMIL (BUMIL) ---
 // ==========================================
-// PERBAIKAN: Menggabungkan semua rute bumil ke dalam satu grup rapi agar tidak bentrok
-Route::middleware(['auth'])->prefix('bumil')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
 
+    // Dashboard Bumil 
     Route::get('/dashboard', [BumilController::class, 'index'])->name('bumil.dashboard');
+
+    // Route Pendaftaran 
+    Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
+    Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
     // ARTIKEL BUMIL (Sudah aman terhubung ke ArtikelController)
     Route::get('/artikel', [ArtikelController::class, 'index'])->name('bumil.artikel');

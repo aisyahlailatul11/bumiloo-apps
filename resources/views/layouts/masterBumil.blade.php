@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     {{-- Google Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
     :root {
@@ -396,7 +397,6 @@
 </head>
 
 <body>
-
     {{-- SIDEBAR --}}
     <div class="sidebar shadow">
         <div class="text-center mb-4">
@@ -513,7 +513,7 @@
         order: 1 !important;
     }
 </style>
-    {{-- TOPBAR --}}
+    @include('partials.alerts'){{-- TOPBAR --}}
     @include('partials.header')
 
     {{-- MAIN CONTENT --}}
@@ -554,6 +554,5 @@
         }
     });
     </script>
-    @include('partials.alerts')
 </body>
 </html>
