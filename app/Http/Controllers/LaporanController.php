@@ -49,6 +49,11 @@ class LaporanController extends Controller
                   ->setPaper('a4', 'portrait');
         return $pdf->download('laporan-pemeriksaan.pdf');
     }
+    public function cetak(Request $request)
+{
+    $data = $this->getFilteredData($request); // pakai logic filter yang sama seperti method laporan()
+    return view('admin.laporan.cetak', compact('data'));
+}
 
     // ================================
     // Export Excel

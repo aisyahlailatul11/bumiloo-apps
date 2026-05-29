@@ -121,9 +121,12 @@
                    class="btn btn-outline-success px-3">
                     <i class="fas fa-file-excel me-1"></i> Export Excel
                 </a>
-                <button type="button" onclick="cetakLaporan()" class="btn btn-outline-secondary px-3">
-                    <i class="fas fa-print me-1"></i> Cetak
-                </button>
+               {{-- Tombol Cetak di file laporan.blade.php --}}
+<a href="{{ route('admin.laporan.cetak', request()->query()) }}" 
+   target="_blank" 
+   class="btn btn-outline-secondary px-3">
+   <i class="fas fa-print me-1"></i> Cetak
+</a>
             </div>
         </form>
     </div>
@@ -142,8 +145,8 @@
 {{-- TABEL --}}
 <div class="card border-0 shadow-sm p-4" id="print-table">
     <h6 class="fw-bold mb-3 d-print-none">Tabel Pasien</h6>
-    <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle small" style="width: 100%;">
+    <div style="overflow-x: scroll; width: 100%;">
+        <table class="table table-striped table-hover align-middle small" style="min-width: 1500px;">
             <thead style="background-color:#f875aa; color:white;">
                 <tr>
                     <th>ID</th><th>Nama</th><th>Tgl</th><th>Waktu</th><th>UK</th><th>Tri</th><th>Ke-</th><th>Layanan</th>
@@ -189,29 +192,38 @@
 
 {{-- CSS CETAK --}}
 <style>
-/* CSS untuk tampilan web normal */
+    /* CSS tabel tidak dempet */
+#print-table table th,
+#print-table table td {
+    white-space: nowrap;
+    padding: 8px 12px !important;
+}
+
+#print-table .table-responsive {
+    overflow-x: auto;
+}
+
 @media print {
-    /* 1. Sembunyikan semua elemen di layar */
+    /* 1. Sembunyikan SEMUA elemen body secara default */
     body * {
         visibility: hidden !important;
     }
 
-    /* 2. Hanya tampilkan div #surat-cetak dan isinya */
-    #surat-cetak, #surat-cetak * {
+    /* 2. Hanya tampilkan ID #print-table dan semua isinya */
+    #print-table, #print-table * {
         visibility: visible !important;
     }
 
-    /* 3. Atur posisi div ke pojok kiri atas agar tidak berantakan */
-    #surat-cetak {
+    /* 3. Posisi paksa ke pojok kiri atas */
+    #print-table {
         position: absolute;
         left: 0;
         top: 0;
-        width: 100%;
+        width: 100% !important;
     }
 
-    /* 4. Pengaturan Kertas (Potrait) */
     @page {
-        size: A4 portrait;
+        size: A4 landscape;
         margin: 1cm;
     }
 }
@@ -276,9 +288,5 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-// Fungsi Cetak
-function cetakLaporan() {
-    window.print();
-}
 </script>
 @endsection

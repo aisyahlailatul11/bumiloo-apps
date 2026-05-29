@@ -106,6 +106,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.pdf');
     Route::get('/laporan/excel', [LaporanController::class, 'exportExcel'])->name('admin.laporan.excel');
+    Route::get('/laporan/cetak', [LaporanController::class, 'cetak'])->name('admin.laporan.cetak');
 });
 
 // ==========================================
