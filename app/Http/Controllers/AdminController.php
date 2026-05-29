@@ -126,16 +126,15 @@ public function masterPasien()
 {
     $request->validate([
         'nama'            => 'required',
-        'nik'             => 'required',
+        'nik'             => 'required|unique:jadwals,nik,NULL,id,tgl_pemeriksaan,' . $request->tgl_pemeriksaan,
         'tgl_pemeriksaan' => 'required|date',
         'jam'             => 'required',
         'keterangan'      => 'required',
-        'nik' => 'unique:jadwals,nik,NULL,id,tgl_pemeriksaan,' . $request->tgl_pemeriksaan,
     ]);
 
     //Simpan data jadwal ke database
    $jadwal = Jadwal::create([
-    'nama_pasien'     => $request->nama,    // INI HARUS SAMA DENGAN NAMA KOLOM DI DB
+    'nama_pasien'     => $request->nama,    
     'nik'             => $request->nik,
     'no_hp'           => $request->no_hp,
     'tgl_lahir'       => $request->tgl_lahir,

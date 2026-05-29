@@ -4,7 +4,7 @@
 
 @section('content')
 <main class="p-10" style="font-family: 'Poppins', sans-serif;">
-    <h2 class="text-3xl font-bold text-black mb-1">Data Pasien</h2>
+    <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Data Pasien</h1>
     <p class="text-sm font-bold text-gray-500 mb-6">Total Pasien : {{ $totalPasien }}</p>
     
     <div style="width: 100%; overflow-x: auto; border: 1px solid #E2E8F0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); background-color: #FFFFFF;">

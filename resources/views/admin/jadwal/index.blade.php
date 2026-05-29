@@ -24,7 +24,7 @@
 
 <div class="jwl-container w-full" style="padding: 10px 20px; background-color: #FAFAFA; min-height: 100vh;">
     
-    <h1 style="font-size: 26px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Jadwal Konsultasi Pasien</h1>
+    <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Jadwal Konsultasi Pasien</h1>
 
     <div class="jwl-form-box" style="margin-bottom: 35px;">
         <p style="font-size: 15px; font-weight: 700; color: #0F172A; margin: 0 0 25px 0;">
@@ -63,7 +63,7 @@
 
             <div class="jwl-form-row">
                 <div class="jwl-form-group">
-                    <label class="jwl-label">Tgl Periksa</label>
+                    <label class="jwl-label">Tgl Pemeriksaan</label>
                     <input type="date" name="tgl_pemeriksaan" value="{{ $editJadwal->tgl_pemeriksaan ?? '' }}" required class="jwl-input">
                 </div>
                 <div class="jwl-form-group">
@@ -104,7 +104,7 @@
                         <th style="padding: 16px 20px; font-weight: 600;">NIK</th>
                         <th style="padding: 16px 20px; font-weight: 600;">Tgl Lahir</th>
                         <th style="padding: 16px 20px; font-weight: 600;">No. HP</th>
-                         <th style="padding: 16px 20px; font-weight: 600;">Email</th>
+                        <th style="padding: 16px 20px; font-weight: 600;">Email</th>
                         <th style="padding: 16px 20px; font-weight: 600;">Tgl Pemeriksaan</th>
                         <th style="padding: 16px 20px; font-weight: 600;">Jam</th>
                         <th style="padding: 16px 20px; font-weight: 600; text-align: center; border-top-right-radius: 14px; border-bottom-right-radius: 14px; width: 160px;">Aksi</th>

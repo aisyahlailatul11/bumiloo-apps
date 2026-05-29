@@ -128,10 +128,10 @@
 }
 </style>
 
-<div class="bdn-f-container w-full" style="padding: 20px; background-color: #F0F4F8; min-height: 100vh;">
+<div class="bdn-f-container w-full" style="padding: 20px; background-color: #ffffff; min-height: 100vh;">
     <div style="max-w: 1024px; margin: 0 auto;">
-        
-        <h1 style="font-size: 28px; font-weight: 700; color: #1E3A5F; margin: 0 0 8px 0;">Data Bidan</h1>
+
+        <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Data Bidan</h1>
 
         <form action="{{ route('bidan.update', $b->id ?? 1) }}" method="POST" enctype="multipart/form-data"
               x-data= "{ isEditing: false, photoPreview: '{{ asset('images/profil-bidan.jpeg') }}' }">
