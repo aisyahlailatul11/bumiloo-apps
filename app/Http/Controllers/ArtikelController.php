@@ -19,7 +19,7 @@ class ArtikelController extends Controller
     {
         $artikels = Artikel::latest()->get();
         // Sesuaikan dengan nama file blade admin kamu, contoh: 'admin.edukasi'
-        return view('admin.edukasi', compact('artikels')); 
+        return view('admin.edukasi.inputEdukasi', compact('artikels'));
     }
 
     // 3. PROSES SIMPAN ARTIKEL BARU DARI ADMIN

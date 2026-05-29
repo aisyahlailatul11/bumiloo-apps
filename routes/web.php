@@ -98,7 +98,7 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::delete('/jadwal/{id}', [AdminController::class, 'jadwalDestroy'])->name('jadwal.destroy');
 
     // FITUR EDUKASI ADMIN
-    Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi.inputEdukasi');
+    Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
     Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
     Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
 
