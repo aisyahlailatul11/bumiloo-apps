@@ -91,9 +91,6 @@
  <div class="other-menu-list border" style="background-color: #FFF0F3; border-radius: 16px; padding: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
     <p class="text-center small fw-bold text-muted my-2 border-bottom pb-2" style="font-size: 11px; border-color: #FCD2D9 !important;">Tindakan Akun</p>
     
-    <button type="button" onclick="confirmLogout()" class="w-100 btn text-start d-flex justify-content-between align-items-center py-2.5 px-3 text-danger fw-bold border-0 bg-transparent" style="font-size: 14px;">
-        <span><i class="bi bi-box-arrow-right me-2"></i> Keluar</span> <i class="bi bi-chevron-right small"></i>
-    </button>
 
     <button type="button" onclick="confirmDeleteAccount()" class="w-100 btn text-start d-flex justify-content-between align-items-center py-2.5 px-3 text-danger fw-bold border-0 bg-transparent" style="font-size: 14px;">
         <span><i class="bi bi-trash me-2"></i> Hapus akun</span> <i class="bi bi-chevron-right small"></i>
