@@ -13,6 +13,7 @@ use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DaftarPasienController;
+use App\Http\Controllers\LaporanBidanController;
 use Illuminate\Support\Facades\DB;
 
 // 1. Rute Home / Landing Page
@@ -145,8 +146,9 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
     Route::post('/konsultasi/{user_id}/kirim', [BidanController::class, 'kirimKonsultasi'])->name('bidan.konsultasi.kirim');
     Route::post('/konsultasi/{user_id}/request-offline', [BidanController::class, 'requestOffline'])->name('bidan.konsultasi.requestOffline');
     
-    Route::get('/laporan', function () { return view('bidan.laporan'); })->name('bidan.laporan');
-    Route::get('/laporan-bidan-demo', function () { return view('bidan.laporan'); })->name('bidan.laporanBidan');
+    // Laporan Bidan
+    Route::get('/laporan', [LaporanBidanController::class, 'index'])
+        ->name('bidan.laporan');
 });
 
 // PROFILE & PENGATURAN ROUTES (Sistem Umum Bawaan Laravel)
