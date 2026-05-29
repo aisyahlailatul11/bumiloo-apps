@@ -59,8 +59,8 @@
     }
 
     .img-profile-wrapper {
-        width: 170px;
-        height: 170px;
+        width: 150px;
+        height: 150px;
         border: 2.5px solid #7E7E7E; 
         border-radius: 50%;
         margin: 0 auto 15px auto;
@@ -68,7 +68,14 @@
         align-items: center;
         justify-content: center;
         background: #FFFFFF;
-        padding: 10px;
+        padding: 0; /* Hapus padding agar lingkaran abu-abu gambar bisa penuh */
+        overflow: hidden; 
+    }
+
+    .img-profile-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* Mengisi penuh lingkaran wrapper tanpa merusak proporsi gambar */
     }
 
     .nama-bidan {
@@ -238,17 +245,24 @@
         font-weight: 400;
     }
 
-    /* Avatar bulat gelap kecil di dalam chat room sebelah kiri */
+
     .avatar-chat-bidan {
         width: 36px;
         height: 36px;
         border-radius: 50%;
-        background-color: #1A1519;
+        background-color: #FFFFFF;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1.5px solid #7E7E7E;
+        overflow: hidden; 
+    }
+
+    .avatar-chat-bidan img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     /* --- FOOTER FORM INPUT CHAT --- */
@@ -317,9 +331,7 @@
                 <div class="title-top">Bidan Praktik</div>
                 
                 <div class="img-profile-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" style="width: 100%; height: 100%;">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                    </svg>
+                    <img src="{{ asset('images/iconchatbidan.png') }}" alt="Icon Bidan">
                 </div>
 
                 <div class="nama-bidan text-center">Bidan Praktik</div>
@@ -366,10 +378,8 @@
                 {{-- HEADER RUANG CHAT --}}
                 <div class="chat-header-custom">
                     <div class="d-flex align-items-center">
-                        <div class="rounded-circle border overflow-hidden d-flex align-items-center justify-content-center bg-light me-3" style="width: 44px; height: 44px; border: 2px solid #000000 !important;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" style="width: 80%; height: 80%;">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                            </svg>
+                        <div class="rounded-circle border overflow-hidden d-flex align-items-center justify-content-center bg-light me-3" style="width: 44px; height: 44px; border: 2.5px solid #7E7E7E !important; padding: 0;">
+                            <img src="{{ asset('images/iconchatbidan.png') }}" alt="Icon Bidan" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div>
                             <h6 class="fw-bold mb-0 text-dark" style="font-size: 14px;">Bidan Praktik</h6>
@@ -406,11 +416,10 @@
 
                         {{-- CHAT KIRI (DARI BIDAN) --}}
                         @else
-                            <div class="chat-row-bidan">
-                                <div class="avatar-chat-bidan">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF" style="width: 70%; height: 70%;">
-                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                                    </svg>
+             
+                                <div class="chat-row-bidan">
+                                <div class="avatar-chat-bidan" style="overflow: hidden;">
+                                    <img src="{{ asset('images/iconchatbidan.png') }}" alt="Bidan" style="width: 100%; height: 100%; object-fit: contain;">
                                 </div>
                                 
                                 <div class="bubble-bidan">
@@ -434,11 +443,13 @@
                             </div>
                         @endif
 
-                    @empty
-                        <div class="text-center text-muted mt-5" style="font-size: 13px; font-style: italic; background: rgba(255,255,255,0.6); padding: 15px; border-radius: 15px; display: inline-block; margin: 0 auto;">
-                            Belum ada pesan konsultasi. Mulai obrolan dengan Bidan.
-                        </div>
-                    @endforelse
+                         @empty
+                            <div class="text-center w-100 mt-3">
+                                <div class="text-muted" style="font-size: 13.5px; background: #FFFFFF; padding: 12px 35px; border-radius: 50px; display: inline-block; color: #000000 !important; font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                    Belum ada pesan konsultasi. Mulai obrolan dengan Bidan.
+                                </div>
+                            </div>
+                        @endforelse
 
                 </div>
 
