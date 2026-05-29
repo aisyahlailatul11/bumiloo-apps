@@ -13,6 +13,11 @@
 
 <div class="container-fluid">
     <h3 class="fw-bold mb-4 text-dark">Input Data Ibu Hamil</h3>
+    <div>
+         <a href="{{ route('bidan.daftarPasien') }}" class="btn btn-secondary mb-3">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
+    </div>
 
     <form action="{{ route('bidan.pasien.store') }}" method="POST" class="card shadow p-4 mb-5" id="formPasien" onsubmit="return validasiFormBumil(event)">
     @csrf
@@ -32,7 +37,9 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Nama Pasien</label>
-                <input type="text" name="nama_pasien" class="form-control" placeholder="Masukkan Nama Pasien" required>
+                <input type="text" name="nama_pasien" 
+       value="{{ old('nama_pasien', $pasien->nama_pasien ?? '') }}" 
+       class="form-control">
             </div>
         </div>
         
@@ -55,12 +62,13 @@
             <div class="col-md-6">
                 <label class="form-label">Golongan Darah</label>
                 <select name="golongan_darah" class="form-select" required>
-                    <option value="">-- Pilih Golongan Darah --</option>
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="AB">AB</option>
-                    <option value="O">O</option>
-                </select>
+    <option value="">-- Pilih Golongan Darah --</option>
+    <option value="A" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'A' ? 'selected' : '' }}>A</option>
+    <option value="B" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'B' ? 'selected' : '' }}>B</option>
+    <option value="AB" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'AB' ? 'selected' : '' }}>AB</option>
+    <option value="O" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'O' ? 'selected' : '' }}>O</option>
+</select>
+
             </div>
         </div>
         
@@ -80,24 +88,24 @@
                <label class="form-label">Pendidikan</label>
                 <select name="pendidikan" class="form-select" required>
                     <option value="">-- Pilih Pendidikan --</option>
-                    <option value="SD">SD</option>
-                    <option value="SMP">SMP</option>
-                    <option value="SMA">SMA</option>
-                    <option value="Diploma">Diploma</option>
-                    <option value="S1">S1/D4</option>
-                    <option value="S2">S2</option>
-                    <option value="S3">S3</option>
+                    <option value="SD" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SD' ? 'selected' : '' }}>SD</option>
+                    <option value="SMP" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                    <option value="SMA" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                    <option value="Diploma" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'Diploma' ? 'selected' : '' }}>Diploma</option>
+                    <option value="S1" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S1' ? 'selected' : '' }}>S1/D4</option>
+                    <option value="S2" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S2' ? 'selected' : '' }}>S2</option>
+                    <option value="S3" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S3' ? 'selected' : '' }}>S3</option>
                 </select>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Agama</label>
                 <select name="agama" class="form-select" required>
                     <option value="">-- Pilih Agama --</option>
-                    <option value="Islam">Islam</option>
-                    <option value="Kristen">Kristen</option>
-                    <option value="Hindu">Hindu</option>
-                    <option value="Konghucu">Konghucu</option>
-                    <option value="Budha">Budha</option>
+                    <option value="Islam" {{ old('agama', $pasien->agama ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                    <option value="Kristen" {{ old('agama', $pasien->agama ?? '') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                    <option value="Hindu" {{ old('agama', $pasien->agama ?? '') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                    <option value="Konghucu" {{ old('agama', $pasien->agama ?? '') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option> 
+                    <option value="Budha" {{ old('agama', $pasien->agama ?? '') == 'Budha' ? 'selected' : '' }}>Budha</option>
                 </select>
             </div>
         </div>
@@ -109,10 +117,10 @@
         <select id="pilihan_pekerjaan" name="pekerjaan" class="form-select" required 
                 onchange="document.getElementById('kotak_lainnya').style.setProperty('display', this.value === 'Lainnya' ? 'block' : 'none', 'important'); document.getElementById('input_manual').required = (this.value === 'Lainnya');">
             <option value="" disabled selected>-- Pilih Pekerjaan --</option>
-            <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
-            <option value="PNS">PNS</option>
-            <option value="Wiraswasta">Wiraswasta</option>
-            <option value="Lainnya">Lainnya</option>
+            <option value="Ibu Rumah Tangga" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Ibu Rumah Tangga' ? 'selected' : '' }}>Ibu Rumah Tangga</option>
+            <option value="PNS" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'PNS' ? 'selected' : '' }}>PNS</option>
+            <option value="Wiraswasta" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
+            <option value="Lainnya" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
         </select>
         
         <div id="kotak_lainnya" class="mt-2" style="display: none !important;">
@@ -131,7 +139,7 @@
                 <i class="fas fa-undo"></i> Reset
             </button>
             <button type="submit" class="btn btn-success" id="btnSimpan">
-                <i class="fas fa-plus"></i> Tambah
+                <i class="fas fa-user-plus"></i> Tambah
             </button>
             
             <button type="button" id="btnSelanjutnya" class="btn btn-secondary disabled" onclick="keHalamanSelanjutnya()">

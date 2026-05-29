@@ -129,8 +129,8 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
         ->name('bidan.pasien.store');
 
     // Detail pasien (form terisi data pasien)
-    Route::get('/pasien/{id}', [InputPasienController::class, 'showPasien'])
-        ->name('pasien.show');
+    Route::get('/input-daftar-pasien/{id}', [InputPasienController::class, 'editPasien'])
+    ->name('bidan.inputDaftarPasien');
     
     Route::get('/input-perkembangan-pasien', function () {
         return view('bidan.inputPerkembanganPasien');
