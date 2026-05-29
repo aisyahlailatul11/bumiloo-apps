@@ -1,7 +1,7 @@
 @extends('layouts.masterBidan')
 
 @section('content')
-<div class="container mt-4">
+<div class="container-fluid">
     <h3 class="fw-bold mb-4 text-pink">Input Perkembangan Pasien</h3>
 
     @if(session('success'))

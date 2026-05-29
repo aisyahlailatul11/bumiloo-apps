@@ -11,7 +11,7 @@
     .psn-row-normal:nth-child(even) td { background-color: #FFF5F7 !important; }
 </style>
 
-<div class="container-lg mt-4">
+<div class="container-fluid">
     <h3 class="fw-bold mb-4 text-dark">Input Data Ibu Hamil</h3>
 
     <form action="{{ route('bidan.pasien.store') }}" method="POST" class="card shadow p-4 mb-5" id="formPasien" onsubmit="return validasiFormBumil(event)">

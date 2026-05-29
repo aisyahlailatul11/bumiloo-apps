@@ -12,6 +12,7 @@ use App\Http\Controllers\PerkembanganController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ArtikelController;
+use App\Http\Controllers\DaftarPasienController;
 use Illuminate\Support\Facades\DB;
 
 // 1. Rute Home / Landing Page
@@ -113,9 +114,22 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
 Route::middleware(['auth'])->prefix('bidan')->group(function () {
     
     Route::get('/dashboard', [BidanController::class, 'index'])->name('bidan.dashboard');
-    Route::get('/input-daftar-pasien', [InputPasienController::class, 'indexPasien'])->name('bidan.inputDaftarPasien');
-    Route::post('pasien/store', [InputPasienController::class, 'storePasien'])->name('bidan.pasien.store');
-    Route::get('/pasien/{id}', [InputPasienController::class, 'showPasien'])->name('pasien.show');
+      Route::get('/daftar-pasien', [PendaftaranController::class, 'index'])
+        ->name('bidan.daftarPasien');
+
+   //Daftar pasien hari ini
+    Route::get('/daftar-pasien', [DaftarPasienController::class, 'index'])
+        ->name('bidan.daftarPasien');
+
+    // Input data pasien (form kosong)
+    Route::get('/input-daftar-pasien', [InputPasienController::class, 'indexPasien'])
+        ->name('bidan.inputDaftarPasien');
+    Route::post('/pasien/store', [InputPasienController::class, 'storePasien'])
+        ->name('bidan.pasien.store');
+
+    // Detail pasien (form terisi data pasien)
+    Route::get('/pasien/{id}', [InputPasienController::class, 'showPasien'])
+        ->name('pasien.show');
     
     Route::get('/input-perkembangan-pasien', function () {
         return view('bidan.inputPerkembanganPasien');
