@@ -8,7 +8,7 @@
     <div class="row">
 
         {{-- PROFILE BIDAN --}}
-        <div class="col-md-4">
+        <div class="col-md-4 mb-4">
             <div class="card border-0 shadow-sm" style="border-radius:20px;">
                 <div class="card-body text-center">
 
@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        {{-- CHAT --}}
+        {{-- CHAT ROOM --}}
         <div class="col-md-8">
 
             <div class="card border-0 shadow-sm" style="border-radius:20px; height:75vh;">
@@ -70,92 +70,82 @@
 
                     @forelse($pesans as $chat)
 
-                    {{-- CHAT BUMIL --}}
-                    @if($chat->sender == 'bumil')
+                        {{-- CHAT DARI BUMIL --}}
+                        @if($chat->sender == 'bumil')
 
-                    <div class="d-flex justify-content-end mb-3">
+                            <div class="d-flex justify-content-end mb-3">
 
-                        <div class="p-3 text-dark" style="
-                        max-width:70%;
-                        background:#fbcfe8;
-                        border-radius:18px 18px 0 18px;
-                    ">
+                                <div class="p-3 text-dark" style="
+                                    max-width:70%;
+                                    background:#fbcfe8;
+                                    border-radius:18px 18px 0 18px;
+                                ">
+                                    <p class="mb-1">
+                                        {{ $chat->pesan }}
+                                    </p>
 
-                            <p class="mb-1">
-                                {{ $chat->pesan }}
-                            </p>
+                                    <small class="text-muted">
+                                        {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
+                                    </small>
+                                </div>
 
-                            <small class="text-muted">
-                                {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
-                            </small>
+                            </div>
 
-                        </div>
+                        {{-- CHAT DARI BIDAN --}}
+                        @else
 
-                    </div>
+                            <div class="d-flex justify-content-start mb-3">
 
-                    {{-- CHAT BIDAN --}}
-                    @else
+                                <div class="p-3 bg-white border" style="
+                                    max-width:70%;
+                                    border-radius:18px 18px 18px 0;
+                                ">
 
-                    <div class="d-flex justify-content-start mb-3">
+                                    {{-- JIKA PESAN REQUEST OFFLINE DARI BIDAN --}}
+                                    @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
 
-                        <div class="p-3 bg-white border" style="
-                        max-width:70%;
-                        border-radius:18px 18px 18px 0;
-                    ">
+                                        <p class="mb-3 text-dark fw-bold">
+                                            <i class="fas fa-info-circle text-pink me-1"></i> {{ $chat->pesan }}
+                                        </p>
 
-                            {{-- JIKA PESAN REQUEST OFFLINE --}}
-                            @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
+                                        <a href="{{ route('jadwal.index', ['pasien_id' => auth()->user()->id]) }}" 
+                                           class="btn text-white w-100 py-2 fw-bold text-center d-block"
+                                           style="background:#f687b3; border-radius:12px; font-size: 14px; text-decoration: none;">
+                                            <i class="fas fa-calendar-alt me-1"></i> Ajukan Jadwal Offline
+                                        </a>
 
-                            <p class="mb-3">
-                                {{ $chat->pesan }}
-                            </p>
+                                    @else
 
-                            <form action="{{ route('bumil.ajukanJadwalOffline', $chat->id) }}" method="POST">
+                                        <p class="mb-1">
+                                            {{ $chat->pesan }}
+                                        </p>
 
-                                @csrf
+                                    @endif
 
-                                <button type="submit" class="btn text-white"
-                                    style="background:#f687b3; border-radius:12px;">
+                                    <small class="text-muted d-block mt-2">
+                                        {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
+                                    </small>
 
-                                    Ajukan Jadwal Offline
+                                </div>
 
-                                </button>
+                            </div>
 
-                            </form>
-
-                            @else
-
-                            <p class="mb-1">
-                                {{ $chat->pesan }}
-                            </p>
-
-                            @endif
-
-                            <small class="text-muted d-block mt-2">
-                                {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
-                            </small>
-
-                        </div>
-
-                    </div>
-
-                    @endif
+                        @endif
 
                     @empty
 
-                    <div class="text-center text-muted mt-5">
-                        Belum ada pesan konsultasi
-                    </div>
+                        <div class="text-center text-muted mt-5">
+                            Belum ada pesan konsultasi
+                        </div>
 
                     @endforelse
 
                 </div>
 
-                {{-- FORM CHAT --}}
+                {{-- FORM INPUT KIRIM CHAT TEXT --}}
                 <div class="card-footer bg-white border-0">
 
                     <form action="{{ route('bumil.konsultasi.kirim') }}" method="POST">
-
                         @csrf
 
                         <div class="d-flex align-items-center gap-2">
@@ -169,9 +159,7 @@
                                     width:50px;
                                     height:50px;
                                 ">
-
                                 <i class="fa fa-paper-plane"></i>
-
                             </button>
 
                         </div>
