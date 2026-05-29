@@ -5,11 +5,6 @@
 
     <div class="mb-4">
         <div class="d-flex align-items-center gap-3">
-            <div class="rounded-circle d-flex align-items-center justify-content-center text-white"
-                style="width:55px;height:55px;background:#F875AA;">
-                <i class="bi bi-calendar-heart fs-3"></i>
-            </div>
-
             <div>
                 <h4 class="fw-bold mb-1">HPL (Hari Perkiraan Lahir)</h4>
                 <p class="text-muted mb-0">
