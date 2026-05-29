@@ -97,8 +97,8 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::put('/jadwal/{id}', [AdminController::class, 'jadwalUpdate'])->name('jadwal.update');
     Route::delete('/jadwal/{id}', [AdminController::class, 'jadwalDestroy'])->name('jadwal.destroy');
 
-    // FITUR EDUKASI ADMIN (PERBAIKAN: Dihubungkan ke ArtikelController agar halaman "Daftar Edukasi" bisa menampilkan data & fungsi hapus)
-    Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
+    // FITUR EDUKASI ADMIN
+    Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi.inputEdukasi');
     Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
     Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
 
