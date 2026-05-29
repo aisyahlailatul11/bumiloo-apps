@@ -111,10 +111,13 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container-fluid py-3">
 
     <div class="mb-4">
-        <h2 class="fw-bold">Reminder</h2>
+        <h4 class="fw-bold mb-1">
+            Reminder
+        </h4>
+
         <p class="text-muted mb-0">
             Pengingat jadwal penting kehamilan Bunda
         </p>
