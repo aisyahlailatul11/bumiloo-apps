@@ -1,178 +1,489 @@
 @extends('layouts.masterBumil')
 
 @section('content')
-<div class="container-fluid py-4">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <h4 class="fw-bold mb-4">Konsultasi Bidan</h4>
+<style>
+    /* Kontainer utama halaman konsultasi */
+    .chat-page-container {
+        font-family: 'Poppins', sans-serif !important;
+        background-color: #000000 !important; /* Latar belakang hitam pekat figma luar */
+        padding: 25px;
+        min-height: calc(100vh - 60px); 
+        display: flex;
+        align-items: stretch;
+    }
 
-    <div class="row">
+    .chat-row-layout {
+        width: 100%;
+        margin: 0;
+        display: flex;
+    }
 
-        {{-- PROFILE BIDAN --}}
-        <div class="col-md-4 mb-4">
-            <div class="card border-0 shadow-sm" style="border-radius:20px;">
-                <div class="card-body text-center">
+    /* ========================================================== */
+    /* FORCE SIDEBAR ACTIVE STATE - BIAR SAMA KAYA DI FIGMA       */
+    /* ========================================================== */
+    /* CSS ini otomatis mencari menu konsultasi di master layout & mengubahnya seolah dipencet */
+    .sidebar .nav-item a.nav-link[href*="konsultasi"],
+    .sidebar .nav-link.active,
+    .main-sidebar .nav-link[href*="konsultasi"] {
+        background-color: rgba(255, 255, 255, 0.25) !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+        border-radius: 12px !important;
+    }
+    .sidebar .nav-item a.nav-link[href*="konsultasi"] i,
+    .sidebar .nav-link.active i {
+        color: #FFFFFF !important;
+    }
 
-                    <div class="mb-3">
-                        <img src="https://ui-avatars.com/api/?name=Bidan&background=f9a8d4&color=fff"
-                            class="rounded-circle" width="110" height="110">
+    /* ========================================== */
+    /* STYLING PROFILE BIDAN (SISI KIRI)          */
+    /* ========================================== */
+    .bidan-profile-card {
+        background: #FFFFFF !important;
+        border: none !important;
+        border-radius: 30px !important;
+        padding: 35px 24px !important;
+        height: 100%;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .title-top {
+        font-size: 15px;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 30px;
+        text-align: left;
+    }
+
+    .img-profile-wrapper {
+        width: 170px;
+        height: 170px;
+        border: 2.5px solid #7E7E7E; 
+        border-radius: 50%;
+        margin: 0 auto 15px auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #FFFFFF;
+        padding: 10px;
+    }
+
+    .nama-bidan {
+        font-size: 16px;
+        font-weight: 700;
+        color: #000000;
+        margin-bottom: 12px;
+    }
+
+    .badge-online {
+        background-color: #DCFCE7 !important; 
+        color: #16A34A !important; 
+        font-weight: 600 !important;
+        padding: 6px 24px !important;
+        border-radius: 50px !important;
+        font-size: 14px !important;
+        border: none !important;
+        display: inline-block;
+        margin-bottom: 35px;
+    }
+
+    .info-box-jadwal {
+        background: #FDF0F2 !important; 
+        border-radius: 24px !important;
+        padding: 20px 24px !important;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .info-box-tips {
+        background: #F9C9C3 !important; 
+        border-radius: 24px !important;
+        padding: 20px 24px !important;
+        text-align: left;
+    }
+
+    .box-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #000000;
+        margin: 0;
+    }
+
+    .box-desc {
+        font-size: 13px;
+        color: #000000;
+        font-weight: 400;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+
+    /* ========================================== */
+    /* STYLING CHAT ROOM (SISI KANAN)             */
+    /* ========================================== */
+    .chat-room-card {
+        background: #FFFFFF !important;
+        border-radius: 30px !important;
+        border: none !important;
+        height: 100%;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column; 
+    }
+
+    .chat-header-custom {
+        background: #FFFFFF !important;
+        border-bottom: 1px solid #E2E8F0 !important;
+        padding: 15px 30px !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0; 
+    }
+
+    .btn-end-chat {
+        border: 2px solid #F84F8F !important; 
+        color: #F84F8F !important;
+        font-weight: 600 !important;
+        border-radius: 50px !important;
+        padding: 6px 22px !important;
+        background: transparent !important;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-end-chat:hover {
+        background: #F84F8F !important;
+        color: #FFFFFF !important;
+    }
+
+    /* GRADASI DIAGONAL SESUAI FIGMA (TERANG DI KIRI ATAS, GELAP DI KANAN BAWAH) */
+    .chat-body-custom {
+        background: linear-gradient(135deg, #D6BEC2 0%, #CBB4B9 45%, #221B21 45.2%, #2C252B 100%) !important;
+        padding: 25px 30px !important;
+        overflow-y: auto;
+        flex-grow: 1; 
+        position: relative;
+    }
+
+    /* --- BUBBLE CHAT PATTERN & TAIL --- */
+    
+    /* Gelembung Pasien (Kanan) - Sesuai Gambar */
+    .chat-row-bumil {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 25px;
+    }
+    .bubble-bumil {
+        background: #F5B6AE !important; 
+        color: #000000 !important;
+        border-radius: 25px 25px 0px 25px !important; 
+        padding: 18px 26px !important;
+        max-width: 70%;
+        position: relative;
+        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
+    }
+    .bubble-bumil::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: -10px;
+        width: 0;
+        height: 0;
+        border-bottom: 15px solid #F5B6AE;
+        border-right: 15px solid transparent;
+    }
+
+    /* Gelembung Bidan (Kiri) - Sejajar Bawah sesuai Gambar */
+    .chat-row-bidan {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-end;
+        gap: 12px;
+        margin-bottom: 25px;
+    }
+    .bubble-bidan {
+        background: #FFFFFF !important;
+        color: #000000 !important;
+        border-radius: 25px 25px 25px 0px !important; 
+        padding: 18px 26px !important;
+        max-width: 70%;
+        position: relative;
+        box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    .bubble-bidan::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: -10px;
+        width: 0;
+        height: 0;
+        border-bottom: 15px solid #FFFFFF;
+        border-left: 15px solid transparent;
+    }
+
+    .chat-time {
+        font-size: 11px;
+        color: #666666;
+        display: block;
+        text-align: right;
+        margin-top: 8px;
+        font-weight: 400;
+    }
+
+    /* Avatar bulat gelap kecil di dalam chat room sebelah kiri */
+    .avatar-chat-bidan {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: #1A1519;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* --- FOOTER FORM INPUT CHAT --- */
+    .chat-footer-custom {
+        background: #FFFFFF !important;
+        padding: 15px 25px 20px 25px !important;
+        border-top: 1px solid #E2E8F0 !important;
+        flex-shrink: 0; 
+    }
+
+    .input-wrapper-custom {
+        background: #F1F5F9 !important; 
+        border-radius: 50px !important;
+        padding: 6px 10px 6px 24px !important;
+        display: flex;
+        align-items: center;
+        border: 1px solid #E2E8F0;
+    }
+
+    .input-chat-field {
+        border: none !important;
+        background: transparent !important;
+        outline: none !important;
+        box-shadow: none !important;
+        font-size: 14px;
+        color: #000000;
+        flex-grow: 1;
+        padding: 8px 0 !important;
+    }
+
+    .btn-clip-attachment {
+        background: transparent !important;
+        border: none !important;
+        color: #94A3B8 !important;
+        font-size: 20px !important;
+        margin-right: 15px !important;
+        cursor: pointer;
+    }
+
+    .btn-send-round {
+        background: #F84F8F !important; 
+        color: #FFFFFF !important;
+        width: 42px;
+        height: 42px;
+        border-radius: 50% !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none !important;
+        transition: transform 0.1s ease;
+    }
+    .btn-send-round:hover {
+        transform: scale(1.05);
+    }
+</style>
+
+<div class="chat-page-container container-fluid">
+    <div class="row chat-row-layout g-4">
+
+        {{-- ========================================== --}}
+        {{-- KONSULTASI SISI KIRI: PROFILE BIDAN         --}}
+        {{-- ========================================== --}}
+        <div class="col-md-4">
+            <div class="card bidan-profile-card">
+                
+                <div class="title-top">Bidan Praktik</div>
+                
+                <div class="img-profile-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" style="width: 100%; height: 100%;">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+
+                <div class="nama-bidan text-center">Bidan Praktik</div>
+                
+                <div class="text-center">
+                    <span class="badge badge-online">Online</span>
+                </div>
+
+                <div class="info-box-jadwal">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <i class="far fa-calendar-alt text-dark" style="font-size: 18px;"></i>
+                        <h6 class="box-title">Jadwal Praktik</h6>
                     </div>
-
-                    <h5 class="fw-bold text-pink">Bidan Praktik</h5>
-
-                    <span class="badge bg-success mb-4">
-                        Online
-                    </span>
-
-                    <div class="p-3 rounded-4" style="background:#fde8f2;">
-                        <h6 class="fw-bold text-pink mb-2">
-                            Jadwal Praktik
-                        </h6>
-
-                        <p class="mb-0 text-muted">
-                            Setiap Hari <br>
-                            08.00 - 16.00 WIB
+                    <div style="padding-left: 32px;">
+                        <p class="box-desc">
+                            Praktik setiap hari<br>
+                            08.00-16.00
                         </p>
                     </div>
-
                 </div>
+
+                <div class="info-box-tips">
+                    <div class="d-flex align-items-center gap-3 mb-2">
+                        <i class="far fa-lightbulb text-dark" style="font-size: 18px;"></i>
+                        <h6 class="box-title">Tips</h6>
+                    </div>
+                    <div style="padding-left: 32px;">
+                        <p class="box-desc" style="text-align: justify;">
+                            Diskusikan keluhan Anda dengan bidan secara terbuka agar mendapatkan saran yang tepat.
+                        </p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        {{-- CHAT ROOM --}}
+
+        {{-- ========================================== --}}
+        {{-- KONSULTASI SISI KANAN: CHAT ROOM UTAMA      --}}
+        {{-- ========================================== --}}
         <div class="col-md-8">
-
-            <div class="card border-0 shadow-sm" style="border-radius:20px; height:75vh;">
-
-                {{-- HEADER CHAT --}}
-                <div class="card-header bg-white border-0 d-flex align-items-center justify-content-between py-3"
-                    style="border-radius:20px 20px 0 0;">
-
+            <div class="card chat-room-card">
+                
+                {{-- HEADER RUANG CHAT --}}
+                <div class="chat-header-custom">
                     <div class="d-flex align-items-center">
-                        <img src="https://ui-avatars.com/api/?name=Bidan&background=f9a8d4&color=fff"
-                            class="rounded-circle me-3" width="45">
-
+                        <div class="rounded-circle border overflow-hidden d-flex align-items-center justify-content-center bg-light me-3" style="width: 44px; height: 44px; border: 2px solid #000000 !important;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000000" style="width: 80%; height: 80%;">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                            </svg>
+                        </div>
                         <div>
-                            <h6 class="fw-bold mb-0">Bidan Praktik</h6>
-
-                            <small class="text-success">
-                                Online
-                            </small>
+                            <h6 class="fw-bold mb-0 text-dark" style="font-size: 14px;">Bidan Praktik</h6>
+                            <small class="text-success fw-bold" style="font-size: 11px;">Online</small>
                         </div>
                     </div>
-
-                    <a href="{{ route('bumil.dashboard') }}" class="btn btn-outline-danger btn-sm">
-                        Akhiri Chat
+                    <a href="{{ route('bumil.dashboard') }}" class="btn btn-end-chat">
+                        <i class="fas fa-sign-out-alt"></i> Akhiri chat
                     </a>
                 </div>
 
-                {{-- ISI CHAT --}}
-                <div class="card-body overflow-auto" style="background:#fff5f8;">
+                {{-- AREA UTAMA DAFTAR PESAN --}}
+                <div class="chat-body-custom">
+                    
+                    {{-- Badge Hari --}}
+                    <div class="text-center mb-4">
+                        <span class="badge bg-white text-dark border px-4 py-2 rounded-4 font-medium" style="font-size: 11px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                            Hari ini
+                        </span>
+                    </div>
 
                     @forelse($pesans as $chat)
-
-                        {{-- CHAT DARI BUMIL --}}
+                        
+                        {{-- CHAT KANAN (DARI BUMIL) --}}
                         @if($chat->sender == 'bumil')
-
-                            <div class="d-flex justify-content-end mb-3">
-
-                                <div class="p-3 text-dark" style="
-                                    max-width:70%;
-                                    background:#fbcfe8;
-                                    border-radius:18px 18px 0 18px;
-                                ">
-                                    <p class="mb-1">
-                                        {{ $chat->pesan }}
-                                    </p>
-
-                                    <small class="text-muted">
-                                        {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
-                                    </small>
+                            <div class="chat-row-bumil">
+                                <div class="bubble-bumil">
+                                    <p class="mb-0" style="font-size: 13.5px; line-height: 1.6;">{{ $chat->pesan }}</p>
+                                    <span class="chat-time">
+                                        {{ \Carbon\Carbon::parse($chat->created_at)->format('H.i') }}
+                                    </span>
                                 </div>
-
                             </div>
 
-                        {{-- CHAT DARI BIDAN --}}
+                        {{-- CHAT KIRI (DARI BIDAN) --}}
                         @else
-
-                            <div class="d-flex justify-content-start mb-3">
-
-                                <div class="p-3 bg-white border" style="
-                                    max-width:70%;
-                                    border-radius:18px 18px 18px 0;
-                                ">
-
-                                    {{-- JIKA PESAN REQUEST OFFLINE DARI BIDAN --}}
+                            <div class="chat-row-bidan">
+                                <div class="avatar-chat-bidan">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#FFFFFF" style="width: 70%; height: 70%;">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                                    </svg>
+                                </div>
+                                
+                                <div class="bubble-bidan">
                                     @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
-
-                                        <p class="mb-3 text-dark fw-bold">
-                                            <i class="fas fa-info-circle text-pink me-1"></i> {{ $chat->pesan }}
+                                        <p class="mb-3 text-dark fw-bold" style="font-size: 13.5px;">
+                                            <i class="fas fa-info-circle me-1" style="color: #F84F8F;"></i> {{ $chat->pesan }}
                                         </p>
-
-                                        <a href="{{ route('jadwal.index', ['pasien_id' => auth()->user()->id]) }}" 
+                                        <a href="{{ route('jadwal.index', ['pendaftaran_id' => auth()->user()->id]) }}" 
                                            class="btn text-white w-100 py-2 fw-bold text-center d-block"
-                                           style="background:#f687b3; border-radius:12px; font-size: 14px; text-decoration: none;">
+                                           style="background:#F84F8F; border-radius:12px; font-size: 12px; text-decoration: none;">
                                             <i class="fas fa-calendar-alt me-1"></i> Ajukan Jadwal Offline
                                         </a>
-
                                     @else
-
-                                        <p class="mb-1">
-                                            {{ $chat->pesan }}
-                                        </p>
-
+                                        <p class="mb-0" style="font-size: 13.5px; line-height: 1.6; white-space: pre-line;">{{ $chat->pesan }}</p>
                                     @endif
-
-                                    <small class="text-muted d-block mt-2">
-                                        {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
-                                    </small>
-
+                                    
+                                    <span class="chat-time">
+                                        {{ \Carbon\Carbon::parse($chat->created_at)->format('H.i') }}
+                                    </span>
                                 </div>
-
                             </div>
-
                         @endif
 
                     @empty
-
-                        <div class="text-center text-muted mt-5">
-                            Belum ada pesan konsultasi
+                        <div class="text-center text-muted mt-5" style="font-size: 13px; font-style: italic; background: rgba(255,255,255,0.6); padding: 15px; border-radius: 15px; display: inline-block; margin: 0 auto;">
+                            Belum ada pesan konsultasi. Mulai obrolan dengan Bidan.
                         </div>
-
                     @endforelse
 
                 </div>
 
-                {{-- FORM INPUT KIRIM CHAT TEXT --}}
-                <div class="card-footer bg-white border-0">
-
-                    <form action="{{ route('bumil.konsultasi.kirim') }}" method="POST">
+                {{-- FORM INPUT TEXT TERKUNCI PALING BAWAH --}}
+                <div class="chat-footer-custom">
+                    <form action="{{ route('bumil.konsultasi.kirim') }}" method="POST" class="m-0">
                         @csrf
+                        <div class="input-wrapper-custom">
+                            
+                            <button type="button" class="btn-clip-attachment">
+                                <i class="fas fa-paperclip"></i>
+                            </button>
 
-                        <div class="d-flex align-items-center gap-2">
+                            <input type="text" name="pesan" class="input-chat-field" 
+                                   placeholder="Ketik pesan....." required autocomplete="off">
 
-                            <input type="text" name="pesan" class="form-control" placeholder="Ketik pesan....." required
-                                style="border-radius:14px;">
-
-                            <button type="submit" class="btn text-white" style="
-                                    background:#ec4899;
-                                    border-radius:14px;
-                                    width:50px;
-                                    height:50px;
-                                ">
-                                <i class="fa fa-paper-plane"></i>
+                            <button type="submit" class="btn-send-round">
+                                <i class="fas fa-paper-plane" style="font-size: 13px; margin-left: -2px;"></i>
                             </button>
 
                         </div>
-
                     </form>
-
                 </div>
 
             </div>
-
         </div>
 
     </div>
-
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Auto scroll room chat ke row paling bawah
+        var chatBody = document.querySelector(".chat-body-custom");
+        if(chatBody) {
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        // Script tambahan untuk memastikan class active nempel di sidebar master template luar Anda
+        var currentNavLinks = document.querySelectorAll('.sidebar a, .nav-link');
+        currentNavLinks.forEach(function(el) {
+            if (el.getAttribute('href') && el.getAttribute('href').includes('konsultasi')) {
+                el.classList.add('active');
+            }
+        });
+    });
+</script>
 @endsection
