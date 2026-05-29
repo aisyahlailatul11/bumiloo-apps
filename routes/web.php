@@ -69,6 +69,9 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     Route::get('/konsultasi', [BumilController::class, 'konsultasi'])->name('bumil.konsultasi');
     Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])->name('bumil.konsultasi.kirim');
     Route::post('/ajukan-jadwal-offline/{chat_id}', [BumilController::class, 'ajukanJadwalOffline'])->name('bumil.ajukanJadwalOffline');
+
+    // REMINDER BUMIL
+    Route::get('/reminder', [BumilController::class, 'reminder'])->name('bumil.reminder');
 });
 
 // ==========================================

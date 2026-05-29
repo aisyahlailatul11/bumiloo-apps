@@ -101,4 +101,33 @@ public function detailRiwayatPerkembangan($id)
     {
         return view('bumil.hpl');
     }
+    public function reminder()
+{
+    $data = DB::table('tb_pendaftaran')
+        ->where('user_id', Auth::id())
+        ->first();
+
+    if ($data) {
+        $jadwals = DB::table('jadwals')
+            ->where('nik', $data->nik)
+            ->orderBy('tgl_pemeriksaan', 'asc')
+            ->orderBy('jam', 'asc')
+            ->get();
+    } else {
+        $jadwals = collect();
+    }
+
+    $events = $jadwals->map(function ($jadwal) {
+        return [
+            'title' => $jadwal->keterangan ?? 'Jadwal Konsultasi',
+            'start' => $jadwal->tgl_pemeriksaan . 'T' . $jadwal->jam,
+            'extendedProps' => [
+                'jam' => $jadwal->jam,
+                'keterangan' => $jadwal->keterangan ?? 'Jadwal Konsultasi',
+            ],
+        ];
+    });
+
+    return view('bumil.reminder', compact('data', 'jadwals', 'events'));
+}
 }

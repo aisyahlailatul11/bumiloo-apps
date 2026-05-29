@@ -434,7 +434,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="{{ route('bumil.reminder') }}"
+                    class="nav-link {{ request()->routeIs('bumil.reminder') ? 'active' : '' }}">
                     <i class="fas fa-bell"></i> <span>Reminder</span>
                 </a>
             </li>
@@ -452,7 +453,7 @@
         </ul>
     </div>
 
-   <script>
+    <script>
     function konfirmasiLogout() {
         Swal.fire({
             title: 'Keluar sesi?',
@@ -470,9 +471,9 @@
             }
         });
     }
-</script>
+    </script>
 
-<style>
+    <style>
     /* 1. Paksa bentuk persegi dan ukuran */
     .swal2-container .swal2-popup {
         border-radius: 20px !important;
@@ -499,7 +500,8 @@
         border-radius: 8px !important;
         font-weight: 700 !important;
         font-size: 14px !important;
-        order: 2 !important; /* Memastikan posisi tombol */
+        order: 2 !important;
+        /* Memastikan posisi tombol */
     }
 
     .swal2-cancel {
@@ -512,7 +514,7 @@
         font-size: 14px !important;
         order: 1 !important;
     }
-</style>
+    </style>
     @include('partials.alerts'){{-- TOPBAR --}}
     @include('partials.header')
 
@@ -555,4 +557,5 @@
     });
     </script>
 </body>
+
 </html>
