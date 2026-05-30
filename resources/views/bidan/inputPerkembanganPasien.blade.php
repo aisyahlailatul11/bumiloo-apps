@@ -21,21 +21,40 @@
 
         <h5 class="fw-bold text-pink mb-3">Data Pemeriksaan</h5>
         <div class="row mb-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">Tanggal Pemeriksaan <span class="text-danger">*</span></label>
                 <input type="date" name="tanggal_pemeriksaan" class="form-control" required>
             </div>
-            <div class="col-md-6">
-             <label class="form-label">Waktu Pemeriksaan <span class="text-danger">*</span></label>
-            <div class="input-group">
-           <input type="time" name="waktu_pemeriksaan" class="form-control" step="60" required>
+            <div class="col-md-4">
+                 <label class="form-label">Waktu Pemeriksaan <span class="text-danger">*</span></label>
+                <div class="input-group">
+                <input type="time" name="waktu_pemeriksaan" class="form-control" step="60" required>
             <span class="input-group-text">WIB</span>
             </div>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Jenis Pelayanan / Kunjungan <span class="text-danger">*</span></label>
+                    <select name="jenis_layanan" class="form-select" required>
+                        <option value="">-- Pilih Jenis Pelayanan --</option>
+                        <option value="Kunjungan Pertama">Kunjungan Pertama</option>
+                        <option value="Kunjungan Ulang">Kunjungan Ulang</option>
+                        <option value="Persalinan">Persalinan</option>
+                    </select>
             </div>
         </div>
 
         <h5 class="fw-bold text-pink mb-3">Data Kehamilan</h5>
         <div class="row mb-3">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label class="form-label">HPHT (Hari Pertama Haid Terakhir) <span class="text-danger">*</span></label>
+                    <input type="date" name="hpht" class="form-control" required>
+                 </div>
+                <div class="col-md-4">
+                  <label class="form-label">HPL (Hari Perkiraan Lahir) <span class="text-danger">*</span></label>
+                  <input type="date" name="hpl" class="form-control" required>
+             </div>
+            </div>
             <div class="col-md-4">
                 <label class="form-label">Usia Kehamilan <span class="text-danger">*</span></label>
                 <select name="usia_kehamilan" id="select_usia_kehamilan" class="form-select" required>
@@ -138,9 +157,15 @@
         <textarea name="catatan_tambahan" class="form-control mb-3" rows="2" placeholder="Catatan tambahan (Opsional)"></textarea>
 
         <div class="text-end gap-2 d-flex justify-content-end">
-            <a href="{{ route('bidan.inputDaftarPasien') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left me-1"></i> Kembali
-            </a>
+            @if(request()->query('pasien_id'))
+    <a href="{{ route('bidan.inputDaftarPasien', ['id' => request()->query('pasien_id')]) }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Kembali ke Form Pasien
+    </a>
+@else
+    <a href="{{ route('bidan.daftarPasien') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Kembali ke Daftar Pasien
+    </a>
+@endif
 
             <button type="reset" class="btn btn-warning text-dark" id="btnResetForm">
                 <i class="fas fa-undo me-1"></i> Reset
