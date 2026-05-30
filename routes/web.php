@@ -14,7 +14,7 @@ use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DaftarPasienController;
 use App\Http\Controllers\LaporanBidanController;
-use App\Http\Controllers\KonsultasiBumilController;
+use App\Http\Controllers\BumilKonsultasiController;
 use App\Http\Controllers\DataBidanController;
 use Illuminate\Support\Facades\DB;
 
@@ -70,7 +70,7 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     // KONSULTASI BUMIL
     Route::get('/konsultasi', [BumilController::class, 'konsultasi'])->name('bumil.konsultasi');
     Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])->name('bumil.konsultasi.kirim');
-    Route::post('/konsultasi-bumil/ajukan', [KonsultasiBumilController::class, 'ajukanJadwal'])->name('konsultasi.ajukan');
+    Route::post('/konsultasi-bumil/ajukan', [BumilKonsultasiController::class, 'ajukanJadwal'])->name('konsultasi.ajukan');
 
     // REMINDER BUMIL
     Route::get('/reminder', [BumilController::class, 'reminder'])->name('bumil.reminder');
