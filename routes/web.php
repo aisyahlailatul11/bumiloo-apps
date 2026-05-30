@@ -14,6 +14,7 @@ use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DaftarPasienController;
 use App\Http\Controllers\LaporanBidanController;
+use App\Http\Controllers\KonsultasiBumilController;
 use Illuminate\Support\Facades\DB;
 
 // Rute Home / Landing Page
@@ -53,7 +54,7 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
-    // ARTIKEL BUMIL (Sudah aman terhubung ke ArtikelController)
+    // ARTIKEL BUMIL
     Route::get('/artikel', [ArtikelController::class, 'index'])->name('bumil.artikel');
     
     // RIWAYAT PERKEMBANGAN
@@ -68,7 +69,7 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     // KONSULTASI BUMIL
     Route::get('/konsultasi', [BumilController::class, 'konsultasi'])->name('bumil.konsultasi');
     Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])->name('bumil.konsultasi.kirim');
-    Route::post('/ajukan-jadwal-offline/{chat_id}', [BumilController::class, 'ajukanJadwalOffline'])->name('bumil.ajukanJadwalOffline');
+    Route::post('/konsultasi-bumil/ajukan', [KonsultasiBumilController::class, 'ajukanJadwal'])->name('konsultasi.ajukan');
 
     // REMINDER BUMIL
     Route::get('/reminder', [BumilController::class, 'reminder'])->name('bumil.reminder');

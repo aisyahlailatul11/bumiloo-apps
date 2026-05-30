@@ -9,19 +9,25 @@ use Illuminate\Support\Facades\Auth;
 class KonsultasiBumilController extends Controller
 {
     /**
-     * Fungsi untuk mengajukan jadwal offline (mengubah status_konsultasi menjadi 'menunggu')
+     * Fungsi untuk mengajukan jadwal offline
      */
     public function ajukanJadwal(Request $request)
     {
-        // 1. Ambil ID pengguna/pasien yang sedang login
-        $userId = Auth::id(); 
+        // 1. Ambil data pendaftaran berdasarkan user yang sedang login
+        $pendaftaran = DB::table('tb_pendaftaran')
+            ->where('user_id', Auth::id())
+            ->first();
 
-        // 2. Cari data pasien di tabel 'daftar_pasien' berdasarkan user_id / id yang login
-        // Catatan: Jika relasi login kamu menggunakan ID lain, sesuaikan where-nya ya.
-        $pasien = DB::table('daftar_pasien')->where('id', $userId)->first();
+        if (!$pendaftaran) {
+            return redirect()->back()->with('error', 'Data pendaftaran bumil tidak ditemukan.');
+        }
+
+        // 2. Cari data di 'daftar_pasien' berdasarkan NIK dari data pendaftaran
+        // (Atau jika di tb_pendaftaran ada id yang langsung nyambung ke daftar_pasien, sesuaikan bagian ini)
+        $pasien = DB::table('daftar_pasien')->where('nik', $pendaftaran->nik)->first();
 
         if (!$pasien) {
-            return redirect()->back()->with('error', 'Data pasien tidak ditemukan.');
+            return redirect()->back()->with('error', 'Data pasien di daftar_pasien tidak ditemukan.');
         }
 
         // 3. Update status_konsultasi menjadi 'menunggu'
@@ -31,7 +37,6 @@ class KonsultasiBumilController extends Controller
                 'status_konsultasi' => 'menunggu'
             ]);
 
-        // 4. Kembalikan ke halaman sebelumnya dengan pesan sukses
         return redirect()->back()->with('success', 'Jadwal offline berhasil diajukan. Silakan tunggu konfirmasi bidan.');
     }
 }
