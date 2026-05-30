@@ -133,10 +133,9 @@
 
         <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Data Bidan</h1>
 
-        <form action="{{ route('bidan.update', $b->id ?? 1) }}" method="POST" enctype="multipart/form-data"
+        <form action="{{ route('bidan.update', $b->id) }}" method="POST" enctype="multipart/form-data"
               x-data= "{ isEditing: false, photoPreview: '{{ asset('images/profil-bidan.jpeg') }}' }">
             @csrf
-            @method('PUT')
 
             <div class="bdn-f-card">
                 
@@ -189,34 +188,34 @@
                                     </div>
                                     <div>
                                         <span class="bdn-f-label">Nama Bidan</span>
-                                        <div x-show="!isEditing" class="bdn-f-value" style="font-size: 18px !important; font-weight: 800 !important; color: #1E3A5F !important;">Siti Fatimah</div>
-                                        <input x-show="isEditing" x-cloak type="text" name="nama" value="Siti Fatimah" class="bdn-f-input">
+                                        <div x-show="!isEditing" class="bdn-f-value" style="font-size: 18px !important; font-weight: 800 !important; color: #1E3A5F !important;">{{ $b->nama }}</div>
+                                        <input x-show="isEditing" x-cloak type="text" name="nama" value="{{ old('nama', $b->nama) }}" class="bdn-f-input">
                                     </div>
                                 </div>
                             </div>
 
                             <div class="bdn-f-group">
                                 <span class="bdn-f-label">Status Praktik</span>
-                                <p x-show="!isEditing" class="bdn-f-value">Aktif</p>
-                                <input x-show="isEditing" x-cloak type="text" name="status" value="Aktif" class="bdn-f-input">
+                                <p x-show="!isEditing" class="bdn-f-value">{{ $b->status }}</p>
+                               <input x-show="isEditing" x-cloak type="text" name="status" value="{{ old('status', $b->status) }}" class="bdn-f-input">
                             </div>
 
                             <div class="bdn-f-group">
                                 <span class="bdn-f-label">NIP</span>
-                                <p x-show="!isEditing" class="bdn-f-value">19850101200122001</p>
-                                <input x-show="isEditing" x-cloak type="text" name="nip" value="19850101200122001" class="bdn-f-input">
+                                <p x-show="!isEditing" class="bdn-f-value">{{ $b->nip }}</p>
+                                <input x-show="isEditing" x-cloak type="text" name="nip" value="{{ old('nip', $b->nip) }}" class="bdn-f-input">
                             </div>
 
                             <div class="bdn-f-group">
                                 <span class="bdn-f-label">SIP (Surat Izin Praktik)</span>
-                                <p x-show="!isEditing" class="bdn-f-value">SIP/2023/05/001</p>
-                                <input x-show="isEditing" x-cloak type="text" name="sip" value="SIP/2023/05/001" class="bdn-f-input">
+                                <p x-show="!isEditing" class="bdn-f-value">{{ $b->sip }}</p>
+                                <input x-show="isEditing" x-cloak type="text" name="sip" value="{{ old('sip', $b->sip) }}" class="bdn-f-input">
                             </div>
 
                             <div class="bdn-f-group">
                                 <span class="bdn-f-label">Profil Singkat & Layanan</span>
-                                <p x-show="!isEditing" class="bdn-f-value" style="line-height: 1.6; color: #475569;">Bidan berpengalaman 15 tahun, spesialisasi ibu dan anak. Menyediakan layanan prenatal, postnatal, dan KB.</p>
-                                <textarea x-show="isEditing" x-cloak name="profil_singkat" rows="3" class="bdn-f-input" style="resize: none;">Bidan berpengalaman 15 tahun, spesialisasi ibu dan anak. Menyediakan layanan prenatal, postnatal, dan KB.</textarea>
+                                <p x-show="!isEditing" class="bdn-f-value" style="line-height: 1.6; color: #475569;">{{ $b->profil_singkat }}</p>
+                                <textarea x-show="isEditing" x-cloak name="profil_singkat" class="bdn-f-input" rows="3">{{ old('profil_singkat', $b->profil_singkat) }}</textarea>
                             </div>
                         </div>
 
@@ -227,13 +226,13 @@
                                 </h4>
                                 <div class="bdn-f-group">
                                     <span class="bdn-f-label">No. HP</span>
-                                    <p x-show="!isEditing" class="bdn-f-value">087656433212</p>
-                                    <input x-show="isEditing" x-cloak type="text" name="no_hp" value="087656433212" class="bdn-f-input">
+                                    <p x-show="!isEditing" class="bdn-f-value">{{ $b->no_hp }}</p>
+                                    <input x-show="isEditing" x-cloak type="text" name="no_hp" value="{{ old('no_hp', $b->no_hp) }}" class="bdn-f-input">
                                 </div>
                                 <div class="bdn-f-group">
                                     <span class="bdn-f-label">Email</span>
-                                    <p x-show="!isEditing" class="bdn-f-value">sitifatimah@gmail.com</p>
-                                    <input x-show="isEditing" x-cloak type="email" name="email" value="sitifatimah@gmail.com" class="bdn-f-input">
+                                    <p x-show="!isEditing" class="bdn-f-value">{{ $b->email }}</p>
+                                    <input x-show="isEditing" x-cloak type="text" name="email" value="{{ old('email', $b->email) }}" class="bdn-f-input">
                                 </div>
                             </div>
 
@@ -243,23 +242,23 @@
                                 </h4>
                                 <div class="bdn-f-group">
                                     <span class="bdn-f-label">Alamat Praktik Mandiri</span>
-                                    <p x-show="!isEditing" class="bdn-f-value">Jl. Melati No.5, Jember</p>
-                                    <input x-show="isEditing" x-cloak type="text" name="alamat_praktik" value="Jl. Melati No.5, Jember" class="bdn-f-input">
+                                    <p x-show="!isEditing" class="bdn-f-value">{{ $b->alamat_praktik }}</p>
+                                    <input x-show="isEditing" x-cloak type="text" name="alamat_praktik" value="{{ old('alamat_praktik', $b->alamat_praktik) }}" class="bdn-f-input">
                                 </div>
                                 <div class="bdn-f-group">
                                     <span class="bdn-f-label">Status Akreditasi TPMB</span>
-                                    <p x-show="!isEditing" class="bdn-f-value" style="color: #F875AA; font-weight: 700;">Terakreditasi - A</p>
-                                    <input x-show="isEditing" x-cloak type="text" name="status_akreditasi" value="Terakreditasi - A" class="bdn-f-input">
+                                    <p x-show="!isEditing" class="bdn-f-value" style="color: #F875AA; font-weight: 700;">{{$b->status_akreditasi}}</p>
+                                    <input x-show="isEditing" x-cloak type="text" name="status_akreditasi" value="{{ old('status_akreditasi', $b->status_akreditasi) }}" class="bdn-f-input">
                                 </div>
                                 <div class="bdn-f-group">
                                     <span class="bdn-f-label">Jadwal Praktik</span>
-                                    <p x-show="!isEditing" class="bdn-f-value">Senin-Jumat: 08:00 - 16:00</p>
-                                    <input x-show="isEditing" x-cloak type="text" name="jadwal_praktik" value="Senin-Jumat: 08:00 - 16:00" class="bdn-f-input">
+                                    <p x-show="!isEditing" class="bdn-f-value">{{$b->jadwal_praktik}}</p>
+                                    <input x-show="isEditing" x-cloak type="text" name="jadwal_praktik" value="{{ old('jadwal_praktik', $b->jadwal_praktik) }}" class="bdn-f-input">
                                 </div>
                                 <div class="bdn-f-group">
                                     <span class="bdn-f-label">Detail Tambahan</span>
-                                    <p x-show="!isEditing" class="bdn-f-value">Masa Berlaku STR: 07/02/2028</p>
-                                    <input x-show="isEditing" x-cloak type="text" name="detail_tambahan" value="Masa Berlaku STR: 07/02/2028" class="bdn-f-input">
+                                    <p x-show="!isEditing" class="bdn-f-value">{{$b->detail_tambahan}}</p>
+                                    <input x-show="isEditing" x-cloak type="text" name="detail_tambahan" value="{{ old('detail_tambahan', $b->detail_tambahan) }}" class="bdn-f-input">
                                 </div>
                             </div>
                         </div>
@@ -269,15 +268,4 @@
         </form>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@if(session('success'))
-<script>
-    Swal.fire({
-        text: "Data profil bidan berhasil diupdate!",
-        showConfirmButton: false, timer: 2500, toast: true, position: 'top', width: '400px',
-        background: '#C6E7CE', color: '#000000', customClass: { popup: 'rounded-xl' }
-    });
-</script>
-@endif
 @endsection

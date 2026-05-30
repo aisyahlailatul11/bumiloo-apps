@@ -72,12 +72,19 @@
                 </div>
             </div>
 
-            <div class="jwl-form-row" style="margin-bottom: 25px;">
-                <div class="jwl-form-group" style="align-items: flex-start;">
-                    <label class="jwl-label" style="padding-top: 10px;">Keterangan</label>
-                    <textarea name="keterangan" placeholder="Masukkan keterangan konsultasi..." required class="jwl-input" style="height: 80px; resize: none; font-family: inherit; flex-grow: 1;">{{ $editJadwal->keterangan ?? '' }}</textarea>
-                </div>
-            </div>
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+    <label style="font-size: 14px; font-weight: 600; color: #334155; width: 120px;">
+        Keterangan
+    </label>
+    
+    <select name="keterangan" required 
+            style="width: 300px; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px;">
+        <option value="" disabled selected>--Pilih Keterangan--</option>
+        <option value="Pemeriksaan Awal">Pemeriksaan Awal</option>
+        <option value="Kontrol Rutin">Kontrol Rutin</option>
+        <option value="Persalinan">Persalinan</option>
+    </select>
+</div>
 
             <div style="display: flex; justify-content: flex-end; width: 100%; gap: 12px;">
                 @if(isset($editJadwal))
@@ -159,7 +166,7 @@
 <script>
     function confirmDelete(id, nama) {
         Swal.fire({
-            title: 'Hapus Jadwal?',
+            title: 'Yakin ingin menghapus jadwal?',
             text: "Jadwal pemeriksaan milik " + nama + " akan terhapus permanen!",
             icon: 'warning',
             showCancelButton: true,
@@ -180,21 +187,4 @@
         })
     }
 </script>
-@if(session('success'))
-<script>
-    Swal.fire({
-        text: "{{ session('success') }}",
-        showConfirmButton: false, 
-        timer: 3500, 
-        toast: true, 
-        position: 'top', 
-        width: 'auto',
-        background: '#C6E7CE', 
-        color: '#1E293B',      
-        customClass: { 
-            popup: 'rounded-xl shadow-lg px-6 py-4 font-poppins font-medium' 
-        }
-    });
-</script>
-@endif
 @endsection

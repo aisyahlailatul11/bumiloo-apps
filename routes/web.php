@@ -15,6 +15,7 @@ use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DaftarPasienController;
 use App\Http\Controllers\LaporanBidanController;
 use App\Http\Controllers\KonsultasiBumilController;
+use App\Http\Controllers\DataBidanController;
 use Illuminate\Support\Facades\DB;
 
 // Rute Home / Landing Page
@@ -84,14 +85,15 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     // Master Data Admin
-    Route::prefix('master')->group(function () {
-        Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
-        Route::get('/bidan', [AdminController::class, 'dataBidan'])->name('master.dataBidan');
-        Route::get('/bidan-alias', [AdminController::class, 'dataBidan'])->name('master.bidan');
-        Route::put('/bidan/{id}/update', function ($id) {
-            return redirect()->back()->with('success', 'Data bidan berhasil diperbarui! (Demo Mode)');
-        })->name('bidan.update');
-    });
+Route::prefix('master')->group(function () {
+    // Ubah .pasien menjadi .dataPasien agar sama dengan yang dipanggil di layout
+    Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
+
+    Route::get('/bidan', [DataBidanController::class, 'dataBidan'])->name('master.bidan');
+    
+    // Gunakan POST saja, tidak perlu Route::any agar lebih aman
+    Route::post('/bidan/update/{id}', [DataBidanController::class, 'updateBidan'])->name('bidan.update');
+});
 
     // Fitur Jadwal Kegiatan Admin
     Route::get('/jadwal', [AdminController::class, 'jadwalIndex'])->name('jadwal.index');
@@ -135,6 +137,7 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
     Route::get('/jadwal', [AdminController::class, 'jadwalBidan'])->name('bidan.jadwal');
     Route::get('/cek-kunjungan/{pasien_id}', [PerkembanganController::class, 'cekKunjungan'])
     ->name('bidan.cekKunjungan');
+
     // KONSULTASI BIDAN
     Route::get('/konsultasi', [BidanController::class, 'konsultasi'])->name('bidan.konsultasi');
     Route::get('/konsultasi/{user_id}', [BidanController::class, 'detailKonsultasi'])->name('bidan.konsultasi.detail');
