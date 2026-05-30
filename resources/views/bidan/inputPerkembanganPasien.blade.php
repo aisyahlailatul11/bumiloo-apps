@@ -3,16 +3,7 @@
 @section('content')
 <div class="container-fluid">
     <h3 class="fw-bold mb-4 text-pink">Input Perkembangan Pasien</h3>
-
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show text-center"
-             role="alert"
-             style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-                    z-index: 9999; display: inline-block; max-width: 80%; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-            <i class="fas fa-check-circle me-1"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
+    @include('partials.alerts')
 
     <form action="{{ route('bidan.inputPerkembangan') }}" method="POST" id="formPerkembangan" 
           onsubmit="return validasiFormPerkembangan(event)" class="card shadow p-4 mb-4">
@@ -23,7 +14,7 @@
         <div class="row mb-3">
             <div class="col-md-4">
                 <label class="form-label">Tanggal Pemeriksaan <span class="text-danger">*</span></label>
-                <input type="date" name="tanggal_pemeriksaan" class="form-control" required>
+                <input type="date" name="tanggal_pemeriksaan" id="tanggal_pemeriksaan" class="form-control" required>
             </div>
             <div class="col-md-4">
                  <label class="form-label">Waktu Pemeriksaan <span class="text-danger">*</span></label>
@@ -32,39 +23,33 @@
             <span class="input-group-text">WIB</span>
             </div>
             </div>
-            {{-- Ganti bagian dropdown jenis layanan yang sudah ada jadi ini: --}}
-<div class="col-md-4">
-    <label class="form-label">Jenis Pelayanan / Kunjungan <span class="text-danger">*</span></label>
-    <select name="jenis_layanan" id="select_jenis_layanan" class="form-select" required>
-        <option value="">-- Pilih Jenis Pelayanan --</option>
-        <option value="Kunjungan Pertama">Kunjungan Pertama</option>
-        <option value="Kunjungan Ulang">Kunjungan Ulang</option>
-        <option value="Persalinan">Persalinan</option>
-    </select>
-    <small id="info_jenis_layanan" class="mt-1 d-block"></small>
-</div>
+            <div class="col-md-4">
+                <label class="form-label">Jenis Pelayanan / Kunjungan <span class="text-danger">*</span></label>
+                <select name="jenis_layanan" id="select_jenis_layanan" class="form-select" required>
+                    <option value="">-- Pilih Jenis Pelayanan --</option>
+                    <option value="Kunjungan Pertama">Kunjungan Pertama</option>
+                    <option value="Kunjungan Ulang">Kunjungan Ulang</option>
+                    <option value="Persalinan">Persalinan</option>
+                </select>
+                <small id="info_jenis_layanan" class="mt-1 d-block"></small>
+            </div>
         </div>
 
         <h5 class="fw-bold text-pink mb-3">Data Kehamilan</h5>
         <div class="row mb-3">
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">HPHT (Hari Pertama Haid Terakhir) <span class="text-danger">*</span></label>
-                     <input type="date" name="hpht" value="{{ old('hpht', $hpht ?? '') }}" class="form-control" required>
-                 </div>
-                <div class="col-md-4">
-                  <label class="form-label">HPL (Hari Perkiraan Lahir) <span class="text-danger">*</span></label>
-                  <input type="date" name="hpl" class="form-control" required>
+            <div class="col-md-4">
+                <label class="form-label">HPHT (Hari Pertama Haid Terakhir) <span class="text-danger">*</span></label>
+                <input type="date" name="hpht" id="hpht" value="{{ old('hpht', $hpht ?? '') }}" class="form-control" readonly required>
              </div>
+            <div class="col-md-4">
+                 <label class="form-label">HPL (Hari Perkiraan Lahir) <span class="text-danger">*</span></label>
+                 <input type="date" name="hpl" id="hpl" class="form-control" readonly required style="background-color: #e9ecef;">
             </div>
+        </div>
+        <div class="row mb-3">
             <div class="col-md-4">
                 <label class="form-label">Usia Kehamilan <span class="text-danger">*</span></label>
-                <select name="usia_kehamilan" id="select_usia_kehamilan" class="form-select" required>
-                    <option value="">-- Usia Kehamilan --</option>
-                    @for ($i = 1; $i <= 40; $i++)
-                        <option value="{{ $i }}">{{ $i }} minggu</option>
-                    @endfor
-                </select>
+                <input type="text" name="usia_kehamilan" id="usia_kehamilan" class="form-control" readonly required placeholder="Otomatis" style="background-color: #e9ecef;">
             </div>
             <div class="col-md-4">
                 <label class="form-label">Trimester</label>
@@ -117,7 +102,7 @@
                 <label class="form-label">Tinggi Badan (cm) <span class="text-danger">*</span></label>
                 <input type="number" step="0.01" name="tinggi_badan" id="tinggi_badan" class="form-control" required>
             </div>
-            <div class="col-md-4   ">
+            <div class="col-md-4">
                 <label class="form-label">IMT</label>
                 <input type="number" step="0.01" name="imt" id="imt" class="form-control" 
                        placeholder="Otomatis" readonly style="background-color: #e9ecef;" required>
@@ -160,14 +145,14 @@
 
         <div class="text-end gap-2 d-flex justify-content-end">
             @if(request()->query('pasien_id'))
-    <a href="{{ route('bidan.inputDaftarPasien', ['id' => request()->query('pasien_id')]) }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Kembali ke Form Pasien
-    </a>
-@else
-    <a href="{{ route('bidan.daftarPasien') }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Kembali ke Daftar Pasien
-    </a>
-@endif
+                <a href="{{ route('bidan.inputDaftarPasien', ['id' => request()->query('pasien_id')]) }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Form Pasien
+                </a>
+            @else
+                <a href="{{ route('bidan.daftarPasien') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Kembali ke Daftar Pasien
+                </a>
+            @endif
 
             <button type="reset" class="btn btn-warning text-dark" id="btnResetForm">
                 <i class="fas fa-undo me-1"></i> Reset
@@ -182,29 +167,68 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const selectUsia = document.getElementById('select_usia_kehamilan');
+    const inputHpht = document.getElementById('hpht');
+    const inputHpl = document.getElementById('hpl');
+    const inputUsia = document.getElementById('usia_kehamilan');
+    const inputTanggalPeriksa = document.getElementById('tanggal_pemeriksaan');
     const inputTrimester = document.getElementById('select_trimester');
 
-    function hitungTrimester() {
-        const usia = parseInt(selectUsia.value);
-        if (!isNaN(usia)) {
-            if (usia >= 1 && usia <= 13) {
+    // Set tanggal pemeriksaan otomatis ke hari ini (biar bidan gak repot)
+    if (inputTanggalPeriksa && !inputTanggalPeriksa.value) {
+        inputTanggalPeriksa.value = new Date().toISOString().split('T')[0];
+    }
+
+    function hitungOtomatisKehamilan() {
+        const hphtValue = inputHpht.value;
+        const tglPeriksaValue = inputTanggalPeriksa.value;
+
+        if (!hphtValue || !tglPeriksaValue) return;
+
+        const dateHpht = new Date(hphtValue);
+        const datePeriksa = new Date(tglPeriksaValue);
+
+        // 1. HITUNG HPL (Rumus Naegele)
+        const dateHpl = new Date(dateHpht);
+        dateHpl.setDate(dateHpl.getDate() + 7);
+        dateHpl.setMonth(dateHpl.getMonth() + 9); 
+        
+        inputHpl.value = dateHpl.toISOString().split('T')[0];
+
+        // 2. HITUNG USIA KEHAMILAN
+        const selisihWaktu = datePeriksa.getTime() - dateHpht.getTime();
+        const selisihHari = Math.floor(selisihWaktu / (1000 * 3600 * 24));
+        
+        if (selisihHari >= 0) {
+            const minggu = Math.floor(selisihHari / 7);
+            const hari = selisihHari % 7;
+            
+            inputUsia.value = `${minggu} Minggu ${hari} Hari`;
+
+            // 3. AUTO-FILL TRIMESTER
+            if (minggu >= 0 && minggu <= 13) {
                 inputTrimester.value = 1;
-            } else if (usia >= 14 && usia <= 27) {
+            } else if (minggu >= 14 && minggu <= 27) {
                 inputTrimester.value = 2;
-            } else if (usia >= 28 && usia <= 40) {
+            } else if (minggu >= 28 && minggu <= 42) {
                 inputTrimester.value = 3;
             } else {
                 inputTrimester.value = '';
             }
         } else {
+            inputUsia.value = '0 Minggu';
             inputTrimester.value = '';
         }
+
+        // Pemicu event change manual agar script Auto Detect Jenis Layanan ikut ter-update
+        inputUsia.dispatchEvent(new Event('change'));
     }
 
-    if (selectUsia) {
-        selectUsia.addEventListener('change', hitungTrimester);
-    }
+    // Jalankan fungsi saat HPHT atau Tanggal Pemeriksaan berubah
+    if (inputHpht) inputHpht.addEventListener('change', hitungOtomatisKehamilan);
+    if (inputTanggalPeriksa) inputTanggalPeriksa.addEventListener('change', hitungOtomatisKehamilan);
+
+    // Jalankan langsung saat pertama kali halaman dibuka
+    setTimeout(hitungOtomatisKehamilan, 300);
 });
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -251,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-  
     if (selectPenyakit) {
         selectPenyakit.addEventListener('change', function() {
             if (this.value === 'Lainnya') {
@@ -270,12 +293,11 @@ document.addEventListener('DOMContentLoaded', function() {
     window.validasiFormPerkembangan = function(event) {
         const form = document.getElementById('formPerkembangan');
         const kolomWajib = [
-    'tanggal_pemeriksaan','waktu_pemeriksaan','usia_kehamilan',
-    'trimester','kehamilan_ke','riwayat_penyakit','berat_badan',
-    'tinggi_badan','imt','tekanan_darah','tinggi_fundus','lila',
-    'djj','keluhan','tindakan','obat',
-    'jenis_layanan' // ← tambah ini
-];
+            'tanggal_pemeriksaan','waktu_pemeriksaan','usia_kehamilan',
+            'trimester','kehamilan_ke','berat_badan',
+            'tinggi_badan','imt','tekanan_darah','tinggi_fundus','lila',
+            'djj','keluhan','tindakan','obat','jenis_layanan'
+        ];
 
         let adaYangKosong = false;
         kolomWajib.forEach(namaKolom => {
@@ -307,13 +329,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const waktuInput = document.querySelector('[name="waktu_pemeriksaan"]');
-waktuInput.addEventListener('change', function() {
-    if (this.value) {
-        let [jam, menit] = this.value.split(':');
-        jam = jam.padStart(2, '0');
-        this.value = `${jam}:${menit}`; // format 24 jam
-    }
-});
+if (waktuInput) {
+    waktuInput.addEventListener('change', function() {
+        if (this.value) {
+            let [jam, menit] = this.value.split(':');
+            jam = jam.padStart(2, '0');
+            this.value = `${jam}:${menit}`;
+        }
+    });
+}
+
 // ================================
 // AUTO DETECT JENIS LAYANAN
 // ================================
@@ -323,18 +348,17 @@ waktuInput.addEventListener('change', function() {
                      : null;
     const selectJenis = document.getElementById('select_jenis_layanan');
     const infoJenis = document.getElementById('info_jenis_layanan');
-    const selectUsia = document.getElementById('select_usia_kehamilan');
+    const selectUsia = document.getElementById('usia_kehamilan');
 
-    // Fungsi cek kunjungan ke backend
     function cekRiwayatKunjungan() {
         if (!pasienId || !selectJenis) return;
 
         fetch(`/bidan/cek-kunjungan/${pasienId}`)
             .then(res => res.json())
             .then(data => {
-                const usia = parseInt(selectUsia ? selectUsia.value : 0);
+                // Modifikasi parseInt agar aman membaca format string "X Minggu Y Hari"
+                const usia = selectUsia ? parseInt(selectUsia.value) : 0;
                 
-                // Cek usia dulu, kalau >= 37 langsung Persalinan
                 if (usia >= 37) {
                     selectJenis.value = 'Persalinan';
                     infoJenis.textContent = '✓ Otomatis: Usia kehamilan >= 37 minggu';
@@ -350,21 +374,18 @@ waktuInput.addEventListener('change', function() {
                 }
             })
             .catch(() => {
-                // Kalau gagal fetch, biarkan bidan pilih manual
                 infoJenis.textContent = 'Pilih jenis layanan secara manual';
                 infoJenis.style.color = '#999';
             });
     }
 
-    // Jalankan saat halaman load
     if (pasienId) {
         cekRiwayatKunjungan();
     }
 
-    // Saat usia kehamilan berubah, cek ulang
     if (selectUsia) {
         selectUsia.addEventListener('change', function() {
-            const usia = parseInt(this.value);
+            const usia = parseInt(this.value) || 0;
             if (usia >= 37) {
                 selectJenis.value = 'Persalinan';
                 infoJenis.textContent = '✓ Otomatis: Usia kehamilan >= 37 minggu (kemungkinan persalinan)';

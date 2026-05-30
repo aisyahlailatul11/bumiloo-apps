@@ -13,6 +13,10 @@
 
 <div class="container-fluid">
     <h3 class="fw-bold mb-4 text-dark">Input Data Ibu Hamil</h3>
+
+    @include('partials.alerts') 
+
+
     <div>
          <a href="{{ route('bidan.daftarPasien') }}" class="btn btn-secondary mb-3">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
@@ -368,16 +372,6 @@ function validasiFormBumil(event) {
     return true; 
 } 
 </script>
-
-@if(session('sukses'))
-    <div class="alert alert-success alert-dismissible fade show text-center"
-         role="alert"
-         style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-                z-index: 9999; display: inline-block; max-width: 80%;">
-        {{ session('sukses') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-@endif
 
 @if(session('edited_id'))
     <script>
