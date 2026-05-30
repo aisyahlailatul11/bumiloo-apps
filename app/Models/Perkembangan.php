@@ -35,6 +35,6 @@ class Perkembangan extends Model
 
     public function pasien()
     {
-        return $this->belongsTo(\App\Models\DaftarPasien::class, 'pasien_id');
+         return $this->belongsTo(\App\Models\Pasien::class, 'pasien_id');
     }
 }
