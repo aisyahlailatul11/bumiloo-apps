@@ -39,4 +39,8 @@ class Pasien extends Model
     public function getGolDarahAttribute() {
         return $this->golongan_darah;
     }
+
+    public function pendaftaran() {
+        return $this->hasOne(Pendaftaran::class, 'nik', 'nik');
+    }
 }
