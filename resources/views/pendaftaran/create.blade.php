@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bumiloo - Pendaftaran</title>
+    <title>Pendaftaran Bumil</title>
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=poppins:400,500,600,700,800" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -71,16 +71,25 @@
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 2px; }
     
-    .form-input { 
-        width: 100%; padding: 12px 16px; 
-        border: 1px solid #E2E8F0; 
-        border-radius: 12px; 
-        font-size: 13px;
-        box-shadow: none !important;
-        background: #FDFDFD;
-    }
-    .form-input:focus { border-color: var(--bml-pink); outline: none; }
-    .readonly-medis { background-color: #F8FAFC !important; color: #64748B !important; border-style: dashed; }
+    /* Pastikan ini ada di style kamu */
+.form-input { 
+    width: 100%; padding: 12px 16px; 
+    border: 1px solid #E2E8F0; 
+    border-radius: 12px; font-size: 13px;
+    background: #FDFDFD;
+}
+
+/* Hanya tambahkan panah jika dia adalah select */
+select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+.form-input:focus { border-color: var(--bml-pink); outline: none; }
+.readonly-medis { background-color: #F8FAFC !important; color: #64748B !important; border-style: dashed; }
 
     .kalkulator-medis-box {
         grid-column: 1 / -1;
@@ -108,6 +117,7 @@
         border-left: 3px solid var(--bml-pink);
         padding-left: 10px; margin: 15px 0;
     }
+    .form-input { padding-right: 35px; width: 100%; }
 </style>
 </head>
 
@@ -121,7 +131,7 @@
     <div class="pendaftaran-card">
         <div class="header-section">
             <h2>Pendaftaran</h2>
-            <p>Lengkapi formulir medis pasien baru untuk memulai pemantauan kehamilan terintegrasi.</p>
+            <p>Lengkapi data diri Bunda untuk memulai pemantauan kehamilan terintegrasi.</p>
         </div>
 
         <form method="POST" action="{{ route('pendaftaran.store') }}">
@@ -144,9 +154,11 @@
                     <input type="hidden" name="nama" value="{{ Auth::user()->name }}">
                 </div>
 
-                <div class="form-group">
+                <!-- Agama -->
+                 <div class="form-group dropdown-container">
                     <label>Agama</label>
                     <select name="agama" class="form-input" required>
+                        <option value="">Pilih Agama</option>
                         <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
                         <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
                         <option value="Katolik" {{ old('agama') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
@@ -160,14 +172,16 @@
                     <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" class="form-input" placeholder="Kota Kelahiran" required>
                 </div>
 
-                <div class="form-group">
+                <!-- Pendidikan -->
+                 <div class="form-group dropdown-container">
                     <label>Pendidikan</label>
                     <select name="pendidikan" class="form-input" required>
+                        <option value="">Pilih Pendidikan</option>
                         <option value="SD" {{ old('pendidikan') == 'SD' ? 'selected' : '' }}>SD / Sederajat</option>
                         <option value="SMP" {{ old('pendidikan') == 'SMP' ? 'selected' : '' }}>SMP / Sederajat</option>
                         <option value="SMA" {{ old('pendidikan') == 'SMA' ? 'selected' : '' }}>SMA / Sederajat</option>
                         <option value="D3" {{ old('pendidikan') == 'D3' ? 'selected' : '' }}>D3 / Diploma</option>
-                        <option value="S1/D4" {{ old('pendidikan') == 'S1/D4' ? 'selected' : '' }}>S1 / D4 / Sarjana</option>
+                        <option value="S1/D4" {{ old('pendidikan') == 'S1/D4' ? 'selected' : '' }}>S1 / D4 </option>
                         <option value="S2" {{ old('pendidikan') == 'S2' ? 'selected' : '' }}>S2</option>
                         <option value="S3" {{ old('pendidikan') == 'S3' ? 'selected' : '' }}>S3</option>
                     </select>
@@ -178,45 +192,49 @@
                     <input type="date" id="tgl_lahir" name="tgl_lahir" value="{{ old('tgl_lahir') }}" class="form-input" required>
                 </div>
 
-                <div class="form-group">
+               <!-- Golongan Darah -->
+                <div class="form-group dropdown-container">
                     <label>Golongan Darah</label>
                     <select name="gol_darah" class="form-input" required>
-                        <option value="A" {{ old('gol_darah') == 'A' ? 'selected' : '' }}>A</option>
-                        <option value="B" {{ old('gol_darah') == 'B' ? 'selected' : '' }}>B</option>
-                        <option value="AB" {{ old('gol_darah') == 'AB' ? 'selected' : '' }}>AB</option>
-                        <option value="O" {{ old('gol_darah') == 'O' ? 'selected' : '' }}>O</option>
-                    </select>
-                </div>
+                    <option value="">Pilih Gol. Darah</option>
+                    <option value="A" {{ old('gol_darah') == 'A' ? 'selected' : '' }}>A</option>
+                    <option value="B" {{ old('gol_darah') == 'B' ? 'selected' : '' }}>B</option>
+                    <option value="AB" {{ old('gol_darah') == 'AB' ? 'selected' : '' }}>AB</option>
+                    <option value="O" {{ old('gol_darah') == 'O' ? 'selected' : '' }}>O</option>
+                </select>
+            </div>
 
                 <div class="form-group">
                     <label>Umur Ibu</label>
                     <input type="number" id="umur" name="umur" value="{{ old('umur') }}" class="form-input readonly-medis" placeholder="Otomatis" readonly required>
                 </div>
 
-                <div class="form-group">
+                <!-- Pekerjaan Ibu -->
+                 <div class="form-group dropdown-container">
                     <label>Pekerjaan Ibu</label>
-                    <select id="pekerjaan_select" class="form-input" required>
-                        <option value="Ibu Rumah Tangga" {{ old('pekerjaan') == 'Ibu Rumah Tangga' ? 'selected' : '' }}>Ibu Rumah Tangga</option>
-                        <option value="PNS / ASN" {{ old('pekerjaan') == 'PNS / ASN' ? 'selected' : '' }}>PNS / ASN</option>
-                        <option value="Karyawan Swasta" {{ old('pekerjaan') == 'Karyawan Swasta' ? 'selected' : '' }}>Karyawan Swasta</option>
-                        <option value="Wiraswasta" {{ old('pekerjaan') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
+                    <select id="pekerjaan_select" class="form-input" onchange="togglePekerjaan(this.value)">
+                        <option value="">Pilih Pekerjaan</option>
+                        <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                        <option value="PNS / ASN">PNS / ASN</option>
+                        <option value="Karyawan Swasta">Karyawan Swasta</option>
+                        <option value="Wiraswasta">Wiraswasta</option>
                         <option value="Lainnya">Lainnya...</option>
                     </select>
-                    <div id="kotak_lainnya" class="hidden-pekerjaan">
-                        <input type="text" id="input_manual" name="pekerjaan" value="{{ old('pekerjaan') }}" class="form-input" placeholder="Tulis Pekerjaan Anda" style="border-color: var(--bml-pink);">
-                    </div>
-                </div>
+                    <div id="kotak_lainnya" style="display:none; margin-top:10px;">
+        <input type="text" id="input_manual" name="pekerjaan" class="form-input" placeholder="Tulis Pekerjaan Anda">
+    </div>
+</div>
 
                 <div class="form-group" style="grid-column: span 2;">
-                    <label>Alamat Domisili Lengkap</label>
+                    <label>Alamat Domisili</label>
                     <input type="text" name="alamat" value="{{ old('alamat') }}" class="form-input" placeholder="Nama Jalan, RT/RW, Desa, Kecamatan" required>
                 </div>
 
-                <div class="section-divider">Data Suami (Penanggung Jawab)</div>
+                <div class="section-divider">Data Suami</div>
 
                 <div class="form-group">
                     <label>Nama Suami</label>
-                    <input type="text" name="nama_suami" value="{{ old('nama_suami') }}" class="form-input" placeholder="Nama Ayah" required>
+                    <input type="text" name="nama_suami" value="{{ old('nama_suami') }}" class="form-input" placeholder="Nama Suami" required>
                 </div>
 
                 <div class="form-group">
