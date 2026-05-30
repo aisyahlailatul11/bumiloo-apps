@@ -58,7 +58,6 @@ class AdminController extends Controller
     ));
 }
 
-
     /**
      * Menampilkan Data Pasien
      */
@@ -71,28 +70,27 @@ class AdminController extends Controller
     return view('admin.pasien.index', compact('pasiens')); 
 }
 
-    /**
-     * Menampilkan Data Bidan untuk Admin
-     */
-   public function dataBidan()
+//DATA PASIEN (MASTER)
+
+public function masterPasien(Request $request)
 {
-    $b = \App\Models\User::where('role', 'Bidan')->orderBy('created_at', 'desc')->first();
-    if (!$b) {
-        $b = (object) [
-            'id' => 1,
-            'id_bidan' => 'B001',
-            'nama' => 'Siti Fatimah, Amd.Keb', 
-            'email' => 'bidan@demo.com',
-            'nip' => '-',
-            'sip' => '-'
-        ];
+    // Mulai query dari model Pendaftaran
+    $query = \App\Models\Pendaftaran::query();
+
+    // 1. Pencarian (berdasarkan nama pasien)
+    if ($request->has('cari') && $request->cari != '') {
+        $query->where('nama', 'like', '%' . $request->cari . '%');
     }
-    return view('admin.master.dataBidan', compact('b'));
-}
-public function masterPasien()
-{
-    $pasiens = \App\Models\Pendaftaran::all(); 
-    $totalPasien = $pasiens->count(); 
+
+    // 2. Filter Status (asumsi ada kolom 'status_pendaftaran')
+    if ($request->has('status') && $request->status != 'semua') {
+        $query->where('status_pendaftaran', $request->status);
+    }
+
+    // Eksekusi query
+    $pasiens = $query->latest()->get();
+    $totalPasien = $pasiens->count();
+
     return view('admin.master.dataPasien', compact('pasiens', 'totalPasien'));
 }
 

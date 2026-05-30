@@ -6,6 +6,21 @@
 <main class="p-10" style="font-family: 'Poppins', sans-serif;">
     <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Data Pasien</h1>
     <p class="text-sm font-bold text-gray-500 mb-6">Total Pasien : {{ $totalPasien }}</p>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px;">
+    
+    <div style="display: flex; gap: 8px;">
+        <a href="?status=semua" style="padding: 8px 16px; background: #64748b; color: white; border-radius: 8px; text-decoration: none; font-size: 14px;">Semua</a>
+        <a href="?status=menunggu" style="padding: 8px 16px; background: #F59E0B; color: white; border-radius: 8px; text-decoration: none; font-size: 14px;">Menunggu Jadwal</a>
+        <a href="?status=terjadwal" style="padding: 8px 16px; background: #10B981; color: white; border-radius: 8px; text-decoration: none; font-size: 14px;">Terjadwal</a>
+    </div>
+
+    <form action="{{ route('master.pasien') }}" method="GET" style="display: flex; gap: 8px;">
+        <input type="text" name="cari" placeholder="Cari nama pasien..." 
+               style="padding: 8px 12px; border: 1px solid #E2E8F0; border-radius: 8px; outline: none;">
+        <button type="submit" style="padding: 8px 20px; background: #3B82F6; color: white; border: none; border-radius: 8px; cursor: pointer;">Cari</button>
+    </form>
+</div>
     
     <div style="width: 100%; overflow-x: auto; border: 1px solid #E2E8F0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); background-color: #FFFFFF;">
         <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 1600px; font-size: 15px;">
