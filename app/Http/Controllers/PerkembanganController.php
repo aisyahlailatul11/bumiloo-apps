@@ -34,4 +34,13 @@ class PerkembanganController extends Controller
         Perkembangan::create($validatedData);
         return redirect()->back()->with('success', 'Data pasien berhasil disimpan!');
     }
+
+    public function indexPerkembangan($pasien_id)
+    {
+        // Mencari data pasien berdasarkan ID, jika tidak ada akan memunculkan error 404
+        $pasien = Pasien::findOrFail($pasien_id);
+
+        // Kirim data pasien ke halaman view
+        return view('bidan.inputPerkembanganPasien', compact('pasien'));
+    }
 }

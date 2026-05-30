@@ -12,6 +12,8 @@ class Perkembangan extends Model
         'pasien_id',
         'tanggal_pemeriksaan',
         'waktu_pemeriksaan',
+        'hpht',
+        'hpl',
         'usia_kehamilan',
         'trimester',
         'kehamilan_ke',

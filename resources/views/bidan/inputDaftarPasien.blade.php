@@ -238,7 +238,7 @@ function isiForm(id) {
             if(document.querySelector('[name="agama"]')) document.querySelector('[name="agama"]').value = data.agama || '';
             if(document.querySelector('[name="nama_suami"]')) document.querySelector('[name="nama_suami"]').value = data.nama_suami || '';
 
-            // Bagian Logika Pekerjaan (Lanjutkan kode Anda di bawah)
+            // Bagian Logika Pekerjaan
             const selectPekerjaan = document.getElementById('pilihan_pekerjaan');
             const kotakLainnya = document.getElementById('kotak_lainnya');
             const inputManual = document.getElementById('input_manual');
@@ -265,58 +265,42 @@ function isiForm(id) {
             if (typeof periksaKelengkapanForm === 'function') {
                 periksaKelengkapanForm();
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Gagal mengambil data pasien: ' + error.message);
-        });
-}
 
+            // --- KODE MODIFIKASI TOMBOL DI MASUKKAN KE SINI (DALAM PROMISE FETCH) ---
             const btnSelanjutnya = document.getElementById('btnSelanjutnya');
             if (btnSelanjutnya) {
                 btnSelanjutnya.className = 'btn';
                 btnSelanjutnya.style.backgroundColor = '#f875aa';
                 btnSelanjutnya.style.color = 'white';
             }
-            
-           const btnSimpan = document.getElementById('btnSimpan');
 
-if (btnSimpan) {
-    btnSimpan.innerHTML = '<i class="fas fa-save"></i> Perbarui Data';
-    
-    btnSimpan.classList.remove('btn-success');
-    btnSimpan.classList.add('btn-info', 'text-white');
-}
+            const btnSimpan = document.getElementById('btnSimpan');
+            if (btnSimpan) {
+                btnSimpan.innerHTML = '<i class="fas fa-save"></i> Perbarui Data';
+                btnSimpan.classList.remove('btn-success');
+                btnSimpan.classList.add('btn-info', 'text-white');
+            }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         })
-       .catch(error => {
-    console.error(error);
+        .catch(error => {
+            console.error(error);
 
-    const container = document.createElement('div');
-    container.className = "alert alert-danger alert-dismissible fade show text-center";
-    container.style.cssText = "position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 80%;";
-    container.innerHTML = `
-        Gagal memuat data pasien.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    `;
-    document.body.appendChild(container);
+            const container = document.createElement('div');
+            container.className = "alert alert-danger alert-dismissible fade show text-center";
+            container.style.cssText = "position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; max-width: 80%;";
+            container.innerHTML = `
+                Gagal memuat data pasien.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            document.body.appendChild(container);
 
-    setTimeout(() => {
-        container.classList.remove('show');
-    }, 4000);
-});
-
-}
-
-function keHalamanSelanjutnya() {
-    const idPasien = document.getElementById('id_pasien').value;
-    if (idPasien) {
-        window.location.href = "{{ route('bidan.inputPerkembanganPasien') }}?pasien_id=" + idPasien;
-    } else {
-        window.location.href = "{{ route('bidan.inputPerkembanganPasien') }}";
-    }
-}
+            setTimeout(() => {
+                container.classList.remove('show');
+                container.remove(); // Menghapus element agar tidak menumpuk di DOM
+            }, 4000);
+        });
+} // Akhir dari fungsi isiForm
 
 function resetFormPasien() {
     const form = document.getElementById('formPasien');
@@ -336,7 +320,7 @@ function resetFormPasien() {
 
     const btnSelanjutnya = document.getElementById('btnSelanjutnya');
     if (btnSelanjutnya) {
-        btnSelanjutnya.className = 'btn btn-secondary disabled';
+        btnSelanjutnya.className = 'btn';
         btnSelanjutnya.style.backgroundColor = '';
     }
 
@@ -360,7 +344,6 @@ function validasiFormBumil(event) {
     } 
     return true; 
 } 
-});
 </script>
 
 @if(session('sukses'))

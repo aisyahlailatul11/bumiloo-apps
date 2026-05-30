@@ -128,8 +128,7 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
     ->name('bidan.pasien.store');
     
     Route::get('/input-perkembangan-pasien', function () {
-        return view('bidan.inputPerkembanganPasien');
-    })->name('bidan.inputPerkembanganPasien');
+    return view('bidan.inputPerkembanganPasien');})->name('bidan.inputPerkembanganPasien');
 
     Route::post('/input-perkembangan-pasien/store', [PerkembanganController::class, 'storePerkembangan'])->name('bidan.inputPerkembangan');
     Route::get('/jadwal', [AdminController::class, 'jadwalBidan'])->name('bidan.jadwal');
