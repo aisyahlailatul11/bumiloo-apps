@@ -145,8 +145,8 @@
 {{-- TABEL --}}
 <div class="card border-0 shadow-sm p-4" id="print-table">
     <h6 class="fw-bold mb-3 d-print-none">Tabel Pasien</h6>
-    <div style="overflow-x: scroll; width: 100%;">
-        <table class="table table-striped table-hover align-middle small" style="min-width: 1500px;">
+    <div class="tabel-wrapper">
+        <table class="table align-middle small" style="min-width: 1500px;">
             <thead style="background-color:#f875aa; color:white;">
                 <tr>
                     <th>ID</th><th>Nama</th><th>Tgl</th><th>Waktu</th><th>UK</th><th>Tri</th><th>Ke-</th><th>Layanan</th>
@@ -192,40 +192,50 @@
 
 {{-- CSS CETAK --}}
 <style>
-    /* CSS tabel tidak dempet */
+/* CSS tabel tidak dempet */
 #print-table table th,
 #print-table table td {
     white-space: nowrap;
     padding: 8px 12px !important;
 }
 
-#print-table .table-responsive {
+/* Wrapper scroll + border + radius */
+#print-table .tabel-wrapper {
     overflow-x: auto;
+    width: 100%;
+    border: 1px solid #dbdbdb;
+    border-radius: 10px;
+}
+
+/* Header pink */
+#print-table thead th {
+    background-color: #f875aa !important;
+    color: white !important;
+    border: none !important;
+}
+
+/* Baris selang seling */
+#print-table tbody tr:nth-child(odd) td {
+    background-color: #ffffff !important;
+}
+#print-table tbody tr:nth-child(even) td {
+    background-color: #FCE4EC !important;
+}
+
+/* Hover */
+#print-table tbody tr:hover td {
+    background-color: #FCF4F7 !important;
 }
 
 @media print {
-    /* 1. Sembunyikan SEMUA elemen body secara default */
-    body * {
-        visibility: hidden !important;
-    }
-
-    /* 2. Hanya tampilkan ID #print-table dan semua isinya */
-    #print-table, #print-table * {
-        visibility: visible !important;
-    }
-
-    /* 3. Posisi paksa ke pojok kiri atas */
+    body * { visibility: hidden !important; }
+    #print-table, #print-table * { visibility: visible !important; }
     #print-table {
         position: absolute;
-        left: 0;
-        top: 0;
+        left: 0; top: 0;
         width: 100% !important;
     }
-
-    @page {
-        size: A4 landscape;
-        margin: 1cm;
-    }
+    @page { size: A4 landscape; margin: 1cm; }
 }
 </style>
 @endsection
