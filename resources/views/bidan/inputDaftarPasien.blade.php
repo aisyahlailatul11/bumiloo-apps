@@ -14,7 +14,7 @@
 <div class="container-fluid">
     <h3 class="fw-bold mb-4 text-dark">Input Data Ibu Hamil</h3>
 
-    @include('partials.alerts') 
+    @include('partials.alerts')
 
 
     <div>
