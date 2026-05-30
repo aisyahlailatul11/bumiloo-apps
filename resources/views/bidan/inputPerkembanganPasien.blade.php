@@ -32,15 +32,17 @@
             <span class="input-group-text">WIB</span>
             </div>
             </div>
-            <div class="col-md-4">
-                <label class="form-label">Jenis Pelayanan / Kunjungan <span class="text-danger">*</span></label>
-                    <select name="jenis_layanan" class="form-select" required>
-                        <option value="">-- Pilih Jenis Pelayanan --</option>
-                        <option value="Kunjungan Pertama">Kunjungan Pertama</option>
-                        <option value="Kunjungan Ulang">Kunjungan Ulang</option>
-                        <option value="Persalinan">Persalinan</option>
-                    </select>
-            </div>
+            {{-- Ganti bagian dropdown jenis layanan yang sudah ada jadi ini: --}}
+<div class="col-md-4">
+    <label class="form-label">Jenis Pelayanan / Kunjungan <span class="text-danger">*</span></label>
+    <select name="jenis_layanan" id="select_jenis_layanan" class="form-select" required>
+        <option value="">-- Pilih Jenis Pelayanan --</option>
+        <option value="Kunjungan Pertama">Kunjungan Pertama</option>
+        <option value="Kunjungan Ulang">Kunjungan Ulang</option>
+        <option value="Persalinan">Persalinan</option>
+    </select>
+    <small id="info_jenis_layanan" class="mt-1 d-block"></small>
+</div>
         </div>
 
         <h5 class="fw-bold text-pink mb-3">Data Kehamilan</h5>
@@ -268,11 +270,12 @@ document.addEventListener('DOMContentLoaded', function() {
     window.validasiFormPerkembangan = function(event) {
         const form = document.getElementById('formPerkembangan');
         const kolomWajib = [
-            'tanggal_pemeriksaan','waktu_pemeriksaan','usia_kehamilan',
-            'trimester','kehamilan_ke','riwayat_penyakit','berat_badan',
-            'tinggi_badan','imt','tekanan_darah','tinggi_fundus','lila',
-            'djj','keluhan','tindakan','obat'
-        ];
+    'tanggal_pemeriksaan','waktu_pemeriksaan','usia_kehamilan',
+    'trimester','kehamilan_ke','riwayat_penyakit','berat_badan',
+    'tinggi_badan','imt','tekanan_darah','tinggi_fundus','lila',
+    'djj','keluhan','tindakan','obat',
+    'jenis_layanan' // ← tambah ini
+];
 
         let adaYangKosong = false;
         kolomWajib.forEach(namaKolom => {
@@ -311,5 +314,66 @@ waktuInput.addEventListener('change', function() {
         this.value = `${jam}:${menit}`; // format 24 jam
     }
 });
+// ================================
+// AUTO DETECT JENIS LAYANAN
+// ================================
+(function() {
+    const pasienId = document.querySelector('[name="pasien_id"]') 
+                     ? document.querySelector('[name="pasien_id"]').value 
+                     : null;
+    const selectJenis = document.getElementById('select_jenis_layanan');
+    const infoJenis = document.getElementById('info_jenis_layanan');
+    const selectUsia = document.getElementById('select_usia_kehamilan');
+
+    // Fungsi cek kunjungan ke backend
+    function cekRiwayatKunjungan() {
+        if (!pasienId || !selectJenis) return;
+
+        fetch(`/bidan/cek-kunjungan/${pasienId}`)
+            .then(res => res.json())
+            .then(data => {
+                const usia = parseInt(selectUsia ? selectUsia.value : 0);
+                
+                // Cek usia dulu, kalau >= 37 langsung Persalinan
+                if (usia >= 37) {
+                    selectJenis.value = 'Persalinan';
+                    infoJenis.textContent = '✓ Otomatis: Usia kehamilan >= 37 minggu';
+                    infoJenis.style.color = '#f875aa';
+                } else if (data.total_kunjungan === 0) {
+                    selectJenis.value = 'Kunjungan Pertama';
+                    infoJenis.textContent = '✓ Otomatis: Pasien belum pernah periksa';
+                    infoJenis.style.color = 'green';
+                } else {
+                    selectJenis.value = 'Kunjungan Ulang';
+                    infoJenis.textContent = `✓ Otomatis: Sudah ${data.total_kunjungan}x periksa sebelumnya`;
+                    infoJenis.style.color = 'blue';
+                }
+            })
+            .catch(() => {
+                // Kalau gagal fetch, biarkan bidan pilih manual
+                infoJenis.textContent = 'Pilih jenis layanan secara manual';
+                infoJenis.style.color = '#999';
+            });
+    }
+
+    // Jalankan saat halaman load
+    if (pasienId) {
+        cekRiwayatKunjungan();
+    }
+
+    // Saat usia kehamilan berubah, cek ulang
+    if (selectUsia) {
+        selectUsia.addEventListener('change', function() {
+            const usia = parseInt(this.value);
+            if (usia >= 37) {
+                selectJenis.value = 'Persalinan';
+                infoJenis.textContent = '✓ Otomatis: Usia kehamilan >= 37 minggu (kemungkinan persalinan)';
+                infoJenis.style.color = '#f875aa';
+            } else {
+                cekRiwayatKunjungan();
+            }
+        });
+    }
+})();
 </script>
 @endsection

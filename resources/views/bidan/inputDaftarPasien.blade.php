@@ -331,8 +331,27 @@ function resetFormPasien() {
     }
 }
 
+// Ganti jadi ini:
 function keHalamanSelanjutnya() {
-    window.location.href = "{{ route('bidan.inputPerkembanganPasien') }}";
+    // Coba ambil dari hidden input dulu
+    let pasienId = document.getElementById('id_pasien').value;
+    
+    // Kalau kosong, ambil dari URL langsung
+    if (!pasienId) {
+        const urlPath = window.location.pathname;
+        const segments = urlPath.split('/');
+        const idFromUrl = segments[segments.length - 1];
+        if (idFromUrl && !isNaN(idFromUrl)) {
+            pasienId = idFromUrl;
+        }
+    }
+    
+    if (!pasienId) {
+        alert('Pilih pasien terlebih dahulu dari tabel di bawah!');
+        return;
+    }
+    
+    window.location.href = "{{ route('bidan.inputPerkembanganPasien') }}?pasien_id=" + pasienId;
 }
 
 function validasiFormBumil(event) {
@@ -360,6 +379,14 @@ function validasiFormBumil(event) {
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             isiForm("{{ session('edited_id') }}");
+            const urlPath = window.location.pathname;
+    const segments = urlPath.split('/');
+    const idFromUrl = segments[segments.length - 1];
+    
+    // Kalau ada ID di URL dan angka, load data pasien otomatis
+    if (idFromUrl && !isNaN(idFromUrl)) {
+        isiForm(idFromUrl);
+    }
         });
     </script>
 @endif

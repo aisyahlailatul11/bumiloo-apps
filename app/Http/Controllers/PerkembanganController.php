@@ -3,19 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Perkembangan; 
+use App\Models\Perkembangan;
 
 class PerkembanganController extends Controller
 {
+    // ================================
+    // Cek Riwayat Kunjungan Pasien
+    // ================================
+    public function cekKunjungan($pasien_id)
+    {
+        $total = Perkembangan::where('pasien_id', $pasien_id)->count();
+        return response()->json(['total_kunjungan' => $total]);
+    }
+
+    // ================================
+    // Simpan Data Perkembangan
+    // ================================
     public function storePerkembangan(Request $request)
     {
-             $validatedData = $request->validate([
+        $validatedData = $request->validate([
             'pasien_id'           => 'required',
             'tanggal_pemeriksaan' => 'required|date',
             'waktu_pemeriksaan'   => 'required',
             'usia_kehamilan'      => 'required|string',
-            'trimester'           => 'required|numeric|in:1,2,3', 
-            'kehamilan_ke'        => 'required|numeric', 
+            'trimester'           => 'required|numeric|in:1,2,3',
+            'kehamilan_ke'        => 'required|numeric',
             'berat_badan'         => 'required|numeric',
             'tinggi_badan'        => 'required|numeric',
             'tekanan_darah'       => 'required|string',
@@ -28,9 +40,10 @@ class PerkembanganController extends Controller
             'keluhan'             => 'required|string',
             'tindakan'            => 'required|string',
             'obat'                => 'required|string',
-            'catatan_tambahan'    => 'nullable|string', 
-            'jenis_pelayanan'     => 'nullable|string',
+            'catatan_tambahan'    => 'nullable|string',
+            'jenis_layanan'       => 'required|string',
         ]);
+
         Perkembangan::create($validatedData);
         return redirect()->back()->with('success', 'Data pasien berhasil disimpan!');
     }

@@ -132,7 +132,8 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
 
     Route::post('/input-perkembangan-pasien/store', [PerkembanganController::class, 'storePerkembangan'])->name('bidan.inputPerkembangan');
     Route::get('/jadwal', [AdminController::class, 'jadwalBidan'])->name('bidan.jadwal');
-
+Route::get('/cek-kunjungan/{pasien_id}', [PerkembanganController::class, 'cekKunjungan'])
+    ->name('bidan.cekKunjungan');
     // KONSULTASI BIDAN
     Route::get('/konsultasi', [BidanController::class, 'konsultasi'])->name('bidan.konsultasi');
     Route::get('/konsultasi/{user_id}', [BidanController::class, 'detailKonsultasi'])->name('bidan.konsultasi.detail');
