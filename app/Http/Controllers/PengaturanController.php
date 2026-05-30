@@ -141,15 +141,31 @@ class PengaturanController extends Controller
     }
 
     public function updateNoHp(Request $request)
-    {
-        $request->validate(['no_hp' => 'required|string|max:15']);
-        $user = Auth::user();
-        $pendaftaran = Pendaftaran::where('user_id', $user->id)->first();
-        if ($pendaftaran) {
-            $pendaftaran->update(['no_hp' => $request->no_hp]);
-        }
-        return redirect()->back()->with('success', 'Nomor HP berhasil diperbarui!');
+{
+    $request->validate([
+        'no_hp_lama'       => 'required|string|max:15',
+        'no_hp_baru'       => 'required|string|max:15',
+        'no_hp_konfirmasi' => 'required|same:no_hp_baru',
+    ]);
+
+    $user = Auth::user();
+
+    // Cari data pendaftaran berdasarkan user_id dan nomor lama
+    $pendaftaran = Pendaftaran::where('user_id', $user->id)
+                              ->where('no_hp', $request->no_hp_lama)
+                              ->first();
+
+    if (!$pendaftaran) {
+        return redirect()->back()->with('error', 'Nomor HP lama tidak ditemukan.');
     }
+
+    // Update nomor HP
+    $pendaftaran->update([
+        'no_hp' => $request->no_hp_baru,
+    ]);
+
+    return redirect()->back()->with('success', 'Nomor HP berhasil diperbarui!');
+}
 
     public function index()
     {

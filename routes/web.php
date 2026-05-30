@@ -121,17 +121,11 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
 
    //Daftar pasien hari ini
     Route::get('/daftar-pasien', [DaftarPasienController::class, 'index'])
-        ->name('bidan.daftarPasien');
-
-    // Input data pasien (form kosong)
-    Route::get('/input-daftar-pasien', [InputPasienController::class, 'indexPasien'])
-        ->name('bidan.inputDaftarPasien');
-    Route::post('/pasien/store', [InputPasienController::class, 'storePasien'])
-        ->name('bidan.pasien.store');
-
-    // Detail pasien (form terisi data pasien)
-    Route::get('/input-daftar-pasien/{id}', [InputPasienController::class, 'editPasien'])
+    ->name('bidan.daftarPasien');
+    Route::get('/input-daftar-pasien/{id}', [InputPasienController::class, 'indexPasien'])
     ->name('bidan.inputDaftarPasien');
+    Route::post('/pasien/store', [InputPasienController::class, 'storePasien'])
+    ->name('bidan.pasien.store');
     
     Route::get('/input-perkembangan-pasien', function () {
         return view('bidan.inputPerkembanganPasien');

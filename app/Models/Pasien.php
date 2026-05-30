@@ -9,8 +9,7 @@ class Pasien extends Model
 {
     use HasFactory;
 
-    // Hubungkan ke nama tabel yang benar di database
-    protected $table = 'daftar_pasien';
+    protected $table = 'pasien';
 
     protected $fillable = [
         'no_pasien', 
@@ -27,4 +26,17 @@ class Pasien extends Model
         'pekerjaan', 
         'nama_suami'
     ];
+
+    // Accessor agar seragam dengan Pendaftaran
+    public function getNamaAttribute() {
+        return $this->nama_pasien;
+    }
+
+    public function getTglLahirAttribute() {
+        return $this->tanggal_lahir;
+    }
+
+    public function getGolDarahAttribute() {
+        return $this->golongan_darah;
+    }
 }

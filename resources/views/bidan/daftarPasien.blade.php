@@ -8,16 +8,12 @@
 <div class="container-fluid">
     <h3 class="fw-bold mb-4 text-dark">Daftar Pasien Hari Ini</h3>
 
-    <!-- Tombol Tambah -->
-    <a href="{{ route('bidan.inputDaftarPasien') }}" class="btn btn-success mb-3">
-        <i class="fas fa-user-plus"></i> Tambah
-    </a>
-
     @if($pasienList->isEmpty())
         <div class="alert alert-info text-center">
             Tidak ada pasien terjadwal untuk hari ini.
         </div>
     @else
+        {{-- DI SINI DIUBAH: Menggunakan $pasien sebagai alias --}}
         @foreach($pasienList as $pasien)
             @php
                 // Tentukan warna ikon dan badge berdasarkan kategori
@@ -41,24 +37,22 @@
             @endphp
 
             <div class="card mb-3 shadow rounded-3 border-0" 
-                 onclick="window.location='{{ route('bidan.inputDaftarPasien', $pasien->id) }}'" 
+                onclick="window.location='{{ route('bidan.inputDaftarPasien', $pasien->id) }}'"
                  style="cursor:pointer; transition:0.2s; border:1px solid rgba(0,0,0,0.05);">
                 <div class="card-body d-flex align-items-center">
-                    <!-- Ikon dengan background lingkaran -->
                     <div class="me-3 d-flex align-items-center justify-content-center rounded-circle" 
                          style="width:60px; height:60px; background:{{ $bgCircle }};">
                         <i class="fas fa-user-circle fa-2x {{ $iconColor }}"></i>
                     </div>
 
-                    <!-- Detail Pasien -->
                     <div class="flex-grow-1">
-    <h5 class="mb-1">{{ $pasien->nama_pasien }}</h5>
-    <p class="mb-0 text-muted">
-        Jadwal: {{ \Carbon\Carbon::parse($pasien->jam)->format('H:i') }} WIB <br>
-        <span class="badge {{ $badgeClass }}">{{ $pasien->keterangan }}</span>
-    </p>
-</div>
-                    <!-- Panah kanan -->
+                        <h5 class="mb-1">{{ $pasien->nama_pasien }}</h5>
+                        <p class="mb-0 text-muted">
+                            Jadwal: {{ \Carbon\Carbon::parse($pasien->jam)->format('H:i') }} WIB <br>
+                            <span class="badge {{ $badgeClass }}">{{ $pasien->keterangan }}</span>
+                        </p>
+                    </div>
+                    
                     <div>
                         <i class="fas fa-chevron-right text-secondary"></i>
                     </div>

@@ -29,6 +29,7 @@ class PerkembanganController extends Controller
             'tindakan'            => 'required|string',
             'obat'                => 'required|string',
             'catatan_tambahan'    => 'nullable|string', 
+            'jenis_pelayanan'     => 'nullable|string',
         ]);
         Perkembangan::create($validatedData);
         return redirect()->back()->with('success', 'Data pasien berhasil disimpan!');
