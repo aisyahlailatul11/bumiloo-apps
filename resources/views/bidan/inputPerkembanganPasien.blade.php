@@ -50,7 +50,7 @@
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label class="form-label">HPHT (Hari Pertama Haid Terakhir) <span class="text-danger">*</span></label>
-                    <input type="date" name="hpht" class="form-control" required>
+                     <input type="date" name="hpht" value="{{ old('hpht', $hpht ?? '') }}" class="form-control" required>
                  </div>
                 <div class="col-md-4">
                   <label class="form-label">HPL (Hari Perkiraan Lahir) <span class="text-danger">*</span></label>

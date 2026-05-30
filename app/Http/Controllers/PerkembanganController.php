@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Perkembangan;
+use App\Models\Pasien;
+use App\Models\Pendaftaran;
+use Illuminate\Support\Facades\DB;
 
 class PerkembanganController extends Controller
 {
@@ -49,11 +52,25 @@ class PerkembanganController extends Controller
     }
 
     public function indexPerkembangan($pasien_id)
-    {
-        // Mencari data pasien berdasarkan ID, jika tidak ada akan memunculkan error 404
-        $pasien = Pasien::findOrFail($pasien_id);
+{
+    // cari pasien
+    $pasien = Pasien::findOrFail($pasien_id);
 
-        // Kirim data pasien ke halaman view
-        return view('bidan.inputPerkembanganPasien', compact('pasien'));
+    // join pasien dengan tb_pendaftaran berdasarkan nik
+    $pendaftaran = DB::table('pasien')
+        ->join('tb_pendaftaran', 'pasien.nik', '=', 'tb_pendaftaran.nik')
+        ->where('pasien.id', $pasien_id)
+        ->select('tb_pendaftaran.hpht')
+        ->first();
+
+    // ambil hpht dari hasil join
+    $hpht = $pendaftaran ? $pendaftaran->hpht : null;
+    // kalau pasien sudah pernah periksa, ambil hpht terbaru dari perkembangan
+    $perkembanganTerakhir = Perkembangan::where('pasien_id', $pasien_id)->latest()->first();
+    if ($perkembanganTerakhir && $perkembanganTerakhir->hpht) {
+        $hpht = $perkembanganTerakhir->hpht;
     }
+
+    return view('bidan.inputPerkembanganPasien', compact('pasien', 'hpht'));
+}
 }

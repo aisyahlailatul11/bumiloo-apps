@@ -26,7 +26,10 @@
         <div class="row mb-3">
             <div class="col-md-6">
                 <label class="form-label">No. Pasien</label>
-                <input type="text" name="no_pasien" class="form-control" readonly value="{{ $noPasienOtomatis }}" required>
+                <input type="text" name="no_pasien" class="form-control" placeholder="No. Pasien Otomatis"
+       value="{{ old('no_pasien', $pasien->no_pasien ?? $noPasienOtomatis ?? '') }}"
+       readonly>
+
             </div>
         </div>    
         
@@ -116,11 +119,12 @@
         
         <select id="pilihan_pekerjaan" name="pekerjaan" class="form-select" required 
                 onchange="document.getElementById('kotak_lainnya').style.setProperty('display', this.value === 'Lainnya' ? 'block' : 'none', 'important'); document.getElementById('input_manual').required = (this.value === 'Lainnya');">
-            <option value="" disabled selected>-- Pilih Pekerjaan --</option>
-            <option value="Ibu Rumah Tangga" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Ibu Rumah Tangga' ? 'selected' : '' }}>Ibu Rumah Tangga</option>
-            <option value="PNS" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'PNS' ? 'selected' : '' }}>PNS</option>
-            <option value="Wiraswasta" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
-            <option value="Lainnya" {{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya</option>
+              <option value="">Pilih Pekerjaan</option>
+                        <option value="Ibu Rumah Tangga"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Ibu Rumah Tangga' ? 'selected' : '' }}>Ibu Rumah Tangga</option>
+                        <option value="PNS / ASN"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'PNS / ASN' ? 'selected' : '' }}>PNS / ASN</option>
+                        <option value="Karyawan Swasta"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Karyawan Swasta' ? 'selected' : '' }}>Karyawan Swasta</option>
+                        <option value="Wiraswasta"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
+                        <option value="Lainnya"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya...</option>
         </select>
         
         <div id="kotak_lainnya" class="mt-2" style="display: none !important;">

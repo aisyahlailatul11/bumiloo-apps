@@ -11,11 +11,22 @@ use Carbon\Carbon;
 class InputPasienController extends Controller
 {
     public function indexPasien($id)
-    {
-        $pendaftaranData = Pendaftaran::find($id);
+{
+    $pendaftaranData = Pendaftaran::find($id);
 
-        $pasien = new Pasien();
-        if ($pendaftaranData) {
+    $pasien = null;
+    $noPasienOtomatis = null;
+
+    if ($pendaftaranData) {
+        // cek apakah pasien dengan NIK ini sudah ada
+        $pasienLama = Pasien::where('nik', $pendaftaranData->nik)->first();
+
+        if ($pasienLama) {
+            // pasien lama → pakai data lama (no_pasien tetap ada)
+            $pasien = $pasienLama;
+        } else {
+            // pasien baru → isi dari pendaftaran
+            $pasien = new Pasien();
             $pasien->nik            = $pendaftaranData->nik;
             $pasien->nama_pasien    = $pendaftaranData->nama;
             $pasien->tempat_lahir   = $pendaftaranData->tempat_lahir;
@@ -28,76 +39,75 @@ class InputPasienController extends Controller
             $pasien->golongan_darah = $pendaftaranData->gol_darah;
             $pasien->pekerjaan      = $pendaftaranData->pekerjaan;
             $pasien->nama_suami     = $pendaftaranData->nama_suami;
+
+            // generate nomor baru
+            $totalPasien = Pasien::count() + 1;
+            $noPasienOtomatis = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
         }
-
-        $pasienListMaster = Pasien::latest()->get(); 
-        $totalPasien = Pasien::count() + 1;
-        $noPasienOtomatis = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
-
-        return view('bidan.inputDaftarPasien', [
-            'pasien' => $pasien,
-            'pasienMaster' => $pasienListMaster,
-            'noPasienOtomatis' => $noPasienOtomatis,
-        ]);
     }
+
+    $pasienListMaster = Pasien::latest()->get();
+
+    return view('bidan.inputDaftarPasien', [
+        'pasien' => $pasien,
+        'pasienMaster' => $pasienListMaster,
+        'noPasienOtomatis' => $noPasienOtomatis,
+    ]);
+}
 
     public function storePasien(Request $request)
-    {
-        $request->validate([
-            'nik' => 'required|numeric|digits:16',
-            'nama_pasien' => 'required|string|max:100',
-            'tanggal_lahir' => 'required|date',
-            'tempat_lahir' => 'required|string',
-            'golongan_darah' => 'required',
-            'alamat' => 'required',
-            'no_hp' => 'required',
-        ], [
-            'nik.unique' => 'NIK sudah terpakai!',
-            'nik.digits' => 'NIK harus berjumlah 16 digit angka.',
-            'nik.required' => 'Kolom NIK wajib diisi.',
-            'nama_pasien.required' => 'Nama Pasien wajib diisi.',
-        ]);
+{
+    $request->validate([
+        'nik' => 'required|numeric|digits:16',
+        'nama_pasien' => 'required|string|max:100',
+        'tanggal_lahir' => 'required|date',
+        'tempat_lahir' => 'required|string',
+        'golongan_darah' => 'required',
+        'alamat' => 'required',
+        'no_hp' => 'required',
+    ]);
 
-        // hitung umur dari tanggal lahir
-        $umur = Carbon::parse($request->tanggal_lahir)->age;
+    // hitung umur dari tanggal lahir
+    $umur = Carbon::parse($request->tanggal_lahir)->age;
 
-        $pekerjaan = $request->pekerjaan === 'Lainnya'
-            ? $request->pekerjaan_lainnya
-            : $request->pekerjaan;
+    $pekerjaan = $request->pekerjaan === 'Lainnya'
+        ? $request->pekerjaan_lainnya
+        : $request->pekerjaan;
 
-        // cek apakah pasien dengan NIK ini sudah ada
-        $pasienLama = Pasien::where('nik', $request->nik)->first();
+    // cek apakah pasien dengan NIK ini sudah ada
+    $pasienLama = Pasien::where('nik', $request->nik)->first();
 
-        if ($pasienLama) {
-            // kalau sudah ada, pakai nomor pasien lama
-            $no_pasien = $pasienLama->no_pasien;
-        } else {
-            // kalau belum ada, generate nomor baru
-            $totalPasien = Pasien::count() + 1;
-            $no_pasien = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
-        }
-
-        Pasien::updateOrCreate(
-            ['nik' => $request->nik], // kunci unik
-            [
-                'no_pasien'      => $no_pasien,
-                'nama_pasien'    => $request->nama_pasien,
-                'tempat_lahir'   => $request->tempat_lahir,
-                'tanggal_lahir'  => $request->tanggal_lahir,
-                'umur'           => $umur,
-                'golongan_darah' => $request->golongan_darah,
-                'alamat'         => $request->alamat,
-                'no_hp'          => $request->no_hp,
-                'pendidikan'     => $request->pendidikan,
-                'agama'          => $request->agama,
-                'pekerjaan'      => $pekerjaan,
-                'nama_suami'     => $request->nama_suami,
-            ]
-        );
-
-        return redirect()->route('bidan.inputDaftarPasien')
-            ->with('sukses', 'Data Pemeriksaan Ibu Hamil Berhasil Disimpan!');
+    if ($pasienLama) {
+        // pasien lama → pakai nomor lama
+        $no_pasien = $pasienLama->no_pasien;
+    } else {
+        // pasien baru → generate nomor baru
+        $totalPasien = Pasien::count() + 1;
+        $no_pasien = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
     }
+
+    // simpan data, kunci unik berdasarkan NIK
+    Pasien::updateOrCreate(
+        ['nik' => $request->nik],
+        [
+            'no_pasien'      => $no_pasien,
+            'nama_pasien'    => $request->nama_pasien,
+            'tempat_lahir'   => $request->tempat_lahir,
+            'tanggal_lahir'  => $request->tanggal_lahir,
+            'umur'           => $umur,
+            'golongan_darah' => $request->golongan_darah,
+            'alamat'         => $request->alamat,
+            'no_hp'          => $request->no_hp,
+            'pendidikan'     => $request->pendidikan,
+            'agama'          => $request->agama,
+            'pekerjaan'      => $pekerjaan,
+            'nama_suami'     => $request->nama_suami,
+        ]
+    );
+
+    return redirect()->route('bidan.inputDaftarPasien', ['id' => $request->id])
+    ->with('sukses', 'Data Pemeriksaan Ibu Hamil Berhasil Disimpan!');
+}
 
     public function showPasien($id)
     {
