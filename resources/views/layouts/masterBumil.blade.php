@@ -427,7 +427,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                 <a href="{{ route('bumil.reminder') }}"
+                    class="nav-link {{ request()->routeIs('bumil.reminder') ? 'active' : '' }}">
                     <i class="fas fa-bell"></i> <span>Reminder</span>
                 </a>
             </li>
