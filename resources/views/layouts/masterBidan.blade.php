@@ -239,25 +239,29 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 </ul>
 </div>
 
-<script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
     function konfirmasiLogout() {
         Swal.fire({
-            title: 'Keluar sesi?',
-            text: 'Anda akan keluar dari aplikasi.',
-            icon: 'question',
-            width: '320px',
-            padding: '24px',
+            title: 'Apakah Anda yakin?',
+            text: "Anda akan keluar dari sesi aplikasi Bumiloo!",
+            icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, Keluar',
+            confirmButtonColor: '#F84F8F', // Warna Pink Fanta khas Bumiloo
+            cancelButtonColor: '#94A3B8', // Warna Abu-abu minimalis
+            confirmButtonText: 'Ya, Keluar!',
             cancelButtonText: 'Batal',
-            buttonsStyling: false // PENTING: Matikan styling bawaan
+            customClass: {
+                popup: 'rounded-[24px]' // Melengkung estetik mirip figma kalian
+            }
         }).then((result) => {
             if (result.isConfirmed) {
+                // Jika klik "Ya, Keluar!", form di atas akan di-submit otomatis oleh JavaScript
                 document.getElementById('logout-form').submit();
             }
-        });
+        })
     }
-</script>
+    </script>
 
 <style>
     /* 1. Paksa bentuk persegi dan ukuran */
