@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     {{-- Google Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
     :root {
@@ -109,12 +108,6 @@
             /* Jarak aman versi HP/Tablet agar tetap sinkron */
         }
     }
-
-    /* =========================================
-   DARK MODE - Pasien / Bumil
-   Selector disesuaikan: #main-content & .page-inner
-   Sidebar & navbar tidak berubah
-   ========================================= */
 
     /* === BACKGROUND UTAMA === */
     body.dark-mode {
@@ -397,11 +390,12 @@
 </head>
 
 <body>
+
     {{-- SIDEBAR --}}
     <div class="sidebar shadow">
         <div class="text-center mb-4">
-            <img src="{{ asset('images/logobumiloo.png') }}" alt="Logo Bumiloo" style="max-height:70px;"
-                class="rounded-circle mb-2 shadow-sm">
+            <img src="{{ asset('images/logobumiloo.png') }}" alt="Logo Bumiloo"
+     style="max-height:120px; width:120px; object-fit:contain;" class="mb-2">
             <br>
             <span class="badge bg-white rounded-pill px-3 py-2 text-pink" style="font-weight: 700; font-size: 12px;">
                 Bumil
@@ -416,9 +410,8 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('bumil.konsultasi') }}" class="nav-link">
-                    <i class="fas fa-comments"></i>
-                    <span>Konsultasi</span>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-comments"></i> <span>Konsultasi</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -434,8 +427,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{{ route('bumil.reminder') }}"
-                    class="nav-link {{ request()->routeIs('bumil.reminder') ? 'active' : '' }}">
+                <a href="#" class="nav-link">
                     <i class="fas fa-bell"></i> <span>Reminder</span>
                 </a>
             </li>
@@ -453,69 +445,31 @@
         </ul>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
     function konfirmasiLogout() {
         Swal.fire({
-            title: 'Keluar sesi?',
-            text: 'Anda akan keluar dari aplikasi.',
-            icon: 'question',
-            width: '320px',
-            padding: '24px',
+            title: 'Apakah Anda yakin?',
+            text: "Anda akan keluar dari sesi aplikasi Bumiloo!",
+            icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Ya, Keluar',
+            confirmButtonColor: '#F84F8F', // Warna Pink Fanta khas Bumiloo
+            cancelButtonColor: '#94A3B8', // Warna Abu-abu minimalis
+            confirmButtonText: 'Ya, Keluar!',
             cancelButtonText: 'Batal',
-            buttonsStyling: false // PENTING: Matikan styling bawaan
+            customClass: {
+                popup: 'rounded-[24px]' // Melengkung estetik mirip figma kalian
+            }
         }).then((result) => {
             if (result.isConfirmed) {
+                // Jika klik "Ya, Keluar!", form di atas akan di-submit otomatis oleh JavaScript
                 document.getElementById('logout-form').submit();
             }
-        });
+        })
     }
     </script>
 
-    <style>
-    /* 1. Paksa bentuk persegi dan ukuran */
-    .swal2-container .swal2-popup {
-        border-radius: 20px !important;
-        width: 320px !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-
-    /* 2. Tombol jadi rata samping (row), bukan menumpuk */
-    .swal2-actions {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 12px !important;
-        width: 100% !important;
-        justify-content: center !important;
-    }
-
-    /* 3. Styling tombol solid (PENTING: Gunakan class default swal2) */
-    .swal2-confirm {
-        background-color: #F84F8F !important;
-        color: #ffffff !important;
-        border: none !important;
-        padding: 10px 20px !important;
-        border-radius: 8px !important;
-        font-weight: 700 !important;
-        font-size: 14px !important;
-        order: 2 !important;
-        /* Memastikan posisi tombol */
-    }
-
-    .swal2-cancel {
-        background-color: #e2e8f0 !important;
-        color: #475569 !important;
-        border: none !important;
-        padding: 10px 20px !important;
-        border-radius: 8px !important;
-        font-weight: 700 !important;
-        font-size: 14px !important;
-        order: 1 !important;
-    }
-    </style>
-    @include('partials.alerts'){{-- TOPBAR --}}
+    {{-- TOPBAR --}}
     @include('partials.header')
 
     {{-- MAIN CONTENT --}}

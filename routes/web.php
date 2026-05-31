@@ -177,7 +177,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pengaturan/update-email', [PengaturanController::class, 'updateEmail'])->name('pengaturan.updateEmail');
     Route::post('/pengaturan/update-password', [PengaturanController::class, 'updatePassword'])->name('pengaturan.updatePassword');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::delete('/pengaturan/hapus-akun', [PengaturanController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/pengaturan/hapus-akun', [PengaturanController::class, 'destroy'])->name('pengaturan.hapusAkun');
 });
 
 require __DIR__.'/auth.php';

@@ -192,7 +192,7 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
     <div class="sidebar shadow">
         <div class="text-center mb-4">
             <img src="{{ asset('images/Logo_bumiloo.png') }}" alt="Logo Bumiloo"
-                 style="max-height:75px;" class="logo-shadow rounded-circle mb-2 bg-white">
+     style="max-height:120px; width:120px; object-fit:contain;" class="mb-2">
             <br>
             <span class="badge bg-white text-pink rounded-pill px-3">Super Admin</span>
         </div>
