@@ -239,7 +239,7 @@
         line-height: 1.5;
     }
     
-    /* MODAL SPINNER DENGAN DELAPAN TITIK BERPUTAR (TICK SPINNER) */
+    /* MODAL SPINNER TICK SPINNER */
     .pink-spinner {
         width: 70px;
         height: 70px;
@@ -319,30 +319,36 @@
                                                     halo Bunda, jika bersedia untuk melakukan konsultasi offline di PMB silakan klik link pendaftaran berikut ya HPL bunda sudah mendekati 2 hari ini saya khawatir nyeri yang bunda rasakan tanda persalinan
                                                 </p>
                                                 
-{{-- LOGIKA TOMBOL BERDASARKAN BULLETIN CHAT TERAKHIR --}}
-@php
-    $sudahAjukan = \DB::table('konsultasis')
-        ->where('user_id', auth()->id())
-        ->where('sender', 'bumil')
-        ->where('pesan', 'like', '%menyetujui pengajuan%')
-        ->exists();
-@endphp
+                                                {{-- 🔥 LOGIKA MENEMBAK STATUS KONSULTASI DI TB_PENDAFTARAN 🔥 --}}
+                                                @php
+                                                    $dataPendaftaran = \DB::table('tb_pendaftaran')
+                                                        ->where('user_id', auth()->id())
+                                                        ->latest()
+                                                        ->first();
+                                                @endphp
 
-@if($sudahAjukan)
-    <button type="button" class="btn text-white w-100 py-2 fw-bold text-center" disabled
-            style="background:#ffc107; border-radius:12px; font-size: 12px; cursor: not-allowed;">
-        <i class="fas fa-spinner fa-spin me-1"></i> ⏳ Menunggu Konfirmasi Bidan
-    </button>
-@else
-    {{-- FORM INPUT JADWAL BARU --}}
-    <form action="{{ route('konsultasi.ajukan') }}" method="POST" id="formAjukanJadwal">
-        @csrf
-        <button type="submit" class="btn text-white w-100 py-2 fw-bold text-center"
-                style="background:#F84F8F; border-radius:12px; font-size: 12px;">
-            <i class="fas fa-calendar-alt me-1"></i> Ajukan Jadwal Offline
-        </button>
-    </form>
-@endif
+                                                @if($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'menunggu')
+                                                    {{-- Status 'menunggu' -> Tombol dikunci (Kuning) --}}
+                                                    <button type="button" class="btn text-white w-100 py-2 fw-bold text-center" disabled
+                                                            style="background:#ffc107; border-radius:12px; font-size: 12px; cursor: not-allowed;">
+                                                        <i class="fas fa-spinner fa-spin me-1"></i> ⏳ Menunggu Konfirmasi Bidan
+                                                    </button>
+                                                @elseif($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'terjadwal')
+                                                    {{-- Status 'terjadwal' -> Muncul badge sukses (Hijau) --}}
+                                                    <div class="alert alert-success text-center py-2 px-3 fw-bold m-0" 
+                                                         style="border-radius:12px; font-size: 12px; border: none; background-color: #d1fae5; color: #065f46;">
+                                                        <i class="fas fa-check-circle me-1"></i> Sudah Terjadwal
+                                                    </div>
+                                                @else
+                                                    {{-- Belum ada status / Data Kosong -> Muncul tombol buat daftar --}}
+                                                    <form action="{{ route('konsultasi.ajukan') }}" method="POST" id="formAjukanJadwal">
+                                                        @csrf
+                                                        <button type="submit" class="btn text-white w-100 py-2 fw-bold text-center"
+                                                                style="background:#F84F8F; border-radius:12px; font-size: 12px;">
+                                                            <i class="fas fa-calendar-alt me-1"></i> Ajukan Jadwal Offline
+                                                        </button>
+                                                    </form>
+                                                @endif
 
                                             @else
                                                 <p class="mb-0" style="font-size: 13.5px; line-height: 1.6; white-space: pre-line;">{{ $chat->pesan }}</p>
@@ -391,7 +397,6 @@
             <div class="modal-body text-center">
                 <h3 class="modal-title-custom mb-3">Pendaftaran Konsultasi Offline<br>Bunda Sedang Diproses</h3>
                 
-                {{-- Komponen animasi lingkaran berputar --}}
                 <div class="pink-spinner"></div>
                 
                 <p class="modal-desc-custom m-0 mt-3">

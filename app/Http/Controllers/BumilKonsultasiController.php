@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class BumilKonsultasiController extends Controller
 {
@@ -63,5 +64,38 @@ class BumilKonsultasiController extends Controller
         }
 
         return redirect()->back()->with('success', 'Jadwal offline berhasil diajukan! Pesan konfirmasi telah dikirim ke Bidan.');
+    }
+    public function ajukanJadwal(Request $request)
+{
+    // 1. Ambil ID Ibu Hamil yang sedang login
+    $userId = auth()->id();
+
+    // 2. Cari data pendaftaran terakhir milik user ini di tb_pendaftaran
+    $pendaftaran = DB::table('tb_pendaftaran')
+        ->where('user_id', $userId) // <--- Sesuaikan 'user_id' jika nama kolom di tabel Anda berbeda (misal: 'pasien_id')
+        ->latest()
+        ->first();
+
+    // 3. Proses Logika Percabangan (Update atau Insert)
+    if ($pendaftaran) {
+        // JIKA SUDAH ADA DATA: Cukup update status_konsultasi menjadi 'menunggu'
+        DB::table('tb_pendaftaran')
+            ->where('id', $pendaftaran->id)
+            ->update([
+                'status_konsultasi' => 'menunggu',
+                'updated_at' => Carbon::now()
+            ]);
+    } else {
+        // JIKA BELUM ADA DATA: Buat baris baru di tb_pendaftaran
+        DB::table('tb_pendaftaran')->insert([
+            'user_id' => $userId,
+            'status_konsultasi' => 'menunggu',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now()
+        ]);
+    }
+
+    // 4. Kembalikan user ke halaman sebelumnya dengan membawa alert sukses
+    return redirect()->back()->with('success', 'Pendaftaran Konsultasi Offline Bunda berhasil diajukan!');
     }
 }
