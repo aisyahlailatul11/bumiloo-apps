@@ -33,10 +33,9 @@ class Pendaftaran extends Model
     // Relasi ke User (Jika ingin mengambil data akun yang mendaftar)
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(\App\Models\User::class, 'nik', 'nik'); 
     }
 
-    // --- TARUH DI SINI (Di bawah fungsi user) ---
     /**
      * Accessor untuk menghitung usia kehamilan secara otomatis dari kolom hpht
      */
@@ -54,4 +53,8 @@ class Pendaftaran extends Model
 
         return $selisihMinggu . ' Minggu';
     }
-} // <-- Ini kurung kurawal tutup paling akhir dari class Pendaftaran
+
+    public function getStatusColorAttribute() {
+    return $this->status_konsultasi === 'terjadwal' ? 'green' : 'yellow';
+}
+} 

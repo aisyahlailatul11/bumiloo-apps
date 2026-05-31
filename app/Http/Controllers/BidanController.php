@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\Auth;
 class BidanController extends Controller
 {
 
+public function index()
+{
+    // Ini adalah halaman dashboard bidan
+    return view('bidan.dashboardBidan'); 
+}
+
     public function konsultasi()
 {
     $konsultasis = DB::table('konsultasis')

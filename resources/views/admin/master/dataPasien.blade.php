@@ -7,51 +7,66 @@
     <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Data Pasien</h1>
     <p class="text-sm font-bold text-gray-500 mb-6">Total Pasien : {{ $totalPasien }}</p>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); margin-bottom: 20px;">
-    
-    <div style="display: flex; gap: 8px;">
-        <a href="?status=semua" style="padding: 8px 16px; background: #64748b; color: white; border-radius: 8px; text-decoration: none; font-size: 14px;">Semua</a>
-        <a href="?status=menunggu" style="padding: 8px 16px; background: #F59E0B; color: white; border-radius: 8px; text-decoration: none; font-size: 14px;">Menunggu Jadwal</a>
-        <a href="?status=terjadwal" style="padding: 8px 16px; background: #10B981; color: white; border-radius: 8px; text-decoration: none; font-size: 14px;">Terjadwal</a>
-    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px;">
+    <div style="display: flex; gap: 10px;">
+    <a href="?status=semua" 
+       style="padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;
+              background-color: {{ request('status', 'semua') == 'semua' ? '#6B7280' : '#E2E8F0' }}; 
+              color: {{ request('status', 'semua') == 'semua' ? '#FFF' : '#4A5568' }};">
+        Semua
+    </a>
 
-    <form action="{{ route('master.pasien') }}" method="GET" style="display: flex; gap: 8px;">
-        <input type="text" name="cari" placeholder="Cari nama pasien..." 
-               style="padding: 8px 12px; border: 1px solid #E2E8F0; border-radius: 8px; outline: none;">
-        <button type="submit" style="padding: 8px 20px; background: #3B82F6; color: white; border: none; border-radius: 8px; cursor: pointer;">Cari</button>
+    <a href="?status=menunggu" 
+       style="padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;
+              background-color: {{ request('status') == 'menunggu' ? '#F59E0B' : '#E2E8F0' }}; 
+              color: {{ request('status') == 'menunggu' ? '#FFF' : '#4A5568' }};">
+        Menunggu
+    </a>
+
+    <a href="?status=terjadwal" 
+       style="padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;
+              background-color: {{ request('status') == 'terjadwal' ? '#10B981' : '#E2E8F0' }}; 
+              color: {{ request('status') == 'terjadwal' ? '#FFF' : '#4A5568' }};">
+        Terjadwal
+    </a>
+</div>
+    
+    <form action="" method="GET" style="display: flex; gap: 10px;">
+        <input type="text" name="search" placeholder="Cari nama pasien..." style="padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; width: 250px;">
+        <button type="submit" style="padding: 10px 20px; background: #4299E1; color: white; border: none; border-radius: 8px; cursor: pointer;">Cari</button>
     </form>
 </div>
     
-    <div style="width: 100%; overflow-x: auto; border: 1px solid #E2E8F0; border-radius: 12px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05); background-color: #FFFFFF;">
-        <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 1600px; font-size: 15px;">
+    <div style="width: 100%; overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left; min-width: 1000px; font-size: 14px; color: #334155;">
             
             <thead>
                 <tr style="background-color: #F875AA; color: #FFFFFF;">
-                    <th style="padding: 18px 16px; font-weight: 700; border-top-left-radius: 24px;">No</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Nama Pasien</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">NIK</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">No. HP</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Tempat Lahir</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Tgl Lahir</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center; border-top-left-radius: 24px;">No</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Nama Pasien</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">NIK</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">No. HP</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Tempat Lahir</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Tgl Lahir</th>
                     <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Umur</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Alamat</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Agama</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Pendidikan</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Alamat</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Agama</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Pendidikan</th>
                     <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Gol</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Pekerjaan</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">Nama Suami</th>
-                    <th style="padding: 18px 16px; font-weight: 700;">HPHT</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Pekerjaan</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Nama Suami</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">HPHT</th>
+                    <th style="padding: 18px 16px; font-weight: 700; text-align: center;">Status Konsultasi</th>
                     <th style="padding: 18px 16px; font-weight: 700; text-align: center; border-top-right-radius: 24px; width: 140px;">Aksi</th>
                 </tr>
             </thead>
             
             <tbody style="color: #4A5568;">
-                @forelse($pasiens as $index => $p)
-                    @php
-                        // Logika saringan untuk highlight baris bermasalah / butuh jadwal
-                        $isButuhJadwal = (isset($p->status_konsultasi) && $p->status_konsultasi == 'butuh_jadwal');
-                        $rowBg = $isButuhJadwal ? '#FFEFEB' : ($index % 2 == 0 ? '#FFFFFF' : '#FFF5F7');
-                    @endphp
+    @forelse($pasiens as $index => $p)
+        @php
+            $isMenunggu = (isset($p->status_konsultasi) && $p->status_konsultasi == 'menunggu');
+            $rowBg = $isMenunggu ? '#FFF7ED' : ($index % 2 == 0 ? '#FFFFFF' : '#FFF5F7');
+        @endphp
                 
                 <tr style="background-color: {{ $rowBg }}; border-bottom: 1px solid #EDF2F7; transition: 0.2s;" onmouseover="this.style.backgroundColor='#FDE2E4'" onmouseout="this.style.backgroundColor='{{ $rowBg }}'">
                     <td style="padding: 16px; text-align: center; font-weight: 500; border-r: 1px solid #EDF2F7;">{{ $index + 1 }}</td>
@@ -61,13 +76,14 @@
                     <td style="padding: 16px;">{{ $p->tempat_lahir ?? '-' }}</td>
                     <td style="padding: 16px;">{{ $p->tgl_lahir ? date('d-m-Y', strtotime($p->tgl_lahir)) : '-' }}</td>
                     <td style="padding: 16px; text-align: center; font-weight: 700;">{{ $p->umur ?? '-' }} Thn</td>
-                    <td style="padding: 16px; font-style: italic; max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $p->alamat ?? '-' }}</td>
+                    <td style="padding: 16px; text-align: center; max-width: 200px; overflow: hidden;">{{ $p->alamat ?? '-' }}</td>
                     <td style="padding: 16px;">{{ $p->agama ?? '-' }}</td>
                     <td style="padding: 16px; text-align: center;">{{ $p->pendidikan ?? '-' }}</td>
                     <td style="padding: 16px; text-align: center; font-weight: 700; color: #E91E63;">{{ $p->gol_darah ?? '-' }}</td>
                     <td style="padding: 16px;">{{ $p->pekerjaan ?? '-' }}</td>
                     <td style="padding: 16px; font-weight: 500;">{{ $p->nama_suami ?? '-' }}</td>
                     <td style="padding: 16px; font-weight: 700; color: #B83280;">{{ $p->hpht ? date('d-m-Y', strtotime($p->hpht)) : '-' }}</td>
+                    <td style="padding: 16px; text-align: center; vertical-align: middle;"><span class="badge badge-{{ $p->status_color }}">{{ $p->status_konsultasi }}</span></td>
                     
                     <td style="padding: 16px; text-align: center;">
                         <div style="display: flex; justify-content: center; items-center: center; gap: 8px;">

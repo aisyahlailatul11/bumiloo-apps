@@ -22,9 +22,16 @@ class JadwalKontrol extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Jadwal Kontrol Kehamilan - Bumiloo',
+            subject: 'Jadwal Kontrol Kehamilan',
         );
     }
+
+    // Di dalam file App\Mail\JadwalKontrol.php
+    public function build()
+{
+    return $this->subject('Pemberitahuan Perubahan Jadwal Pemeriksaan')
+                ->view('emails.jadwal_kontrol');
+}
 
     public function content(): Content
 {

@@ -77,14 +77,14 @@ public function masterPasien(Request $request)
     // Mulai query dari model Pendaftaran
     $query = \App\Models\Pendaftaran::query();
 
-    // 1. Pencarian (berdasarkan nama pasien)
+    //Pencarian (berdasarkan nama pasien)
     if ($request->has('cari') && $request->cari != '') {
         $query->where('nama', 'like', '%' . $request->cari . '%');
     }
 
-    // 2. Filter Status (asumsi ada kolom 'status_pendaftaran')
+    //Filter Status 
     if ($request->has('status') && $request->status != 'semua') {
-        $query->where('status_pendaftaran', $request->status);
+        $query->where('status_konsultasi', $request->status);
     }
 
     // Eksekusi query
@@ -94,10 +94,7 @@ public function masterPasien(Request $request)
     return view('admin.master.dataPasien', compact('pasiens', 'totalPasien'));
 }
 
-    /**
-     * /*
-    // Menampilkan Jadwal Bumil
-    */
+    //INPUT JADWAL
     public function jadwalIndex(Request $request)
 {
     $pasienTerpilih = null;
@@ -143,14 +140,29 @@ public function masterPasien(Request $request)
 
     $pendaftaran = \App\Models\Pendaftaran::where('nik', $request->nik)->first();
 
-// Baru ambil user dari pendaftaran tersebut
-if ($pendaftaran && $pendaftaran->user && $pendaftaran->user->email) {
-    \Illuminate\Support\Facades\Mail::to($pendaftaran->user->email)
-        ->send(new \App\Mail\JadwalKontrol($jadwal));
+   // Update status_konsultasi jadi 'terjadwal' jika pendaftarannya ketemu
+    if ($pendaftaran) {
+        $pendaftaran->update([
+            'status_konsultasi' => 'terjadwal'
+        ]);
+    }
+
+    // Cari pendaftaran berdasarkan NIK
+$pendaftaran = \App\Models\Pendaftaran::where('nik', $jadwal->nik)->first();
+
+if ($pendaftaran) {
+    $user = \App\Models\User::where('nik', $pendaftaran->nik)->first(); 
+    
+    if ($user && $user->email) {
+        \Illuminate\Support\Facades\Mail::to($user->email)
+            ->send(new \App\Mail\JadwalKontrol($jadwal));
+    } else {
+        \Log::error('Gagal kirim email: User tidak ditemukan atau email kosong untuk NIK: ' . $pendaftaran->nik);
+    }
 }
 
 
-    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil disimpan!');
+    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dibuat dan status diperbarui!');
 }
 
     public function jadwalUpdate(Request $request, $id)

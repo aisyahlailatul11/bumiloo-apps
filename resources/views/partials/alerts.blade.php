@@ -14,7 +14,7 @@
     @endif
 
     @if(session()->has('info')) 
-        Toast.fire({ icon: 'info', title: "{{ session('info') }}", background: '#E0F2FE', color: '#1E40AF' }); 
+        Toast.fire({ icon: 'info', title: "{{ session('info') }}", background: '#ecf7ff', color: '#1E40AF' }); 
     @endif
     
     @if(session()->has('error')) 
