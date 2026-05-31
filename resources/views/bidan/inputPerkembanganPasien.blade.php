@@ -422,7 +422,7 @@
 
         <div class="row align-items-center bg-light p-3 rounded-4 border mx-0 mb-4">
             <div class="col-md-8">
-                <label class="form-label fw-bold text-dark">Bidan Penanggung Jawab / DPJP</label>
+                <label class="form-label fw-bold text-dark">Bidan Penanggung Jawab</label>
                 <input type="text" class="form-control bg-white fw-bold text-secondary" value="Siti Fatimah, S.Tr.Keb." readonly style="cursor: not-allowed; max-width: 400px;">
                 <small class="text-muted d-block mt-1">*Nama terkunci otomatis sebagai penanggung jawab rekam medis.</small>
             </div>
