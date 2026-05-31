@@ -235,70 +235,31 @@ body.dark-mode ::-webkit-scrollbar-thumb:hover {
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-    function konfirmasiLogout() {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Anda akan keluar dari sesi aplikasi Bumiloo!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#F84F8F', // Warna Pink Fanta khas Bumiloo
-            cancelButtonColor: '#94A3B8', // Warna Abu-abu minimalis
-            confirmButtonText: 'Ya, Keluar!',
-            cancelButtonText: 'Batal',
-            customClass: {
-                popup: 'rounded-[24px]' // Melengkung estetik mirip figma kalian
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Jika klik "Ya, Keluar!", form di atas akan di-submit otomatis oleh JavaScript
-                document.getElementById('logout-form').submit();
-            }
-        })
-    }
-    </script>
-
-<style>
-    /* 1. Paksa bentuk persegi dan ukuran */
-    .swal2-container .swal2-popup {
-        border-radius: 20px !important;
-        width: 320px !important;
-        display: flex !important;
-        flex-direction: column !important;
-    }
-
-    /* 2. Tombol jadi rata samping (row), bukan menumpuk */
-    .swal2-actions {
-        display: flex !important;
-        flex-direction: row !important;
-        gap: 12px !important;
-        width: 100% !important;
-        justify-content: center !important;
-    }
-
-    /* 3. Styling tombol solid (PENTING: Gunakan class default swal2) */
-    .swal2-confirm {
-        background-color: #F84F8F !important;
-        color: #ffffff !important;
-        border: none !important;
-        padding: 10px 20px !important;
-        border-radius: 8px !important;
-        font-weight: 700 !important;
-        font-size: 14px !important;
-        order: 2 !important; /* Memastikan posisi tombol */
-    }
-
-    .swal2-cancel {
-        background-color: #e2e8f0 !important;
-        color: #475569 !important;
-        border: none !important;
-        padding: 10px 20px !important;
-        border-radius: 8px !important;
-        font-weight: 700 !important;
-        font-size: 14px !important;
-        order: 1 !important;
-    }
-</style>
+<script>
+function konfirmasiLogout() {
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Anda akan keluar dari sesi aplikasi Bumiloo!",
+        icon: 'warning', // Tetap warning untuk ikon tanda seru
+        iconColor: '#EF4444', // <--- INI KUNCI AGAR IKON JADI MERAH
+        showCancelButton: true,
+        // URUTAN TOMBOL DI SWEETALERT2:
+        // Secara default, confirmButton di kanan, cancelButton di kiri.
+        reverseButtons: true, // <--- INI AKAN MEMAKSA POSISI SESUAI KEINGINANMU
+        confirmButtonColor: '#F84F8F', 
+        cancelButtonColor: '#94A3B8',
+        confirmButtonText: 'Ya, Keluar!',
+        cancelButtonText: 'Batal',
+        customClass: {
+            popup: 'rounded-[24px]'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-form').submit();
+        }
+    })
+}
+</script>
 
     @include('partials.header')
 

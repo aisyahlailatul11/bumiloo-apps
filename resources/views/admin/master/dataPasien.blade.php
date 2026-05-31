@@ -7,7 +7,15 @@
     <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Data Pasien</h1>
     <p class="text-sm font-bold text-gray-500 mb-6">Total Pasien : {{ $totalPasien }}</p>
 
-    <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px;">
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+    <a href="{{ route('master.createDataPasien') }}" 
+       style="background-color: #F84F8F; color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 10px rgba(248, 79, 143, 0.3);">
+        + Tambah Pasien
+    </a>
+</div>
+
+   <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border-radius: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px;">
+    
     <div style="display: flex; gap: 10px;">
     <a href="?status=semua" 
        style="padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;
@@ -30,8 +38,8 @@
         Terjadwal
     </a>
 </div>
-    
-    <form action="" method="GET" style="display: flex; gap: 10px;">
+
+<form action="" method="GET" style="display: flex; gap: 10px;">
         <input type="text" name="search" placeholder="Cari nama pasien..." style="padding: 10px 15px; border: 1px solid #E2E8F0; border-radius: 8px; width: 250px;">
         <button type="submit" style="padding: 10px 20px; background: #4299E1; color: white; border: none; border-radius: 8px; cursor: pointer;">Cari</button>
     </form>

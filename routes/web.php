@@ -89,6 +89,10 @@ Route::prefix('master')->group(function () {
     // Ubah .pasien menjadi .dataPasien agar sama dengan yang dipanggil di layout
     Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
 
+    //create data pasien
+    Route::get('/admin/master/pasien/create', [AdminController::class, 'createDataPasien'])
+     ->name('master.createDataPasien');
+
     Route::get('/bidan', [DataBidanController::class, 'dataBidan'])->name('master.bidan');
     
     // Gunakan POST saja, tidak perlu Route::any agar lebih aman
