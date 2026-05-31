@@ -6,7 +6,6 @@
         <h2 class="fw-bold">Laporan Bidan</h2>
     </div>
 
-    <!-- CARDS -->
     <div class="row mb-4">
         <div class="col-md-6">
             <div class="card card-custom p-4 border-0 shadow-sm">
@@ -15,8 +14,8 @@
                         <i class="fas fa-users fa-2x"></i>
                     </div>
                     <div>
-                        <h2 class="fw-bold mb-0">{{ $jumlahKunjunganHariIni }}</h2>
-                        <small class="text-muted">Jumlah Kunjungan Hari Ini</small>
+                        <h2 class="fw-bold mb-0">{{ $jumlahKunjunganBulanIni ?? $jumlahKunjunganHariIni }}</h2>
+                        <small class="text-muted">Jumlah Kunjungan Bulan Ini</small>
                     </div>
                 </div>
             </div>
@@ -29,17 +28,15 @@
                         <i class="fas fa-baby fa-2x"></i>
                     </div>
                     <div>
-                        <h2 class="fw-bold mb-0">{{ $jumlahPersalinanHariIni }}</h2>
-                        <small class="text-muted">Jumlah Persalinan Hari Ini</small>
+                        <h2 class="fw-bold mb-0">{{ $jumlahPersalinanBulanIni ?? $jumlahPersalinanHariIni }}</h2>
+                        <small class="text-muted">Jumlah Persalinan Bulan Ini</small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- CHARTS -->
     <div class="row">
-        <!-- Line Chart Kunjungan Per Bulan -->
         <div class="col-md-6">
             <div class="card card-custom p-4 border-0 shadow-sm h-100 bg-pink-light">
                 <h6 class="fw-bold mb-3">Jumlah Kunjungan Per Bulan</h6>
@@ -47,7 +44,6 @@
             </div>
         </div>
 
-        <!-- Pie Chart Trimester -->
         <div class="col-md-6">
             <div class="card card-custom p-4 border-0 shadow-sm h-100 bg-pink-light">
                 <h6 class="fw-bold mb-3">Jumlah Ibu Hamil per Trimester</h6>
@@ -57,7 +53,6 @@
     </div>
 
     <div class="row">
-        <!-- Line Chart Persalinan Per Bulan -->
         <div class="col-md-6 mt-4">
             <div class="card card-custom p-4 border-0 shadow-sm h-100 bg-pink-light">
                 <h6 class="fw-bold mb-3">Jumlah Persalinan Per Bulan</h6>
@@ -107,7 +102,15 @@ document.addEventListener("DOMContentLoaded", function() {
         options: {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: { y: { display: false }, x: { grid: { display: false } } }
+            scales: { 
+                y: { 
+                    display: true, 
+                    beginAtZero: true 
+                }, 
+                x: { 
+                    grid: { display: false } 
+                } 
+            }
         }
     });
 
@@ -130,7 +133,15 @@ document.addEventListener("DOMContentLoaded", function() {
         options: {
             maintainAspectRatio: false,
             plugins: { legend: { display: false } },
-            scales: { y: { display: false }, x: { grid: { display: false } } }
+            scales: { 
+                y: { 
+                    display: true, 
+                    beginAtZero: true 
+                }, 
+                x: { 
+                    grid: { display: false } 
+                } 
+            }
         }
     });
 });

@@ -163,7 +163,7 @@
 <div class="container-fluid py-4">
     
     <div class="header-layout d-flex justify-content-between align-items-center">
-        <h2 class="fw-bold mb-0"><i class="fas fa-calendar-check text-danger me-2"></i>Jadwal Bidan</h2>
+        <h2 class="fw-bold mb-0"><i class="text-danger me-2"></i>Jadwal Bidan</h2>
     </div>
 
     <div class="row g-3 mb-4">

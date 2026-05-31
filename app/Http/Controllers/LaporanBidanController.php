@@ -10,13 +10,18 @@ class LaporanBidanController extends Controller
 {
     public function index()
     {
-        $hariIni = Carbon::today();
+        // Ambil bulan dan tahun saat ini
+        $bulanIni = Carbon::now()->month;
+        $tahunIni = Carbon::now()->year;
 
-        // Jumlah kunjungan hari ini
-        $jumlahKunjunganHariIni = Perkembangan::whereDate('tanggal_pemeriksaan', $hariIni)->count();
+        // DIUBAH: Jumlah kunjungan bulan ini
+        $jumlahKunjunganBulanIni = Perkembangan::whereMonth('tanggal_pemeriksaan', $bulanIni)
+            ->whereYear('tanggal_pemeriksaan', $tahunIni)
+            ->count();
 
-        // Jumlah persalinan hari ini
-        $jumlahPersalinanHariIni = Perkembangan::whereDate('tanggal_pemeriksaan', $hariIni)
+        // DIUBAH: Jumlah persalinan bulan ini
+        $jumlahPersalinanBulanIni = Perkembangan::whereMonth('tanggal_pemeriksaan', $bulanIni)
+            ->whereYear('tanggal_pemeriksaan', $tahunIni)
             ->where('jenis_layanan', 'Persalinan')
             ->count();
 
@@ -27,23 +32,27 @@ class LaporanBidanController extends Controller
             Perkembangan::where('trimester', 3)->count(),
         ];
 
-        // Data untuk line chart kunjungan per bulan
+        // Data untuk line chart kunjungan per bulan (tahun berjalan)
         $perBulan = [];
         for ($i = 1; $i <= 12; $i++) {
-            $perBulan[] = Perkembangan::whereMonth('tanggal_pemeriksaan', $i)->count();
+            $perBulan[] = Perkembangan::whereMonth('tanggal_pemeriksaan', $i)
+                ->whereYear('tanggal_pemeriksaan', $tahunIni) // Filter berdasarkan tahun ini agar data tahun lalu tidak bercampur
+                ->count();
         }
 
-        // Data untuk line chart persalinan per bulan
+        // Data untuk line chart persalinan per bulan (tahun berjalan)
         $perBulanPersalinan = [];
         for ($i = 1; $i <= 12; $i++) {
             $perBulanPersalinan[] = Perkembangan::whereMonth('tanggal_pemeriksaan', $i)
+                ->whereYear('tanggal_pemeriksaan', $tahunIni) // Filter berdasarkan tahun ini agar data tahun lalu tidak bercampur
                 ->where('jenis_layanan', 'Persalinan')
                 ->count();
         }
 
+        // Kirim variabel baru ke view
         return view('bidan.laporan', compact(
-            'jumlahKunjunganHariIni',
-            'jumlahPersalinanHariIni',
+            'jumlahKunjunganBulanIni',
+            'jumlahPersalinanBulanIni',
             'perTrimester',
             'perBulan',
             'perBulanPersalinan'

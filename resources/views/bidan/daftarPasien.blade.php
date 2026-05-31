@@ -108,7 +108,7 @@
     
     <div class="header-layout row align-items-center">
         <div class="col-md-7 mb-2 mb-md-0">
-            <h3 class="mb-1"><i class="fas fa-heartbeat text-danger me-2"></i>Daftar Pasien Hari Ini</h3>
+            <h3 class="mb-1"><i class="text-danger me-2"></i>Daftar Pasien Hari Ini</h3>
             <p class="text-muted small mb-0">
                 <i class="far fa-calendar-alt me-1"></i> {{ \Carbon\Carbon::today()->translatedFormat('l, d F Y') }}
             </p>
