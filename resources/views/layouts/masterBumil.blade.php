@@ -395,7 +395,7 @@
     <div class="sidebar shadow">
         <div class="text-center mb-4">
             <img src="{{ asset('images/logobumiloo.png') }}" alt="Logo Bumiloo"
-     style="max-height:120px; width:120px; object-fit:contain;" class="mb-2">
+                style="max-height:120px; width:120px; object-fit:contain;" class="mb-2">
             <br>
             <span class="badge bg-white rounded-pill px-3 py-2 text-pink" style="font-weight: 700; font-size: 12px;">
                 Bumil
@@ -427,7 +427,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                 <a href="{{ route('bumil.reminder') }}"
+                <a href="{{ route('bumil.reminder') }}"
                     class="nav-link {{ request()->routeIs('bumil.reminder') ? 'active' : '' }}">
                     <i class="fas fa-bell"></i> <span>Reminder</span>
                 </a>

@@ -64,6 +64,12 @@
                         <td>{{ $pendaftaran->hpht ?? '-' }}</td>
                     </tr>
                     <tr>
+                        <th>HPL</th>
+                        <td>
+                            {{ $riwayat->hpl ? \Carbon\Carbon::parse($riwayat->hpl)->format('d-m-Y') : '-' }}
+                        </td>
+                    </tr>
+                    <tr>
                         <th>Keluhan Utama</th>
                         <td>{{ $riwayat->keluhan ?? '-' }}</td>
                     </tr>

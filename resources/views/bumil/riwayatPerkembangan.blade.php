@@ -67,6 +67,7 @@
     <div class="row g-4 mb-4">
 
         {{-- RIWAYAT KEHAMILAN --}}
+        {{-- RIWAYAT KEHAMILAN --}}
         <div class="col-lg-5">
             <div class="custom-card h-100">
                 <div class="section-heading">
@@ -98,6 +99,13 @@
                     <div class="data-item">
                         <span>HPHT</span>
                         <strong>{{ $pendaftaran->hpht ?? '-' }}</strong>
+                    </div>
+
+                    <div class="data-item">
+                        <span>HPL</span>
+                        <strong>
+                            {{ $terakhir && $terakhir->hpl ? \Carbon\Carbon::parse($terakhir->hpl)->format('d-m-Y') : '-' }}
+                        </strong>
                     </div>
 
                     <div class="data-item">
@@ -192,6 +200,7 @@
                         <th>No</th>
                         <th>Tanggal Pemeriksaan</th>
                         <th>Usia Kehamilan</th>
+                        <th>HPL</th>
                         <th>Keluhan</th>
                         <th>Tindakan / Saran</th>
                         <th>Selengkapnya</th>
@@ -212,6 +221,10 @@
                         </td>
 
                         <td>
+                            {{ $item->hpl ? \Carbon\Carbon::parse($item->hpl)->format('d-m-Y') : '-' }}
+                        </td>
+
+                        <td>
                             {{ $item->keluhan ?? '-' }}
                         </td>
 
@@ -219,7 +232,7 @@
                             {{ $item->tindakan ?? '-' }}
                         </td>
 
-                        <td>
+                        <td class="text-center">
                             <a href="{{ route('bumil.detailRiwayatPerkembangan', $item->id) }}"
                                 class="btn btn-sm text-white rounded-pill px-4" style="background:#F875AA;">
                                 Detail
@@ -228,7 +241,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center py-4">
+                        <td colspan="7" class="text-center py-4">
                             Belum ada riwayat pemeriksaan
                         </td>
                     </tr>
