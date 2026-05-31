@@ -468,18 +468,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==========================================
     // DYNAMIC SWITCH LABEL & VISIBILITY
     // ==========================================
-    checkPersalinan.addEventListener('change', function() {
-        if (this.checked) {
-            containerPersalinan.style.display = 'block';
-            labelTanggal.innerHTML = 'Tanggal Persalinan <span class="text-danger">*</span>'; // Mengubah label
-            inputsSalin.forEach(input => input.required = true);
-            if(selectJenisLayanan) selectJenisLayanan.value = 'Persalinan';
-        } else {
-            containerPersalinan.style.display = 'none';
-            labelTanggal.innerHTML = 'Tanggal Pemeriksaan <span class="text-danger">*</span>'; // Mengembalikan label
-            inputsSalin.forEach(input => input.required = false);
-        }
-    });
+    if (checkPersalinan) {
+        checkPersalinan.addEventListener('change', function() {
+            if (this.checked) {
+                if (containerPersalinan) containerPersalinan.style.display = 'block';
+                if (labelTanggal) labelTanggal.innerHTML = 'Tanggal Persalinan <span class="text-danger">*</span>';
+                inputsSalin.forEach(input => input.required = true);
+                if (selectJenisLayanan) selectJenisLayanan.value = 'Persalinan';
+            } else {
+                if (containerPersalinan) containerPersalinan.style.display = 'none';
+                if (labelTanggal) labelTanggal.innerHTML = 'Tanggal Pemeriksaan <span class="text-danger">*</span>';
+                inputsSalin.forEach(input => input.required = false);
+            }
+        });
+    }
 
     // ==========================================
     // SELECTION DYNAMIC (LAINNYA SELECT BOX)
@@ -489,55 +491,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const inputManualKelainan = document.getElementById('input_manual_kelainan');
     const hiddenKelainan = document.getElementById('hidden_kelainan');
 
-    selectKelainan.addEventListener('change', function() {
-        if (this.value === 'Lainnya') {
-            inputManualKelainan.style.display = 'block';
-            inputManualKelainan.required = true;
-            inputManualKelainan.value = '';
-            hiddenKelainan.value = '';
-        } else {
-            inputManualKelainan.style.display = 'none';
-            inputManualKelainan.required = false;
+    if (selectKelainan && inputManualKelainan && hiddenKelainan) {
+        selectKelainan.addEventListener('change', function() {
+            if (this.value === 'Lainnya') {
+                inputManualKelainan.style.display = 'block';
+                inputManualKelainan.required = true;
+                inputManualKelainan.value = '';
+                hiddenKelainan.value = '';
+            } else {
+                inputManualKelainan.style.display = 'none';
+                inputManualKelainan.required = false;
+                hiddenKelainan.value = this.value;
+            }
+        });
+        inputManualKelainan.addEventListener('input', function() {
             hiddenKelainan.value = this.value;
-        }
-    });
-    inputManualKelainan.addEventListener('input', function() {
-        hiddenKelainan.value = this.value;
-    });
+        });
+    }
 
     // 2. Macam Persalinan
     const selectMacam = document.getElementById('select_macam_persalinan');
     const inputManualMacam = document.getElementById('input_manual_macam');
     const hiddenMacam = document.getElementById('hidden_macam_persalinan');
 
-    selectMacam.addEventListener('change', function() {
-        if (this.value === 'Lainnya') {
-            inputManualMacam.style.display = 'block';
-            inputManualMacam.required = true;
-            inputManualMacam.value = '';
-            hiddenMacam.value = '';
-        } else {
-            inputManualMacam.style.display = 'none';
-            inputManualMacam.required = false;
+    if (selectMacam && inputManualMacam && hiddenMacam) {
+        selectMacam.addEventListener('change', function() {
+            if (this.value === 'Lainnya') {
+                inputManualMacam.style.display = 'block';
+                inputManualMacam.required = true;
+                inputManualMacam.value = '';
+                hiddenMacam.value = '';
+            } else {
+                inputManualMacam.style.display = 'none';
+                inputManualMacam.required = false;
+                hiddenMacam.value = this.value;
+            }
+        });
+        inputManualMacam.addEventListener('input', function() {
             hiddenMacam.value = this.value;
-        }
-    });
-    inputManualMacam.addEventListener('input', function() {
-        hiddenMacam.value = this.value;
-    });
+        });
+    }
 
     // ==========================================
     // PREVENT NEGATIVE VALUE ON NUMBER INPUTS
     // ==========================================
     document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('keydown', function(e) {
-            // Memblokir tombol minus (-)
             if (e.key === '-' || e.key === 'e') {
                 e.preventDefault();
             }
         });
         input.addEventListener('input', function() {
-            if (this.value < 0) this.value = 0; // fallback jika user copy-paste angka minus
+            if (this.value < 0) this.value = 0;
         });
     });
 
@@ -546,28 +551,30 @@ document.addEventListener('DOMContentLoaded', function() {
     // ==========================================
     function hitungApgarM1() {
         let total = 0;
-        document.querySelectorAll('.apgar-m1:checked').forEach(radio => {
-            total += parseInt(radio.value);
-        });
-        document.getElementById('total_apgar_m1').textContent = total;
-        document.getElementById('hidden_apgar_m1').value = total;
+        const radios = document.querySelectorAll('.apgar-m1:checked');
+        if (radios.length === 0) return;
+        radios.forEach(radio => { total += parseInt(radio.value); });
+        
+        const elTotal = document.getElementById('total_apgar_m1');
+        const elHidden = document.getElementById('hidden_apgar_m1');
+        if (elTotal) elTotal.textContent = total;
+        if (elHidden) elHidden.value = total;
     }
 
     function hitungApgarM5() {
         let total = 0;
-        document.querySelectorAll('.apgar-m5:checked').forEach(radio => {
-            total += parseInt(radio.value);
-        });
-        document.getElementById('total_apgar_m5').textContent = total;
-        document.getElementById('hidden_apgar_m5').value = total;
+        const radios = document.querySelectorAll('.apgar-m5:checked');
+        if (radios.length === 0) return;
+        radios.forEach(radio => { total += parseInt(radio.value); });
+
+        const elTotal = document.getElementById('total_apgar_m5');
+        const elHidden = document.getElementById('hidden_apgar_m5');
+        if (elTotal) elTotal.textContent = total;
+        if (elHidden) elHidden.value = total;
     }
 
-    document.querySelectorAll('.apgar-m1').forEach(radio => {
-        radio.addEventListener('change', hitungApgarM1);
-    });
-    document.querySelectorAll('.apgar-m5').forEach(radio => {
-        radio.addEventListener('change', hitungApgarM5);
-    });
+    document.querySelectorAll('.apgar-m1').forEach(radio => radio.addEventListener('change', hitungApgarM1));
+    document.querySelectorAll('.apgar-m5').forEach(radio => radio.addEventListener('change', hitungApgarM5));
 
     // ==========================================
     // LOGIK DATA KEHAMILAN (HPHT & IMT)
@@ -589,20 +596,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const dateHpht = new Date(hphtValue);
         const datePeriksa = new Date(tglPeriksaValue);
+        
+        // Rumus Negele untuk perkiraan lahir HPL
         const dateHpl = new Date(dateHpht);
         dateHpl.setDate(dateHpl.getDate() + 7);
         dateHpl.setMonth(dateHpl.getMonth() + 9); 
         
-        if(inputHpl) inputHpl.value = dateHpl.toISOString().split('T')[0];
+        if (inputHpl) inputHpl.value = dateHpl.toISOString().split('T')[0];
 
+        // Hitung Usia Kehamilan & Trimester
         const selisihWaktu = datePeriksa.getTime() - dateHpht.getTime();
         const selisihHari = Math.floor(selisihWaktu / (1000 * 3600 * 24));
         
         if (selisihHari >= 0) {
             const minggu = Math.floor(selisihHari / 7);
             const hari = selisihHari % 7;
-            if(inputUsia) inputUsia.value = `${minggu} Minggu ${hari} Hari`;
-            if(inputTrimester) {
+            if (inputUsia) inputUsia.value = `${minggu} Minggu ${hari} Hari`;
+            if (inputTrimester) {
                 if (minggu >= 0 && minggu <= 13) inputTrimester.value = 1;
                 else if (minggu >= 14 && minggu <= 27) inputTrimester.value = 2;
                 else if (minggu >= 28 && minggu <= 42) inputTrimester.value = 3;
@@ -613,14 +623,22 @@ document.addEventListener('DOMContentLoaded', function() {
     if (inputHpht) inputHpht.addEventListener('change', hitungOtomatisKehamilan);
     if (inputTanggalPeriksa) inputTanggalPeriksa.addEventListener('change', hitungOtomatisKehamilan);
 
+    // ==========================================
+    // AUTO KALKULASI IMT
+    // ==========================================
     const inputBB = document.getElementById('berat_badan');
     const inputTB = document.getElementById('tinggi_badan');
     const inputIMT = document.getElementById('imt');
 
     function hitungIMT() {
+        if (!inputBB || !inputTB || !inputIMT) return;
         const bb = parseFloat(inputBB.value);
         const tb = parseFloat(inputTB.value) / 100;
-        if (bb > 0 && tb > 0) inputIMT.value = (bb / (tb * tb)).toFixed(2);
+        if (bb > 0 && tb > 0) {
+            inputIMT.value = (bb / (tb * tb)).toFixed(2);
+        } else {
+            inputIMT.value = '';
+        }
     }
     if (inputBB && inputTB) {
         inputBB.addEventListener('input', hitungIMT);
@@ -632,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const boxManual = document.getElementById('riwayat_manual_box');
     const inputManual = document.getElementById('input_riwayat_penyakit');
 
-    if (selectPenyakit) {
+    if (selectPenyakit && boxManual && inputManual) {
         selectPenyakit.addEventListener('change', function() {
             if (this.value === 'Lainnya') {
                 boxManual.style.display = 'block';
@@ -646,35 +664,39 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Reset Form
-    document.getElementById('btnResetForm').addEventListener('click', function() {
-        setTimeout(() => {
-            hitungIMT();
-            hitungApgarM1();
-            hitungApgarM5();
-            containerPersalinan.style.display = 'none';
-            labelTanggal.innerHTML = 'Tanggal Pemeriksaan <span class="text-danger">*</span>';
-            inputManualKelainan.style.display = 'none';
-            inputManualMacam.style.display = 'none';
-        }, 20);
-    });
+    // Reset Form Handler
+    const btnReset = document.getElementById('btnResetForm');
+    if (btnReset) {
+        btnReset.addEventListener('click', function() {
+            setTimeout(() => {
+                hitungIMT();
+                hitungApgarM1();
+                hitungApgarM5();
+                if (containerPersalinan) containerPersalinan.style.display = 'none';
+                if (labelTanggal) labelTanggal.innerHTML = 'Tanggal Pemeriksaan <span class="text-danger">*</span>';
+                if (inputManualKelainan) inputManualKelainan.style.display = 'none';
+                if (inputManualMacam) inputManualMacam.style.display = 'none';
+            }, 20);
+        });
+    }
 
-    setTimeout(() => {
-        hitungOtomatisKehamilan();
-        hitungApgarM1();
-        hitungApgarM5();
-    }, 200);
+    // JALANKAN KALKULASI OTOMATIS SAAT HALAMAN SELESAI DI-LOAD
+    hitungOtomatisKehamilan();
+    hitungIMT();
+    hitungApgarM1();
+    hitungApgarM5();
 });
 
 // VALIDASI FINAL SEBELUM SUBMIT
 window.validasiFormPerkembangan = function(event) {
     const form = document.getElementById('formPerkembangan');
-    const isPersalinanActive = document.getElementById('checkPersalinan').checked;
+    const checkPersalinan = document.getElementById('checkPersalinan');
+    const isPersalinanActive = checkPersalinan ? checkPersalinan.checked : false;
     
     let kolomWajib = [
         'tanggal_pemeriksaan','waktu_pemeriksaan','usia_kehamilan',
         'trimester','kehamilan_ke','berat_badan','tinggi_badan',
-        'imt','tekanan_darah','tinggi_fundus','lila','djj','keluhan','tindakan','obat','jenis_layanan'
+        'imt','tekanan_darah','tinggi_fundus','lila','djj','keluhan','jenis_layanan'
     ];
 
     if (isPersalinanActive) {

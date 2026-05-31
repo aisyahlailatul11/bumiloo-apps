@@ -37,14 +37,14 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4">
             <div class="card card-custom p-4 border-0 shadow-sm h-100 bg-pink-light">
                 <h6 class="fw-bold mb-3">Jumlah Kunjungan Per Bulan</h6>
                 <div style="height:250px;"><canvas id="kunjunganChart"></canvas></div>
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-6 mb-4">
             <div class="card card-custom p-4 border-0 shadow-sm h-100 bg-pink-light">
                 <h6 class="fw-bold mb-3">Jumlah Ibu Hamil per Trimester</h6>
                 <div style="height:250px;"><canvas id="trimesterChart"></canvas></div>
@@ -53,7 +53,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 mt-4">
+        <div class="col-md-6 mb-4">
             <div class="card card-custom p-4 border-0 shadow-sm h-100 bg-pink-light">
                 <h6 class="fw-bold mb-3">Jumlah Persalinan Per Bulan</h6>
                 <div style="height:250px;"><canvas id="persalinanChart"></canvas></div>
@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function() {
         data: {
             labels: ['Trimester 1', 'Trimester 2', 'Trimester 3'],
             datasets: [{
-                data: [{{ $perTrimester[0] }}, {{ $perTrimester[1] }}, {{ $perTrimester[2] }}],
+                data: [{{ $perTrimester[0] ?? 0 }}, {{ $perTrimester[1] ?? 0 }}, {{ $perTrimester[2] ?? 0 }}],
                 backgroundColor: ['#FFD700', '#9333EA', '#3B82F6'],
                 borderWidth: 0
             }]
@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // LINE CHART (Kunjungan per bulan)
+    // LINE CHART (Kunjungan per bulan) - Sumbu Y Selisih 5
     new Chart(document.getElementById('kunjunganChart'), {
         type: 'line',
         data: {
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 data: {!! json_encode($perBulan) !!},
                 borderColor: '#f875aa',
                 borderWidth: 3,
-                backgroundColor: 'rgba(248,117,170,0.3)',
+                backgroundColor: 'rgba(248,117,170,0.15)',
                 fill: true,
                 tension: 0.4,
                 pointRadius: 5,
@@ -105,16 +105,25 @@ document.addEventListener("DOMContentLoaded", function() {
             scales: { 
                 y: { 
                     display: true, 
-                    beginAtZero: true 
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 5, // Mengatur jeda kelipatan 5 (0, 5, 10, 15, dst)
+                        color: '#6c757d'
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)', // Garis panduan horizontal tipis
+                        drawBorder: false
+                    }
                 }, 
                 x: { 
-                    grid: { display: false } 
+                    grid: { display: false },
+                    ticks: { color: '#6c757d' }
                 } 
             }
         }
     });
 
-    // LINE CHART (Persalinan per bulan)
+    // LINE CHART (Persalinan per bulan) - Sumbu Y Selisih 5
     new Chart(document.getElementById('persalinanChart'), {
         type: 'line',
         data: {
@@ -123,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 data: {!! json_encode($perBulanPersalinan) !!},
                 borderColor: '#3B82F6',
                 borderWidth: 3,
-                backgroundColor: 'rgba(59,130,246,0.3)',
+                backgroundColor: 'rgba(59,130,246,0.15)',
                 fill: true,
                 tension: 0.4,
                 pointRadius: 5,
@@ -136,10 +145,19 @@ document.addEventListener("DOMContentLoaded", function() {
             scales: { 
                 y: { 
                     display: true, 
-                    beginAtZero: true 
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 5, // Mengatur jeda kelipatan 5 (0, 5, 10, 15, dst)
+                        color: '#6c757d'
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)', // Garis panduan horizontal tipis
+                        drawBorder: false
+                    }
                 }, 
                 x: { 
-                    grid: { display: false } 
+                    grid: { display: false },
+                    ticks: { color: '#6c757d' }
                 } 
             }
         }

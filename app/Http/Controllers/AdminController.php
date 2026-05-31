@@ -15,60 +15,56 @@ use App\Mail\JadwalKontrol;
 
 class AdminController extends Controller
 {
-    
     public function index()
-{
-    $hariIni = \Carbon\Carbon::today();
+    {
+        // Mendapatkan bulan dan tahun saat ini
+        $bulanIni = \Carbon\Carbon::now()->month;
+        $tahunIni = \Carbon\Carbon::now()->year;
 
-    // Jumlah kunjungan hari ini
-    $jumlahKunjunganHariIni = \App\Models\Perkembangan::whereDate('tanggal_pemeriksaan', $hariIni)->count();
+        // 1. Jumlah kunjungan BULAN INI
+        $jumlahKunjunganBulanIni = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $bulanIni)
+            ->whereYear('tanggal_pemeriksaan', $tahunIni)
+            ->count();
 
-    // Jumlah persalinan hari ini
-    $jumlahPersalinanHariIni = \App\Models\Perkembangan::whereDate('tanggal_pemeriksaan', $hariIni)
-        ->where('jenis_layanan', 'Persalinan')
-        ->count();
-
-    // Data untuk pie chart (jumlah ibu hamil per trimester)
-    $perTrimester = [
-        \App\Models\Perkembangan::where('trimester', 1)->count(),
-        \App\Models\Perkembangan::where('trimester', 2)->count(),
-        \App\Models\Perkembangan::where('trimester', 3)->count(),
-    ];
-
-    // Data untuk line chart kunjungan per bulan
-    $perBulan = [];
-    for ($i = 1; $i <= 12; $i++) {
-        $perBulan[] = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $i)->count();
-    }
-
-    // Data untuk line chart persalinan per bulan
-    $perBulanPersalinan = [];
-    for ($i = 1; $i <= 12; $i++) {
-        $perBulanPersalinan[] = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $i)
+        // 2. Jumlah persalinan BULAN INI
+        $jumlahPersalinanBulanIni = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $bulanIni)
+            ->whereYear('tanggal_pemeriksaan', $tahunIni)
             ->where('jenis_layanan', 'Persalinan')
             ->count();
+
+        // Data untuk pie chart (jumlah ibu hamil per trimester)
+        $perTrimester = [
+            \App\Models\Perkembangan::where('trimester', 1)->count(),
+            \App\Models\Perkembangan::where('trimester', 2)->count(),
+            \App\Models\Perkembangan::where('trimester', 3)->count(),
+        ];
+
+        // Data untuk line chart kunjungan per bulan (berdasarkan tahun berjalan)
+        $perBulan = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $perBulan[] = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $i)
+                ->whereYear('tanggal_pemeriksaan', $tahunIni)
+                ->count();
+        }
+
+        // Data untuk line chart persalinan per bulan (berdasarkan tahun berjalan)
+        $perBulanPersalinan = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $perBulanPersalinan[] = \App\Models\Perkembangan::whereMonth('tanggal_pemeriksaan', $i)
+                ->whereYear('tanggal_pemeriksaan', $tahunIni)
+                ->where('jenis_layanan', 'Persalinan')
+                ->count();
+        }
+
+        // Mengirimkan variabel baru ke view
+        return view('admin.dashboard', compact(
+            'jumlahKunjunganBulanIni',
+            'jumlahPersalinanBulanIni',
+            'perTrimester',
+            'perBulan',
+            'perBulanPersalinan'
+        ));
     }
-
-    return view('admin.dashboard', compact(
-        'jumlahKunjunganHariIni',
-        'jumlahPersalinanHariIni',
-        'perTrimester',
-        'perBulan',
-        'perBulanPersalinan'
-    ));
-}
-
-    /**
-     * Menampilkan Data Pasien
-     */
-    public function dataPasien()
-{
-    // Mengambil user dengan role 'Ibu Hamil' sesuai log database kamu
-    $pasiens = \App\Models\User::where('role', 'Ibu Hamil')->orderBy('created_at', 'desc')->get();
-    
-    // Arahkan ke folder resources/views/admin/pasien/index.blade.php
-    return view('admin.pasien.index', compact('pasiens')); 
-}
 
 //DATA PASIEN (MASTER)
 

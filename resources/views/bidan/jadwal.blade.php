@@ -221,7 +221,7 @@
             </h5>
             
             <div class="badge-date-blue">
-                <i class="far fa-calendar-alt me-2"></i> Hari Ini: {{ \Carbon\Carbon::today()->translatedFormat('l, d F Y') }}
+                <i class="far fa-calendar-alt me-2"></i> Hari Ini: {{ \Carbon\Carbon::today()->locale('id')->translatedFormat('l, d F Y') }}
             </div>
         </div>
 
