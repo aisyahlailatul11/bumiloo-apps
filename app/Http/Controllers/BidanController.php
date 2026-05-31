@@ -11,52 +11,59 @@ class BidanController extends Controller
 
 public function index()
 {
-    // Ini adalah halaman dashboard bidan
-    return view('bidan.dashboardBidan'); 
-}
+    $janjiHariIni = DB::table('jadwals')
+        ->whereDate('tgl_pemeriksaan', today())
+        ->count();
 
-    public function konsultasi()
-{
-    $konsultasis = DB::table('konsultasis')
-        ->join('users', 'konsultasis.user_id', '=', 'users.id')
-        ->select(
-            'konsultasis.user_id',
-            'users.name as nama_pasien',
-            DB::raw('MAX(konsultasis.created_at) as waktu_terakhir')
-        )
-        ->groupBy('konsultasis.user_id', 'users.name')
-        ->orderBy('waktu_terakhir', 'desc')
+    $pemeriksaanBulanIni = DB::table('perkembangan')
+        ->whereMonth('tanggal_pemeriksaan', now()->month)
+        ->whereYear('tanggal_pemeriksaan', now()->year)
+        ->count();
+
+    $totalPasien = DB::table('users')
+        ->where('role', 'bumil')
+        ->count();
+
+    $rataKunjungan = $totalPasien > 0
+        ? round($pemeriksaanBulanIni / $totalPasien, 2)
+        : 0;
+
+    $jadwalHariIni = DB::table('jadwals')
+        ->whereDate('tgl_pemeriksaan', today())
+        ->orderBy('jam', 'asc')
         ->get();
 
-    return view('bidan.konsultasi', compact('konsultasis'));
-}
-public function detailKonsultasi($user_id)
-{
-    $konsultasis = DB::table('konsultasis')
-        ->join('users', 'konsultasis.user_id', '=', 'users.id')
-        ->select(
-            'konsultasis.user_id',
-            'users.name as nama_pasien',
-            DB::raw('MAX(konsultasis.created_at) as waktu_terakhir')
-        )
-        ->groupBy('konsultasis.user_id', 'users.name')
-        ->orderBy('waktu_terakhir', 'desc')
-        ->get();
+    $trimester = DB::table('perkembangan')
+        ->select('trimester', DB::raw('COUNT(DISTINCT pasien_id) as total'))
+        ->groupBy('trimester')
+        ->pluck('total', 'trimester');
 
-    $pasien = DB::table('users')
-        ->where('id', $user_id)
-        ->first();
+    $kunjunganBulanan = DB::table('perkembangan')
+        ->selectRaw('MONTH(tanggal_pemeriksaan) as bulan, COUNT(*) as total')
+        ->whereYear('tanggal_pemeriksaan', now()->year)
+        ->groupBy('bulan')
+        ->pluck('total', 'bulan');
 
-    $pesans = DB::table('konsultasis')
-        ->where('user_id', $user_id)
-        ->orderBy('created_at', 'asc')
-        ->get();
+    $perTrimester = [
+        $trimester[1] ?? 0,
+        $trimester[2] ?? 0,
+        $trimester[3] ?? 0,
+    ];
 
-    return view('bidan.detailKonsultasi', compact(
-        'konsultasis',
-        'pasien',
-        'pesans',
-        'user_id'
+    $perBulan = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $perBulan[] = $kunjunganBulanan[$i] ?? 0;
+    }
+
+    return view('bidan.dashboardBidan', compact(
+        'janjiHariIni',
+        'pemeriksaanBulanIni',
+        'rataKunjungan',
+        'jadwalHariIni',
+        'trimester',
+        'kunjunganBulanan',
+        'perTrimester',
+        'perBulan'
     ));
 }
 public function kirimKonsultasi(Request $request, $user_id)

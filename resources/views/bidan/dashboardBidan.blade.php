@@ -1,49 +1,50 @@
 @extends('layouts.masterBidan')
 
-
 @section('content')
 <div class="container-fluid">
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold">Bumiloo Dashboard</h2>
-        </div>
     </div>
 
-
+    {{-- CARD RINGKASAN --}}
     <div class="row mb-4">
-        <div class="col-md-4">
+        <div class="col-md-4 mb-3">
             <div class="card card-custom p-4 border-0 shadow-sm">
                 <div class="d-flex align-items-center">
                     <div class="p-3 bg-success bg-opacity-10 rounded-4 me-3 text-success">
                         <i class="fas fa-users fa-2x"></i>
                     </div>
                     <div>
-                        <h2 class="fw-bold mb-0">5</h2>
+                        <h2 class="fw-bold mb-0">{{ $janjiHariIni ?? 0 }}</h2>
                         <small class="text-muted">Janji Hari Ini</small>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-4 mb-3">
             <div class="card card-custom p-4 border-0 shadow-sm">
                 <div class="d-flex align-items-center">
                     <div class="p-3 bg-primary bg-opacity-10 rounded-4 me-3 text-primary">
                         <i class="fas fa-stethoscope fa-2x"></i>
                     </div>
                     <div>
-                        <h2 class="fw-bold mb-0">45</h2>
+                        <h2 class="fw-bold mb-0">{{ $pemeriksaanBulanIni ?? 0 }}</h2>
                         <small class="text-muted">Pemeriksaan Bulan Ini</small>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
+
+        <div class="col-md-4 mb-3">
             <div class="card card-custom p-4 border-0 shadow-sm">
                 <div class="d-flex align-items-center">
                     <div class="p-3 bg-danger bg-opacity-10 rounded-4 me-3 text-danger">
                         <i class="fas fa-chart-line fa-2x"></i>
                     </div>
                     <div>
-                        <h2 class="fw-bold mb-0">1.41</h2>
+                        <h2 class="fw-bold mb-0">{{ $rataKunjungan ?? 0 }}</h2>
                         <small class="text-muted">Rata-rata Kunjungan</small>
                     </div>
                 </div>
@@ -51,79 +52,100 @@
         </div>
     </div>
 
-
+    {{-- ISI DASHBOARD --}}
     <div class="row">
-        <div class="col-md-7">
+
+        {{-- JADWAL HARI INI --}}
+        <div class="col-md-7 mb-4">
             <div class="card card-custom p-4 border-0 shadow-sm h-100">
                 <h5 class="fw-bold mb-4">Janji Pemeriksaan Hari Ini</h5>
+
                 <div class="table-responsive">
                     <table class="table table-borderless align-middle">
                         <tbody>
+                            @forelse ($jadwalHariIni ?? [] as $jadwal)
                             <tr>
-                                <td class="text-muted small">09.00</td>
+                                <td class="text-muted small" width="90">
+                                    {{ \Carbon\Carbon::parse($jadwal->jam ?? $jadwal->waktu ?? now())->format('H:i') }}
+                                </td>
+
                                 <td>
                                     <div class="d-flex align-items-center">
-                                        <img src="https://ui-avatars.com/api/?name=Rini+Wulandari"
-                                            class="rounded-circle me-3" width="40">
-                                        <div><span class="fw-bold d-block">Rini Wulandari</span><small
-                                                class="text-muted">18 Minggu 4 Hari</small></div>
+                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($jadwal->nama_pasien ?? 'Pasien') }}"
+                                            class="rounded-circle me-3" width="40" height="40">
+
+                                        <div>
+                                            <span class="fw-bold d-block">
+                                                {{ $jadwal->nama_pasien ?? 'Nama pasien tidak tersedia' }}
+                                            </span>
+
+                                            <small class="text-muted">
+                                                {{ $jadwal->usia_kehamilan ?? '-' }}
+                                            </small>
+                                        </div>
                                     </div>
                                 </td>
-                                <td><span
-                                        class="badge rounded-pill bg-danger bg-opacity-10 text-danger border border-danger px-3">Kontrol
-                                        Rutin</span></td>
+
+                                <td class="text-end">
+                                    <span class="badge rounded-pill bg-pink-light text-pink border border-pink px-3">
+                                        {{ $jadwal->keterangan ?? $jadwal->status ?? 'Pemeriksaan' }}
+                                    </span>
+                                </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td class="text-muted small">10.00</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="https://ui-avatars.com/api/?name=Siska+Putri"
-                                            class="rounded-circle me-3" width="40">
-                                        <div><span class="fw-bold d-block">Siska Putri</span><small
-                                                class="text-muted">22 Minggu 1 Hari</small></div>
-                                    </div>
-                                </td>
-                                <td><span
-                                        class="badge rounded-pill bg-pink-light text-pink border border-pink px-3">Konsultasi</span>
+                                <td colspan="3" class="text-center text-muted py-4">
+                                    Belum ada jadwal pemeriksaan hari ini.
                                 </td>
                             </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
+
                 <div class="mt-4 p-3 bg-pink-light rounded-4 d-flex align-items-center border border-pink">
                     <i class="fas fa-info-circle text-pink me-3 fs-3"></i>
-                    <p class="mb-0 small">Ingatkan ibu hamil untuk mengonsumsi tablet tambah darah secara rutin.</p>
+                    <p class="mb-0 small">
+                        Ingatkan ibu hamil untuk melakukan pemeriksaan rutin sesuai jadwal.
+                    </p>
                 </div>
             </div>
         </div>
 
+        {{-- CHART --}}
+        <div class="col-md-5 mb-4">
 
-        <div class="col-md-5">
             <div class="card card-custom p-4 border-0 shadow-sm mb-4">
                 <h6 class="fw-bold mb-3">Jumlah Ibu Hamil per Trimester</h6>
-                <div style="height: 200px;"><canvas id="trimesterChart"></canvas></div>
+                <div style="height: 200px;">
+                    <canvas id="trimesterChart"></canvas>
+                </div>
             </div>
+
             <div class="card card-custom p-4 border-0 shadow-sm">
                 <h6 class="fw-bold mb-3">Jumlah Kunjungan Per Bulan</h6>
-                <div style="height: 150px;"><canvas id="kunjunganChart"></canvas></div>
+                <div style="height: 150px;">
+                    <canvas id="kunjunganChart"></canvas>
+                </div>
             </div>
+
         </div>
     </div>
 </div>
 @endsection
 
-
 @section('scripts')
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    // PIE CHART
-    const ctx1 = document.getElementById('trimesterChart').getContext('2d');
-    new Chart(ctx1, {
+
+    new Chart(document.getElementById('trimesterChart'), {
         type: 'pie',
         data: {
-            labels: ['Tri 1', 'Tri 2', 'Tri 3'],
+            labels: ['Trimester 1', 'Trimester 2', 'Trimester 3'],
             datasets: [{
-                data: [10, 15, 20],
+                data: {
+                    !!json_encode($perTrimester) !!
+                },
                 backgroundColor: ['#FFD700', '#9333EA', '#3B82F6'],
                 borderWidth: 0
             }]
@@ -138,28 +160,23 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-
-    // LINE CHART (AREA)
-    const ctx2 = document.getElementById('kunjunganChart').getContext('2d');
-    const gradient = ctx2.createLinearGradient(0, 0, 0, 150);
-    gradient.addColorStop(0, 'rgba(246, 135, 179, 0.4)');
-    gradient.addColorStop(1, 'rgba(246, 135, 179, 0)');
-
-
-    new Chart(ctx2, {
+    new Chart(document.getElementById('kunjunganChart'), {
         type: 'line',
         data: {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov',
-                'Des'],
+                'Des'
+            ],
             datasets: [{
-                data: [30, 45, 35, 60, 80, 70, 90, 85, 60, 75, 80, 95],
-                borderColor: '#f687b3',
+                data: {
+                    !!json_encode($perBulan) !!
+                },
+                borderColor: '#f875aa',
                 borderWidth: 3,
-                backgroundColor: gradient,
+                backgroundColor: 'rgba(248,117,170,0.3)',
                 fill: true,
                 tension: 0.4,
-                pointRadius: 3,
-                pointBackgroundColor: '#f687b3'
+                pointRadius: 5,
+                pointBackgroundColor: '#f875aa'
             }]
         },
         options: {
@@ -168,19 +185,10 @@ document.addEventListener("DOMContentLoaded", function() {
                 legend: {
                     display: false
                 }
-            },
-            scales: {
-                y: {
-                    display: false
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
             }
         }
     });
+
 });
 </script>
 @endsection
