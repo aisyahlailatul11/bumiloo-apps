@@ -23,7 +23,7 @@
    <div class="p-4">
     <form action="{{ route('profile.updateAvatar') }}" method="POST" enctype="multipart/form-data" id="avatarForm">
         @csrf
-        <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;" onchange="this.form.submit();">
+       <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display: none;" onchange="uploadAvatar(this)">
     </form>
 
     <div class="d-flex flex-column align-items-center mb-4">
@@ -100,8 +100,7 @@
 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
     @csrf
 </form>
-
-<form id="delete-account-form" action="{{ route('profile.destroy') }}" method="POST" class="d-none">
+<form id="delete-account-form" action="{{ route('pengaturan.hapusAkun') }}" method="POST" class="d-none">
     @csrf
     @method('DELETE')
 </form>
@@ -159,4 +158,17 @@
             overlay.classList.remove('d-none');
         }
     }
+function uploadAvatar(input) {
+    if (input.files && input.files[0]) {
+        // Tampilkan preview lokal dulu
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.querySelector('.profile-avatar-container img').src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+        
+        // Submit form
+        document.getElementById('avatarForm').submit();
+    }
+}
 </script>
