@@ -17,7 +17,7 @@ class ArtikelController extends Controller
     // 2. TAMPILAN SISI ADMIN (Halaman "Daftar Edukasi" di foto kamu)
     public function adminIndex()
     {
-        $artikels = Artikel::latest()->get();
+        $artikels = Artikel::orderBy('id', 'desc')->get();
         // Sesuaikan dengan nama file blade admin kamu, contoh: 'admin.edukasi'
         return view('admin.edukasi.inputEdukasi', compact('artikels'));
     }

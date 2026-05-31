@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Artikel extends Model
 {
-    // Daftarkan nama tabel dan kolom yang boleh diisi
-    protected $table = 'artikels';
+    // UBAH DI SINI: Arahkan ke nama tabel asli di database kamu, yaitu 'edukasis'
+    protected $table = 'edukasis';
     
     protected $fillable = [
         'judul', 

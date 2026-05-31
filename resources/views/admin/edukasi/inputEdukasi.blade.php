@@ -4,24 +4,169 @@
 
 @section('content')
 <style>
-    .bg-bumiloo { background-color: #f472b6; }
-    .text-bumiloo { color: #f472b6; }
-    .hover-bumiloo:hover { background-color: #ec4899; }
+    /* Paksa tombol menu Input Edukasi di sidebar agar aktif putih transparan */
+    .sidebar-bumiloo .sidebar-menu-list li a.menu-link:has(.fa-book-open),
+    a[href*="edukasi"] {
+        background-color: rgba(255, 255, 255, 0.25) !important;
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    /* Container utama agar konten tidak terlalu menempel ke pinggir */
+    .content-container {
+        padding: 40px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    /* Card Box Putih Utama */
+    .form-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 40px;
+        border: 1px solid rgba(244, 114, 182, 0.15);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .form-title {
+        font-size: 32px;
+        font-weight: 800;
+        color: #1f2937;
+        margin-bottom: 36px;
+    }
+
+    /* Struktur Grid Form Baris (Label Kiri, Input Kanan) */
+    .form-row-grid {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .form-row-grid-top {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        align-items: flex-start;
+        gap: 20px;
+        margin-bottom: 24px;
+    }
+
+    .form-label-custom {
+        font-size: 15px;
+        font-weight: 700;
+        color: #374151;
+        margin: 0;
+    }
+
+    /* Input & Textarea Styling */
+    .input-custom-field {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 12px;
+        border: 1.5px solid #e5e7eb;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s ease;
+        background-color: #fbfbfb;
+        box-sizing: border-box;
+    }
+
+    .input-custom-field:focus {
+        border-color: #f472b6;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(244, 114, 182, 0.15);
+    }
+
+    /* Desain Tombol Pilih Gambar Pink */
+    .btn-choose-image {
+        cursor: pointer;
+        background-color: #f472b6;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 10px 20px;
+        border-radius: 10px;
+        display: inline-block;
+        border: none;
+        transition: background 0.2s;
+    }
+
+    .btn-choose-image:hover {
+        background-color: #ec4899;
+    }
+
+    /* Box Pratinjau Gambar */
+    .preview-image-box {
+        margin-top: 14px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 16px;
+        overflow: hidden;
+        width: 280px; 
+        height: 165px; 
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f9fafb;
+    }
+
+    .preview-image-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .info-size-text {
+        font-size: 12px;
+        color: #9ca3af;
+        margin-top: 6px;
+        font-weight: 500;
+    }
+
+    /* Tombol Simpan di Kanan Bawah */
+    .action-row-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1.5px solid #f3f4f6;
+    }
+
+    .btn-submit-pink {
+        background-color: #f472b6;
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px 28px;
+        border-radius: 12px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .btn-submit-pink:hover {
+        background-color: #ec4899;
+        transform: translateY(-1px);
+    }
 </style>
 
-<div class="p-8 max-w-5xl w-full mx-auto">
-    <div class="bg-white rounded-2xl shadow-md p-8 border border-gray-100">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-4">Tambah Edukasi</h2>
+<div class="content-container">
+    <div class="form-card">
+        <h2 class="form-title">Tambah Edukasi</h2>
 
         @if(session('success'))
-            <div class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-r-lg text-sm">
+            <div style="margin-bottom: 20px; padding: 16px; background-color: #d1fae5; border-left: 4px solid #10b981; color: #065f46; border-radius: 0 12px 12px 0; font-size: 14px; font-weight: 600;">
                 {{ session('success') }}
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-r-lg text-sm">
-                <ul class="list-disc pl-5">
+            <div style="margin-bottom: 20px; padding: 16px; background-color: #fee2e2; border-left: 4px solid #ef4444; color: #991b1b; border-radius: 0 12px 12px 0; font-size: 14px; font-weight: 600;">
+                <ul style="list-style-type: disc; padding-left: 20px; margin: 0;">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
@@ -29,58 +174,49 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.edukasi.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('admin.edukasi.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
-            <div class="grid grid-cols-4 items-center gap-4">
-                <label for="judul_edukasi" class="text-sm font-semibold text-gray-700">Judul Edukasi</label>
-                <div class="col-span-3">
-                    <input type="text" id="judul_edukasi" name="judul_edukasi" placeholder="Masukkan Judul Edukasi..." required
-                        class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none transition text-sm">
+            <div class="form-row-grid">
+                <label for="judul" class="form-label-custom">Judul Edukasi</label>
+                <div>
+                    <input type="text" id="judul" name="judul" placeholder="Masukkan Judul Edukasi..." required class="input-custom-field">
                 </div>
             </div>
 
-            <div class="grid grid-cols-4 items-center gap-4">
-                <label for="kategori" class="text-sm font-semibold text-gray-700">Kategori</label>
-                <div class="col-span-3">
-                    <input type="text" id="kategori" name="kategori" placeholder="Masukkan Kategori Edukasi..." required
-                        class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none transition text-sm">
+            <div class="form-row-grid">
+                <label for="kategori" class="form-label-custom">Kategori</label>
+                <div>
+                    <input type="text" id="kategori" name="kategori" placeholder="Masukkan Kategori Edukasi..." required class="input-custom-field">
                 </div>
             </div>
 
-            <div class="grid grid-cols-4 items-start gap-4">
-                <label for="konten_edukasi" class="text-sm font-semibold text-gray-700 pt-2">Konten Edukasi</label>
-                <div class="col-span-3">
-                    <textarea id="konten_edukasi" name="konten_edukasi" rows="6" placeholder="Masukkan Konten Edukasi..." required
-                        class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none transition text-sm resize-none"></textarea>
+            <div class="form-row-grid-top">
+                <label for="deskripsi" class="form-label-custom" style="margin-top: 10px;">Konten Edukasi</label>
+                <div>
+                    <textarea id="deskripsi" name="deskripsi" placeholder="Masukkan Konten Edukasi..." required class="input-custom-field" style="resize: none; height: 160px;"></textarea>
                 </div>
             </div>
 
-            <div class="grid grid-cols-4 items-start gap-4">
-                <label class="text-sm font-semibold text-gray-700 pt-2">Upload Gambar</label>
-                <div class="col-span-3 space-y-3">
-                    <div class="flex items-center space-x-4">
-                        <label for="gambar" class="cursor-pointer bg-pink-500 hover:bg-pink-600 text-white text-xs font-semibold px-4 py-2.5 rounded-lg shadow-sm transition duration-200">
-                            Pilih Gambar
-                        </label>
-                        <input type="file" id="gambar" name="gambar" accept="image/*" class="hidden" onchange="previewImage(event)">
-                        <span id="file-name" class="text-xs text-gray-500">Tidak ada file yang dipilih</span>
+            <div class="form-row-grid-top">
+                <label class="form-label-custom" style="margin-top: 10px;">Upload Gambar</label>
+                <div>
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <label for="gambar" class="btn-choose-image">Pilih Gambar</label>
+                        <input type="file" id="gambar" name="gambar" accept="image/*" style="display: none;" onchange="previewImage(event)">
+                        <span id="file-name" style="font-size: 14px; color: #6b7280; font-weight: 600;">Tidak ada file yang dipilih</span>
                     </div>
                     
-                    <p class="text-xs text-gray-400 font-medium">*Ukuran Gambar Maksimal 2 MB</p>
-
-                    <div class="mt-2 border rounded-xl overflow-hidden w-64 bg-gray-50 h-40 flex items-center justify-center relative">
-                        <img id="output_image" class="w-full h-full object-cover hidden" />
-                        <div id="placeholder-text" class="text-gray-400 text-xs flex flex-col items-center">
-                            <i class="fa-solid fa-image text-2xl mb-1"></i>
-                            <span>Pratinjau gambar di sini</span>
-                        </div>
+                    <div class="preview-image-box">
+                        <img id="output_image" src="{{ asset('usgibuhamil.png') }}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23ccc\' stroke-width=\'1.5\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><path d=\'M21 15l-5-5L5 21\'/></svg>'" />
                     </div>
+                    
+                    <p class="info-size-text">*Ukuran Gambar Maksimal 2 MB</p>
                 </div>
             </div>
 
-            <div class="flex justify-end pt-4 border-t">
-                <button type="submit" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold text-sm px-6 py-2.5 rounded-xl shadow-md transition duration-200 flex items-center space-x-2">
+            <div class="action-row-footer">
+                <button type="submit" class="btn-submit-pink">
                     <i class="fa-solid fa-floppy-disk"></i>
                     <span>Simpan</span>
                 </button>
@@ -88,16 +224,15 @@
         </form>
     </div>
 </div>
+@endsection
 
+@section('scripts')
 <script>
-    // Fungsi untuk menangani penamaan file dan pemuatan gambar (Preview) secara langsung
     function previewImage(event) {
         const reader = new FileReader();
         const imageField = document.getElementById('output_image');
-        const placeholder = document.getElementById('placeholder-text');
         const fileNameSpan = document.getElementById('file-name');
 
-        // Menampilkan nama file di label samping tombol
         if (event.target.files.length > 0) {
             fileNameSpan.textContent = event.target.files[0].name;
         }
@@ -105,8 +240,6 @@
         reader.onload = function() {
             if (reader.readyState === 2) {
                 imageField.src = reader.result;
-                imageField.classList.remove('hidden');
-                placeholder.classList.add('hidden');
             }
         }
         if (event.target.files[0]) {
