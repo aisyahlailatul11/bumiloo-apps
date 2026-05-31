@@ -1,0 +1,286 @@
+@extends('layouts.masterAdmin')
+
+@section('title', 'Tambah Data Pasien')
+
+@section('content')
+<style>
+    /* Styling Container Form */
+    .jwl-form-container {
+        background: #FFFFFF;
+        padding: 40px;
+        border-radius: 24px;
+        border: 1px solid #E2E8F0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    /* Grid Layout */
+    .form-grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    /* Input & Select Styling */
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid #CBD5E1;
+        border-radius: 12px;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+    .form-input:focus {
+        border-color: #F84F8F;
+        box-shadow: 0 0 0 4px rgba(248, 79, 143, 0.1);
+        outline: none;
+    }
+
+    /* Label Styling */
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #475569;
+        font-size: 13px;
+    }
+
+    /* Section Divider */
+    .section-divider {
+        grid-column: span 3;
+        font-size: 18px;
+        font-weight: 700;
+        color: #F84F8F;
+        margin: 30px 0 15px 0;
+        border-bottom: 2px solid #FBCFE8;
+        padding-bottom: 10px;
+    }
+
+    /* Button Styling */
+    .btn-submit-premium {
+        background: #F84F8F;
+        color: white;
+        padding: 14px 40px;
+        border-radius: 12px;
+        font-weight: 700;
+        border: none;
+        float: right;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .btn-submit-premium:hover {
+        background: #e03e7a;
+        transform: translateY(-2px);
+    }
+</style>
+
+<main class="p-10" style="font-family: 'Poppins', sans-serif;">
+    <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Tambah Data Pasien</h1>
+
+    <div class="form-grid-3">
+                <div class="form-group">
+                    <label>NIK Pasien</label>
+                    <input type="text" name="nik" value="{{ old('nik') }}" class="form-input" placeholder="16 Digit Nomor KTP" maxlength="16" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nomor WhatsApp</label>
+                    <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="form-input" placeholder="08XXXXXXXXXX" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" class="form-input readonly-medis" value="{{ Auth::user()->name }}" disabled>
+                    <input type="hidden" name="nama" value="{{ Auth::user()->name }}">
+                </div>
+
+                <!-- Agama -->
+                 <div class="form-group dropdown-container">
+                    <label>Agama</label>
+                    <select name="agama" class="form-input" required>
+                        <option value="">Pilih Agama</option>
+                        <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                        <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                        <option value="Katolik" {{ old('agama') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
+                        <option value="Hindu" {{ old('agama') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                        <option value="Budha" {{ old('agama') == 'Budha' ? 'selected' : '' }}>Budha</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tempat Lahir</label>
+                    <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" class="form-input" placeholder="Kota Kelahiran" required>
+                </div>
+
+                <!-- Pendidikan -->
+                 <div class="form-group dropdown-container">
+                    <label>Pendidikan</label>
+                    <select name="pendidikan" class="form-input" required>
+                        <option value="">Pilih Pendidikan</option>
+                        <option value="SD" {{ old('pendidikan') == 'SD' ? 'selected' : '' }}>SD / Sederajat</option>
+                        <option value="SMP" {{ old('pendidikan') == 'SMP' ? 'selected' : '' }}>SMP / Sederajat</option>
+                        <option value="SMA" {{ old('pendidikan') == 'SMA' ? 'selected' : '' }}>SMA / Sederajat</option>
+                        <option value="D3" {{ old('pendidikan') == 'D3' ? 'selected' : '' }}>D3 / Diploma</option>
+                        <option value="S1/D4" {{ old('pendidikan') == 'S1/D4' ? 'selected' : '' }}>S1 / D4 </option>
+                        <option value="S2" {{ old('pendidikan') == 'S2' ? 'selected' : '' }}>S2</option>
+                        <option value="S3" {{ old('pendidikan') == 'S3' ? 'selected' : '' }}>S3</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Lahir Ibu</label>
+                    <input type="date" id="tgl_lahir" name="tgl_lahir" value="{{ old('tgl_lahir') }}" class="form-input" required>
+                </div>
+
+               <!-- Golongan Darah -->
+                <div class="form-group dropdown-container">
+                    <label>Golongan Darah</label>
+                    <select name="gol_darah" class="form-input" required>
+                    <option value="">Pilih Gol. Darah</option>
+                    <option value="A" {{ old('gol_darah') == 'A' ? 'selected' : '' }}>A</option>
+                    <option value="B" {{ old('gol_darah') == 'B' ? 'selected' : '' }}>B</option>
+                    <option value="AB" {{ old('gol_darah') == 'AB' ? 'selected' : '' }}>AB</option>
+                    <option value="O" {{ old('gol_darah') == 'O' ? 'selected' : '' }}>O</option>
+                </select>
+            </div>
+
+                <div class="form-group">
+                    <label>Umur Ibu</label>
+                    <input type="number" id="umur" name="umur" value="{{ old('umur') }}" class="form-input readonly-medis" placeholder="Otomatis" readonly required>
+                </div>
+
+                <!-- Pekerjaan Ibu -->
+                 <div class="form-group dropdown-container">
+                    <label>Pekerjaan Ibu</label>
+                    <select id="pekerjaan_select" class="form-input" onchange="togglePekerjaan(this.value)">
+                        <option value="">Pilih Pekerjaan</option>
+                        <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                        <option value="PNS / ASN">PNS / ASN</option>
+                        <option value="Karyawan Swasta">Karyawan Swasta</option>
+                        <option value="Wiraswasta">Wiraswasta</option>
+                        <option value="Lainnya">Lainnya...</option>
+                    </select>
+                    <div id="kotak_lainnya" style="display:none; margin-top:10px;">
+        <input type="text" id="input_manual" name="pekerjaan" class="form-input" placeholder="Tulis Pekerjaan Anda">
+    </div>
+</div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Alamat Domisili</label>
+                    <input type="text" name="alamat" value="{{ old('alamat') }}" class="form-input" placeholder="Nama Jalan, RT/RW, Desa, Kecamatan" required>
+                </div>
+
+                <div class="section-divider">Data Suami</div>
+
+                <div class="form-group">
+                    <label>Nama Suami</label>
+                    <input type="text" name="nama_suami" value="{{ old('nama_suami') }}" class="form-input" placeholder="Nama Suami" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Lahir Suami</label>
+                    <input type="date" id="tgllahir_suami" name="tgllahir_suami" value="{{ old('tgllahir_suami') }}" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Umur Suami</label>
+                    <input type="number" id="usia_suami" name="usia_suami" value="{{ old('usia_suami') }}" class="form-input readonly-medis" placeholder="Otomatis" readonly required>
+                </div>
+
+                <div class="kalkulator-medis-box">
+                    <div class="form-group">
+                        <label>HPHT (Hari Pertama Haid Terakhir)</label>
+                        <input type="date" id="hpht" name="hpht" value="{{ old('hpht') }}" class="form-input" style="border-color: #F9A8D4;" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Estimasi Persalinan (HPL / EDD)</label>
+                        <input type="date" id="hpl_screen" class="form-input readonly-medis" style="background-color: #FFF !important; color: #DB2777 !important; border-color: #F9A8D4 !important;" readonly>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit-premium">
+                Daftar 
+            </button>
+            <div style="clear: both;"></div>
+        </form>
+    </div>
+
+    <script>
+    // 1. Logika Toggle Pekerjaan
+    const selPekerjaan = document.getElementById('pekerjaan_select');
+    const boxLainnya = document.getElementById('kotak_lainnya');
+    const inpManual = document.getElementById('input_manual');
+
+    function togglePekerjaan(val) {
+        if (val === 'Lainnya') {
+            boxLainnya.style.display = 'block';
+            inpManual.setAttribute('name', 'pekerjaan');
+            selPekerjaan.removeAttribute('name');
+        } else {
+            boxLainnya.style.display = 'none';
+            selPekerjaan.setAttribute('name', 'pekerjaan');
+            inpManual.removeAttribute('name');
+        }
+    }
+
+    // 2. Fungsi Kalkulator Umur (Ibu & Suami)
+    function calcAge(birthDate) {
+        if (!birthDate) return '';
+        const today = new Date();
+        const birth = new Date(birthDate);
+        let age = today.getFullYear() - birth.getFullYear();
+        const m = today.getMonth() - birth.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+        return age < 0 ? 0 : age;
+    }
+
+    // Event Listener untuk Ibu
+    document.getElementById('tgl_lahir').addEventListener('change', function() {
+        document.getElementById('umur').value = calcAge(this.value);
+    });
+
+    // Event Listener untuk Suami
+    document.getElementById('tgllahir_suami').addEventListener('change', function() {
+        document.getElementById('usia_suami').value = calcAge(this.value);
+    });
+
+    // 3. Kalkulator HPL (HPHT + 7 hari - 3 bulan + 1 tahun)
+    document.getElementById('hpht').addEventListener('change', function() {
+        if (!this.value) return;
+        let hpl = new Date(this.value);
+        hpl.setDate(hpl.getDate() + 7);
+        hpl.setMonth(hpl.getMonth() - 3);
+        hpl.setFullYear(hpl.getFullYear() + 1);
+
+        let y = hpl.getFullYear();
+        let m = String(hpl.getMonth() + 1).padStart(2, '0');
+        let d = String(hpl.getDate()).padStart(2, '0');
+        document.getElementById('hpl_screen').value = `${y}-${m}-${d}`;
+    });
+
+    // 4. Inisialisasi saat halaman pertama kali dibuka
+    window.addEventListener('DOMContentLoaded', () => {
+        // Kalkulasi ulang jika data lama (old) tersedia
+        if(document.getElementById('tgl_lahir').value) document.getElementById('umur').value = calcAge(document.getElementById('tgl_lahir').value);
+        if(document.getElementById('tgllahir_suami').value) document.getElementById('usia_suami').value = calcAge(document.getElementById('tgllahir_suami').value);
+        if(document.getElementById('hpht').value) document.getElementById('hpht').dispatchEvent(new Event('change'));
+        
+        // Handle inputan 'Lainnya' jika ada error validasi
+        const oldPek = "{{ old('pekerjaan') }}";
+        if(oldPek && !['Ibu Rumah Tangga','PNS / ASN','Karyawan Swasta','Wiraswasta'].includes(oldPek)) {
+            selPekerjaan.value = 'Lainnya';
+            inpManual.value = oldPek;
+            togglePekerjaan('Lainnya');
+        } else if(oldPek) {
+            selPekerjaan.value = oldPek;
+        }
+    });
+</script>
+    @include('partials.alerts')
+
+</body>
+</html>
+</main>
+@endsection

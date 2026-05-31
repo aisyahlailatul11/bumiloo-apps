@@ -447,28 +447,31 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-    function konfirmasiLogout() {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Anda akan keluar dari sesi aplikasi Bumiloo!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#F84F8F', // Warna Pink Fanta khas Bumiloo
-            cancelButtonColor: '#94A3B8', // Warna Abu-abu minimalis
-            confirmButtonText: 'Ya, Keluar!',
-            cancelButtonText: 'Batal',
-            customClass: {
-                popup: 'rounded-[24px]' // Melengkung estetik mirip figma kalian
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Jika klik "Ya, Keluar!", form di atas akan di-submit otomatis oleh JavaScript
-                document.getElementById('logout-form').submit();
-            }
-        })
-    }
-    </script>
+<script>
+function konfirmasiLogout() {
+    Swal.fire({
+        title: 'Apakah Anda yakin?',
+        text: "Anda akan keluar dari sesi aplikasi Bumiloo!",
+        icon: 'warning', // Tetap warning untuk ikon tanda seru
+        iconColor: '#EF4444', // <--- INI KUNCI AGAR IKON JADI MERAH
+        showCancelButton: true,
+        // URUTAN TOMBOL DI SWEETALERT2:
+        // Secara default, confirmButton di kanan, cancelButton di kiri.
+        reverseButtons: true, // <--- INI AKAN MEMAKSA POSISI SESUAI KEINGINANMU
+        confirmButtonColor: '#F84F8F', 
+        cancelButtonColor: '#94A3B8',
+        confirmButtonText: 'Ya, Keluar!',
+        cancelButtonText: 'Batal',
+        customClass: {
+            popup: 'rounded-[24px]'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById('logout-form').submit();
+        }
+    })
+}
+</script>
 
     {{-- TOPBAR --}}
     @include('partials.header')

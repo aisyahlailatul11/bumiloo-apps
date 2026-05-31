@@ -72,6 +72,12 @@ class AdminController extends Controller
 
 //DATA PASIEN (MASTER)
 
+public function createDataPasien()
+    {
+        // Pastikan path view-nya benar (misal: 'admin.master.create')
+        return view('admin.master.createDataPasien');
+    }
+
 public function masterPasien(Request $request)
 {
     // Mulai query dari model Pendaftaran

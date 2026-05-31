@@ -5,7 +5,7 @@
 @section('content')
 <style>
     .jwl-container * { font-family: 'Poppins', sans-serif !important; box-sizing: border-box !important; }
-    .jwl-form-box { background: #FFFFFF !important; border-radius: 24px !important; border: 1px solid #F1F5F9 !important; padding: 30px !important; width: 100% !important; box-shadow: 0 4px 25px rgba(0,0,0,0.01) !important; }
+    .jwl-form-box { background: #FFFFFF !important; border-radius: 24px !important; border: 1px solid #F1F5F9 !important; padding: 30px !important; max-width: 1500px !important; margin: 20px auto !important;; box-shadow: 0 4px 25px rgba(0,0,0,0.01) !important; }
     
     /* Desain Baris Form Sejajar Pas Sesuai Urutan Baru */
     .jwl-form-row { display: flex; gap: 24px; width: 100%; margin-bottom: 20px; flex-wrap: wrap; }
@@ -21,14 +21,12 @@
     .jwl-btn-submit:hover { background-color: #e03e7a !important; }
 }
 </style>
-
-<div class="jwl-container w-full" style="padding: 10px 20px; background-color: #FAFAFA; min-height: 100vh;">
     
     <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Jadwal Konsultasi Pasien</h1>
 
     <div class="jwl-form-box" style="margin-bottom: 35px;">
-        <p style="font-size: 15px; font-weight: 700; color: #0F172A; margin: 0 0 25px 0;">
-            {{ isset($editJadwal) ? 'Edit Atur Jadwal' : 'Form Pembuatan Jadwal Baru' }}
+        <p style="font-size: 20px; font-weight: 700; color: #0F172A; margin: 0 0 25px 0;">
+            {{ isset($editJadwal) ? 'Edit Jadwal' : 'Form Pembuatan Jadwal Baru' }}
         </p>
 
         <form action="{{ isset($editJadwal) ? route('jadwal.update', $editJadwal->id) : route('jadwal.store') }}" method="POST" style="margin: 0; display: flex; flex-direction: column; width: 100%;">
@@ -78,7 +76,7 @@
     </label>
     
     <select name="keterangan" required 
-            style="width: 300px; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px;">
+            style="min-width: 280px; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px;">
         <option value="" disabled selected>--Pilih Keterangan--</option>
         <option value="Pemeriksaan Awal">Pemeriksaan Awal</option>
         <option value="Kontrol Rutin">Kontrol Rutin</option>

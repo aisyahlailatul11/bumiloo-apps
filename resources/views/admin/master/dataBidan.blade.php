@@ -128,9 +128,6 @@
 }
 </style>
 
-<div class="bdn-f-container w-full" style="padding: 20px; background-color: #ffffff; min-height: 100vh;">
-    <div style="max-w: 1024px; margin: 0 auto;">
-
         <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Data Bidan</h1>
 
         <form action="{{ route('bidan.update', $b->id) }}" method="POST" enctype="multipart/form-data"
