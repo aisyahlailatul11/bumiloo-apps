@@ -33,7 +33,7 @@ class Pendaftaran extends Model
     // Relasi ke User (Jika ingin mengambil data akun yang mendaftar)
     public function user()
     {
-        return $this->belongsTo(\App\Models\User::class, 'nik', 'nik'); 
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     /**

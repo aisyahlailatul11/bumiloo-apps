@@ -147,20 +147,7 @@ public function masterPasien(Request $request)
         ]);
     }
 
-    // Cari pendaftaran berdasarkan NIK
-$pendaftaran = \App\Models\Pendaftaran::where('nik', $jadwal->nik)->first();
-
-if ($pendaftaran) {
-    $user = \App\Models\User::where('nik', $pendaftaran->nik)->first(); 
-    
-    if ($user && $user->email) {
-        \Illuminate\Support\Facades\Mail::to($user->email)
-            ->send(new \App\Mail\JadwalKontrol($jadwal));
-    } else {
-        \Log::error('Gagal kirim email: User tidak ditemukan atau email kosong untuk NIK: ' . $pendaftaran->nik);
-    }
-}
-
+    $this->kirimEmailJadwal($jadwal, false);
 
     return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dibuat dan status diperbarui!');
 }
@@ -182,9 +169,22 @@ if ($pendaftaran) {
             'keterangan'      => $request->keterangan,
         ]);
 
-        return redirect()->route('jadwal.index')->with('success', 'Jadwal konsultasi berhasil diperbarui!');
-    }
+        $this->kirimEmailJadwal($jadwal, true);
 
+    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui dan email dikirim ulang!');
+}
+
+private function kirimEmailJadwal($jadwal, $isUpdate = false) // Tambahkan parameter $isUpdate
+{
+    $user = \App\Models\User::where('name', $jadwal->nama_pasien)->first(); 
+    
+    if ($user && $user->email) {
+        \Illuminate\Support\Facades\Mail::to($user->email)
+            ->send(new \App\Mail\JadwalKontrol($jadwal, $isUpdate)); // Oper parameter ke sini
+    } else {
+        \Log::error('Gagal kirim email: User tidak ditemukan untuk nama: ' . $jadwal->nama_pasien);
+    }
+}
     public function jadwalDestroy($id)
     {
         $jadwal = Jadwal::findOrFail($id);
@@ -193,11 +193,13 @@ if ($pendaftaran) {
         return redirect()->route('jadwal.index')->with('success', 'Jadwal konsultasi berhasil dihapus!');
     }
 
+
     public function edukasiIndex()
     {
         // Contoh: Mengembalikan view edukasi
         return view('admin.edukasi.inputEdukasi'); 
     }
+
 
     public function jadwalBidan()
 {

@@ -4,7 +4,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         .email-container {
-            font-family: 'Poppins', sans-serif; /* Menggunakan Poppins */
+            font-family: 'Poppins', sans-serif;
             max-width: 500px;
             margin: 20px auto;
             border: 1px solid #fce7f3;
@@ -36,7 +36,7 @@
             padding: 12px 25px;
             border-radius: 50px;
             text-decoration: none;
-            font-weight: 600; /* Sedikit lebih tebal untuk tombol */
+            font-weight: 600;
             text-align: center;
             box-shadow: 0 4px 10px rgba(244, 114, 182, 0.3);
         }
@@ -49,7 +49,11 @@
         </div>
         
         <div class="content">
-            <p style="margin-top:0;">Jadwal kontrol kehamilan Bunda di <b>BUMILOO</b> telah berhasil dibuat:</p>
+            @if($isUpdate)
+                <p style="margin-top:0;">Mohon maaf Bunda, terdapat <b>perubahan</b> pada jadwal kontrol kehamilan Bunda di <b>BUMILOO</b> menjadi berikut:</p>
+            @else
+                <p style="margin-top:0;">Jadwal kontrol kehamilan Bunda di <b>BUMILOO</b> telah berhasil dibuat:</p>
+            @endif
             
             <div class="details-box">
                 <div class="info-item">📅 <b>Tanggal:</b> {{ date('d F Y', strtotime($jadwal->tgl_pemeriksaan)) }}</div>

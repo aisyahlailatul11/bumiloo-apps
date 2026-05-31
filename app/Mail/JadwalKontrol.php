@@ -12,24 +12,20 @@ class JadwalKontrol extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $jadwal; // Variabel ini untuk menampung data jadwal
+    public $jadwal; 
+    public $isUpdate;
 
-    public function __construct($jadwal)
-    {
-        $this->jadwal = $jadwal;
-    }
+    public function __construct($jadwal, $isUpdate = false)
+{
+    $this->jadwal = $jadwal;
+    $this->isUpdate = $isUpdate;
+}
 
-    public function envelope(): Envelope
-    {
-        return new Envelope(
-            subject: 'Jadwal Kontrol Kehamilan',
-        );
-    }
-
-    // Di dalam file App\Mail\JadwalKontrol.php
     public function build()
 {
-    return $this->subject('Pemberitahuan Perubahan Jadwal Pemeriksaan')
+    $subject = $this->isUpdate ? 'Pemberitahuan Perubahan Jadwal' : 'Jadwal Pemeriksaan Kehamilan';
+    
+    return $this->subject($subject)
                 ->view('emails.jadwal_kontrol');
 }
 
