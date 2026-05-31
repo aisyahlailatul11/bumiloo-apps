@@ -56,61 +56,68 @@
     <div class="row">
 
         {{-- JADWAL HARI INI --}}
-        <div class="col-md-7 mb-4">
-            <div class="card card-custom p-4 border-0 shadow-sm h-100">
-                <h5 class="fw-bold mb-4">Janji Pemeriksaan Hari Ini</h5>
+<div class="col-md-7 mb-4">
+    <div class="card border-0 shadow-sm rounded-4 p-4 h-100">
 
-                <div class="table-responsive">
-                    <table class="table table-borderless align-middle">
-                        <tbody>
-                            @forelse ($jadwalHariIni ?? [] as $jadwal)
-                            <tr>
-                                <td class="text-muted small" width="90">
-                                    {{ \Carbon\Carbon::parse($jadwal->jam ?? $jadwal->waktu ?? now())->format('H:i') }}
-                                </td>
-
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <img src="https://ui-avatars.com/api/?name={{ urlencode($jadwal->nama_pasien ?? 'Pasien') }}"
-                                            class="rounded-circle me-3" width="40" height="40">
-
-                                        <div>
-                                            <span class="fw-bold d-block">
-                                                {{ $jadwal->nama_pasien ?? 'Nama pasien tidak tersedia' }}
-                                            </span>
-
-                                            <small class="text-muted">
-                                                {{ $jadwal->usia_kehamilan ?? '-' }}
-                                            </small>
-                                        </div>
-                                    </div>
-                                </td>
-
-                                <td class="text-end">
-                                    <span class="badge rounded-pill bg-pink-light text-pink border border-pink px-3">
-                                        {{ $jadwal->keterangan ?? $jadwal->status ?? 'Pemeriksaan' }}
-                                    </span>
-                                </td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="3" class="text-center text-muted py-4">
-                                    Belum ada jadwal pemeriksaan hari ini.
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="mt-4 p-3 bg-pink-light rounded-4 d-flex align-items-center border border-pink">
-                    <i class="fas fa-info-circle text-pink me-3 fs-3"></i>
-                    <p class="mb-0 small">
-                        Ingatkan ibu hamil untuk melakukan pemeriksaan rutin sesuai jadwal.
-                    </p>
-                </div>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h5 class="fw-bold mb-1">Janji Pemeriksaan Hari Ini</h5>
+                <small class="text-muted">
+                    Jadwal pemeriksaan berdasarkan tabel jadwals
+                </small>
             </div>
+
+            <span class="badge rounded-pill bg-pink-light text-pink px-3 py-2">
+                {{ $janjiHariIni ?? 0 }} Jadwal
+            </span>
         </div>
+
+        @forelse ($jadwalHariIni ?? [] as $jadwal)
+    <div class="appointment-card mb-3">
+
+        <div class="appointment-time">
+            <i class="fas fa-clock"></i>
+            <strong>
+                {{ \Carbon\Carbon::parse($jadwal->jam ?? now())->format('H:i') }}
+            </strong>
+        </div>
+
+        <div class="appointment-avatar">
+            {{ strtoupper(substr($jadwal->nama_pasien ?? 'P', 0, 2)) }}
+        </div>
+
+        <div class="appointment-info">
+            <h6 class="fw-bold mb-1">
+                {{ $jadwal->nama_pasien ?? 'Nama pasien' }}
+            </h6>
+
+            <small class="text-muted d-block">
+                <i class="fas fa-notes-medical me-1 text-pink"></i>
+                {{ $jadwal->keterangan ?? 'Pemeriksaan Kehamilan' }}
+            </small>
+        </div>
+    </div>
+@empty
+    <div class="text-center py-5">
+        <div class="empty-icon mb-3">
+            <i class="fas fa-calendar-times"></i>
+        </div>
+        <h6 class="fw-bold mb-1">Belum ada jadwal hari ini</h6>
+        <p class="text-muted small mb-0">
+            Jadwal akan muncul setelah admin membuat jadwal pemeriksaan.
+        </p>
+    </div>
+@endforelse
+
+        <div class="mt-4 p-3 rounded-4 bg-pink-light border border-pink d-flex align-items-center">
+            <i class="fas fa-circle-info text-pink me-3 fs-4"></i>
+            <p class="mb-0 small">
+                Pastikan pasien datang sesuai jam pemeriksaan dan membawa identitas diri.
+            </p>
+        </div>
+
+    </div>
+</div>
 
         {{-- CHART --}}
         <div class="col-md-5 mb-4">
@@ -133,6 +140,95 @@
     </div>
 </div>
 @endsection
+<style>
+    .appointment-card {
+    display: grid;
+    grid-template-columns: 80px 58px minmax(0, 1fr) 90px;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+    padding: 16px;
+    border-radius: 22px;
+    background: linear-gradient(135deg, #fff7fb, #ffffff);
+    border: 1px solid rgba(248, 117, 170, 0.25);
+    transition: 0.25s;
+    overflow: hidden;
+}
+
+.appointment-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(248, 117, 170, 0.18);
+}
+
+.appointment-time {
+    background: rgba(248, 117, 170, 0.12);
+    color: #f875aa;
+    border-radius: 18px;
+    padding: 12px 8px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.appointment-time i {
+    display: block;
+    font-size: 17px;
+    margin-bottom: 4px;
+}
+
+.appointment-avatar {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f875aa, #ffb3c6);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.appointment-info {
+    min-width: 0;
+}
+
+.appointment-info h6,
+.appointment-info small {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.appointment-status {
+    text-align: right;
+    white-space: nowrap;
+}
+
+    .bg-pink-light {
+        background-color: rgba(248, 117, 170, 0.12) !important;
+    }
+
+    .text-pink {
+        color: #f875aa !important;
+    }
+
+    .border-pink {
+        border-color: rgba(248, 117, 170, 0.35) !important;
+    }
+
+    .empty-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 24px;
+        background: rgba(248, 117, 170, 0.12);
+        color: #f875aa;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+    }
+</style>
 
 @section('scripts')
 <script>
@@ -143,9 +239,7 @@ document.addEventListener("DOMContentLoaded", function() {
         data: {
             labels: ['Trimester 1', 'Trimester 2', 'Trimester 3'],
             datasets: [{
-                data: {
-                    !!json_encode($perTrimester) !!
-                },
+                data: {!! json_encode($perTrimester) !!},
                 backgroundColor: ['#FFD700', '#9333EA', '#3B82F6'],
                 borderWidth: 0
             }]
@@ -163,13 +257,9 @@ document.addEventListener("DOMContentLoaded", function() {
     new Chart(document.getElementById('kunjunganChart'), {
         type: 'line',
         data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov',
-                'Des'
-            ],
+            labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agt','Sep','Okt','Nov','Des'],
             datasets: [{
-                data: {
-                    !!json_encode($perBulan) !!
-                },
+                data: {!! json_encode($perBulan) !!},
                 borderColor: '#f875aa',
                 borderWidth: 3,
                 backgroundColor: 'rgba(248,117,170,0.3)',
