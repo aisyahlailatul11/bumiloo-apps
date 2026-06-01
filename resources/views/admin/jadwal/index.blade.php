@@ -127,25 +127,19 @@
                         <td style="padding: 18px 20px; font-weight: 500; color: #F84F8F;">{{ date('d-m-Y', strtotime($j->tgl_pemeriksaan)) }}</td>
                         <td style="padding: 18px 20px; font-weight: 600;">{{ $j->jam }} WIB</td>
                         <td style="padding: 14px 20px; text-align: center;">
-                        <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-                        <a href="{{ route('jadwal.index', ['edit_id' => $j->id]) }}" 
-                        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: #FFCC00; border-radius: 12px; box-shadow: 0 4px 6px rgba(255, 204, 0, 0.2); text-decoration: none; transition: 0.2s;" 
-                        title="Edit Jadwal Konsultasi"
-                        onmouseover="this.style.backgroundColor='#e6b800'" onmouseout="this.style.backgroundColor='#FFCC00'">
-                        <span style="color: #FFFFFF; font-size: 16px;">✎</span>
-                    </a>
-                    
-                    <button type="button" 
-        onclick="confirmDelete('{{ $j->id }}', '{{ $j->nama_pasien ?? 'Pasien' }}')" 
-        style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: #E2E8F0; border-radius: 12px; box-shadow: 0 4px 6px rgba(226, 232, 240, 0.4); border: none; cursor: pointer; transition: 0.2s;" 
-        title="Hapus Jadwal Konsultasi"
-        onmouseover="this.style.backgroundColor='#CBD5E1'" 
-        onmouseout="this.style.backgroundColor='#E2E8F0'">
-    <span style="color: #EF4444; font-size: 20px; font-weight: bold; line-height: 1;">🗑</span>
-</button>
-            </div>
-        </td>
-                    </tr>
+    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+        
+        <button type="button" 
+                onclick="confirmDelete('{{ $j->id }}', '{{ $j->nama_pasien ?? 'Pasien' }}')" 
+                style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: #FF3B30; border-radius: 12px; box-shadow: 0 4px 6px rgba(255, 59, 48, 0.2); border: none; cursor: pointer; transition: 0.2s;" 
+                title="Hapus Jadwal Konsultasi"
+                onmouseover="this.style.backgroundColor='#d32f2f'" 
+                onmouseout="this.style.backgroundColor='#FF3B30'">
+            <i class="fa fa-trash" style="color: #FFFFFF; font-size: 16px;"></i>
+        </button>
+    </div>
+</td>
+</tr>
                     @empty
                     <tr>
                         <td colspan="7" style="text-align: center; color: #94A3B8; padding: 40px; font-style: italic;">

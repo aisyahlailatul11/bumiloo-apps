@@ -264,23 +264,6 @@
         100% { transform: rotate(360deg); }
     }
 </style>
-
-<div class="chat-page-container container-fluid d-flex flex-column">
-    
-    {{-- Notifikasi Sukses / Eror --}}
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show rounded-4 mb-3" role="alert">
-            <i class="fas fa-check-circle me-1"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger alert-dismissible fade show rounded-4 mb-3" role="alert">
-            <i class="fas fa-exclamation-circle me-1"></i> {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
     
     {{-- FIX: Mengganti class row pembungkus agar melunak dan tidak menabrak sidebar --}}
     <div class="chat-main-row">

@@ -101,7 +101,7 @@ public function storeDataPasien(Request $request)
     // 3. Tambahkan status default
     $data['created_by'] = 'admin'; 
     $data['user_id'] = null;
-    $data['status_konsultasi'] = 'langsung_aktif'; 
+    $data['status_konsultasi'] = 'Datang Langsung'; 
 
     // 4. Simpan ke database
     \App\Models\Pendaftaran::create($data);
@@ -143,23 +143,29 @@ public function masterPasien(Request $request)
     public function jadwalIndex(Request $request)
 {
     $pasienTerpilih = null;
+    $jadwalEdit = null; // Ini untuk data jadwal jika sedang mode edit
 
+    // 1. Ambil data pasien jika ada pendaftaran_id
     if ($request->has('pendaftaran_id')) {
         $pasienTerpilih = \App\Models\Pendaftaran::find($request->pendaftaran_id);
     }
 
-    $editJadwal = null;
+    // 2. Ambil data jadwal jika sedang mode edit
     if ($request->has('edit_id')) {
-        $editJadwal = Jadwal::find($request->edit_id);
-
-        if ($editJadwal) {
-            $pasienTerpilih = $editJadwal;
+        $jadwalEdit = Jadwal::find($request->edit_id);
+        
+        // Jika jadwal ditemukan, pastikan data pasien juga ada 
+        // (kita ambil lewat relasi atau query manual)
+        if ($jadwalEdit) {
+            $pasienTerpilih = \App\Models\Pendaftaran::find($jadwalEdit->pendaftaran_id);
         }
     }
 
+    // 3. Ambil semua jadwal untuk tabel di bawah form
     $jadwals = Jadwal::latest()->get();
 
-    return view('admin.jadwal.index', compact('jadwals', 'editJadwal', 'pasienTerpilih'));
+    // Kirim ketiganya ke view
+    return view('admin.jadwal.index', compact('jadwals', 'jadwalEdit', 'pasienTerpilih'));
 }
 
     public function jadwalStore(Request $request)

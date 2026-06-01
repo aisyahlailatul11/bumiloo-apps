@@ -16,7 +16,7 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
         <div style="display: flex; gap: 10px;">
-            @foreach(['semua' => 'Semua', 'menunggu' => 'Menunggu', 'terjadwal' => 'Terjadwal', 'langsung_aktif' => 'Offline'] as $key => $label)
+            @foreach(['semua' => 'Semua', 'menunggu' => 'Menunggu', 'terjadwal' => 'Terjadwal', 'Datang Langsung' => 'Offline'] as $key => $label)
             <a href="?status={{ $key }}" 
                style="padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; 
                background-color: {{ request('status', 'semua') == $key ? '#F84F8F' : '#E2E8F0' }}; 
@@ -71,19 +71,27 @@
                     <td style="padding: 12px;">{{ $p->nama_suami }}</td>
                     <td style="padding: 12px;">{{ $p->hpht }}</td>
                     <td style="padding: 12px;">{{ $p->status_konsultasi }}</td>
-                    <td style="padding: 12px; text-align: center;">
+                    <td style="padding: 12px; text-align: center; vertical-align: middle;">
     @php
-        $status = strtolower(trim($p->status_konsultasi));
+        $status = strtolower(trim($p->status_konsultasi ?? ''));
     @endphp
 
-    @if($status == 'menunggu' || $status == 'terjadwal')
+    @if($status == 'terjadwal')
         <a href="{{ route('jadwal.index', ['pendaftaran_id' => $p->id]) }}" 
-           style="background: #4CD964; color: white; padding: 6px 12px; border-radius: 8px; text-decoration: none; display: inline-block; box-shadow: 0 2px 4px rgba(76, 217, 100, 0.3);"
+           style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background-color: #FF9500; border-radius: 12px; box-shadow: 0 4px 6px rgba(255, 149, 0, 0.2); text-decoration: none; color: white;" 
+           title="Edit Jadwal">
+           <i class="fa fa-edit"></i>
+        </a>
+
+    @elseif($status == 'menunggu' || empty($status))
+        <a href="{{ route('jadwal.index', ['pendaftaran_id' => $p->id]) }}" 
+           style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background-color: #4CD964; border-radius: 12px; box-shadow: 0 4px 6px rgba(76, 217, 100, 0.2); text-decoration: none; color: white; font-weight: bold; font-size: 20px;" 
            title="Buat Jadwal">
            +
         </a>
+
     @else
-        <span style="color: #6B7280; background: #F3F4F6; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 600;">
+        <span style="color: #6B7280; background: #F3F4F6; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600;">
             OFFLINE
         </span>
     @endif
