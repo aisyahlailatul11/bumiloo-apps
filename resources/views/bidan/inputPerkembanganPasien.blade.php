@@ -1,6 +1,14 @@
 @extends('layouts.masterBidan')
 
 @section('content')
+    <style>
+        /* Kode CSS untuk mengubah warna header */
+        .header-pink th {
+            background-color: #f875aa !important; /* !important memastikan warna Bootstrap tertimpa */
+            color: white !important;
+        }
+    </style>
+
 <div class="container-fluid mb-5">
     <h3 class="fw-bold mb-4 text-dark">Input Rekam Medis Pasien</h3>
     @include('partials.alerts')
@@ -278,85 +286,85 @@
 
             <h5 class="fw-bold text-dark border-start border-4 border-pink ps-2 mb-3">4. Penilaian Tabel APGAR SCORE</h5>
             <div class="table-responsive mb-4">
-                <table class="table table-bordered table-striped text-center align-middle" style="font-size: 13px;">
-                    <thead class="table-dark">
-                        <tr>
-                            <th width="8%">Waktu</th>
-                            <th width="12%">Tanda</th>
-                            <th width="23%">Skor 0</th>
-                            <th width="23%">Skor 1</th>
-                            <th width="23%">Skor 2</th>
-                            <th width="11%">Nilai Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td rowspan="5" class="fw-bold bg-light">Menit 1</td>
-                            <td class="text-start fw-bold">Frek. Jantung</td>
-                            <td><input type="radio" name="apgar_m1_jantung" value="0" class="apgar-m1" checked> Tak ada</td>
-                            <td><input type="radio" name="apgar_m1_jantung" value="1" class="apgar-m1"> < 100</td>
-                            <td><input type="radio" name="apgar_m1_jantung" value="2" class="apgar-m1"> > 100</td>
-                            <td rowspan="5" class="fw-bold fs-5 text-primary bg-light" id="total_apgar_m1">0</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Usaha Napas</td>
-                            <td><input type="radio" name="apgar_m1_napas" value="0" class="apgar-m1" checked> Tak ada</td>
-                            <td><input type="radio" name="apgar_m1_napas" value="1" class="apgar-m1"> Lambat / Tak teratur</td>
-                            <td><input type="radio" name="apgar_m1_napas" value="2" class="apgar-m1"> Menangis kuat</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Tonus Otot</td>
-                            <td><input type="radio" name="apgar_m1_otot" value="0" class="apgar-m1" checked> Lumpuh</td>
-                            <td><input type="radio" name="apgar_m1_otot" value="1" class="apgar-m1"> Ekstremitas fleksi sedikit</td>
-                            <td><input type="radio" name="apgar_m1_otot" value="2" class="apgar-m1"> Gerakan aktif</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Refleks</td>
-                            <td><input type="radio" name="apgar_m1_refleks" value="0" class="apgar-m1" checked> Tak bereaksi</td>
-                            <td><input type="radio" name="apgar_m1_refleks" value="1" class="apgar-m1"> Gerakan sedikit</td>
-                            <td><input type="radio" name="apgar_m1_refleks" value="2" class="apgar-m1"> Menangis / Bersin</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Warna Kulit</td>
-                            <td><input type="radio" name="apgar_m1_warna" value="0" class="apgar-m1" checked> Biru / Pucat</td>
-                            <td><input type="radio" name="apgar_m1_warna" value="1" class="apgar-m1"> Tubuh kemerahan, kaki biru</td>
-                            <td><input type="radio" name="apgar_m1_warna" value="2" class="apgar-m1"> Kemerahan seluruhnya</td>
-                        </tr>
+               <table class="table table-bordered table-striped text-center align-middle" style="font-size: 13px;">
+    <thead class="header-pink">
+        <tr>
+            <th width="8%">Waktu</th>
+            <th width="12%">Tanda</th>
+            <th width="23%">Skor 0</th>
+            <th width="23%">Skor 1</th>
+            <th width="23%">Skor 2</th>
+            <th width="11%">Nilai Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td rowspan="5" class="fw-bold bg-light">Menit 1</td>
+            <td class="text-start fw-bold">Frek. Jantung</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_jantung" value="0" class="form-check-input apgar-m1" checked> <label class="form-check-label">Tak ada</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_jantung" value="1" class="form-check-input apgar-m1"> <label class="form-check-label">&lt; 100</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_jantung" value="2" class="form-check-input apgar-m1"> <label class="form-check-label">&gt; 100</label></div></td>
+            <td rowspan="5" class="fw-bold fs-5 text-primary bg-light" id="total_apgar_m1">0</td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Usaha Napas</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_napas" value="0" class="form-check-input apgar-m1" checked> <label class="form-check-label">Tak ada</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_napas" value="1" class="form-check-input apgar-m1"> <label class="form-check-label">Lambat / Tak teratur</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_napas" value="2" class="form-check-input apgar-m1"> <label class="form-check-label">Menangis kuat</label></div></td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Tonus Otot</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_otot" value="0" class="form-check-input apgar-m1" checked> <label class="form-check-label">Lumpuh</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_otot" value="1" class="form-check-input apgar-m1"> <label class="form-check-label">Ekstremitas fleksi sedikit</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_otot" value="2" class="form-check-input apgar-m1"> <label class="form-check-label">Gerakan aktif</label></div></td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Refleks</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_refleks" value="0" class="form-check-input apgar-m1" checked> <label class="form-check-label">Tak bereaksi</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_refleks" value="1" class="form-check-input apgar-m1"> <label class="form-check-label">Gerakan sedikit</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_refleks" value="2" class="form-check-input apgar-m1"> <label class="form-check-label">Menangis / Bersin</label></div></td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Warna Kulit</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_warna" value="0" class="form-check-input apgar-m1" checked> <label class="form-check-label">Biru / Pucat</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_warna" value="1" class="form-check-input apgar-m1"> <label class="form-check-label">Tubuh kemerahan, kaki biru</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m1_warna" value="2" class="form-check-input apgar-m1"> <label class="form-check-label">Kemerahan seluruhnya</label></div></td>
+        </tr>
 
-                        <tr>
-                            <td rowspan="5" class="fw-bold bg-light">Menit 5</td>
-                            <td class="text-start fw-bold">Frek. Jantung</td>
-                            <td><input type="radio" name="apgar_m5_jantung" value="0" class="apgar-m5" checked> Tak ada</td>
-                            <td><input type="radio" name="apgar_m5_jantung" value="1" class="apgar-m5"> < 100</td>
-                            <td><input type="radio" name="apgar_m5_jantung" value="2" class="apgar-m5"> > 100</td>
-                            <td rowspan="5" class="fw-bold fs-5 text-success bg-light" id="total_apgar_m5">0</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Usaha Napas</td>
-                            <td><input type="radio" name="apgar_m5_napas" value="0" class="apgar-m5" checked> Tak ada</td>
-                            <td><input type="radio" name="apgar_m5_napas" value="1" class="apgar-m5"> Lambat / Tak teratur</td>
-                            <td><input type="radio" name="apgar_m5_napas" value="2" class="apgar-m5"> Menangis kuat</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Tonus Otot</td>
-                            <td><input type="radio" name="apgar_m5_otot" value="0" class="apgar-m5" checked> Lumpuh</td>
-                            <td><input type="radio" name="apgar_m5_otot" value="1" class="apgar-m5"> Ekstremitas fleksi sedikit</td>
-                            <td><input type="radio" name="apgar_m5_otot" value="2" class="apgar-m5"> Gerakan aktif</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Refleks</td>
-                            <td><input type="radio" name="apgar_m5_refleks" value="0" class="apgar-m5" checked> Tak bereaksi</td>
-                            <td><input type="radio" name="apgar_m5_refleks" value="1" class="apgar-m5"> Gerakan sedikit</td>
-                            <td><input type="radio" name="apgar_m5_refleks" value="2" class="apgar-m5"> Menangis / Bersin</td>
-                        </tr>
-                        <tr>
-                            <td class="text-start fw-bold">Warna Kulit</td>
-                            <td><input type="radio" name="apgar_m5_warna" value="0" class="apgar-m5" checked> Biru / Pucat</td>
-                            <td><input type="radio" name="apgar_m5_warna" value="1" class="apgar-m5"> Tubuh kemerahan, kaki biru</td>
-                            <td><input type="radio" name="apgar_m5_warna" value="2" class="apgar-m5"> Kemerahan seluruhnya</td>
-                        </tr>
-                    </tbody>
-                </table>
+        <tr>
+            <td rowspan="5" class="fw-bold bg-light">Menit 5</td>
+            <td class="text-start fw-bold">Frek. Jantung</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_jantung" value="0" class="form-check-input apgar-m5" checked> <label class="form-check-label">Tak ada</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_jantung" value="1" class="form-check-input apgar-m5"> <label class="form-check-label">&lt; 100</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_jantung" value="2" class="form-check-input apgar-m5"> <label class="form-check-label">&gt; 100</label></div></td>
+            <td rowspan="5" class="fw-bold fs-5 text-success bg-light" id="total_apgar_m5">0</td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Usaha Napas</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_napas" value="0" class="form-check-input apgar-m5" checked> <label class="form-check-label">Tak ada</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_napas" value="1" class="form-check-input apgar-m5"> <label class="form-check-label">Lambat / Tak teratur</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_napas" value="2" class="form-check-input apgar-m5"> <label class="form-check-label">Menangis kuat</label></div></td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Tonus Otot</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_otot" value="0" class="form-check-input apgar-m5" checked> <label class="form-check-label">Lumpuh</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_otot" value="1" class="form-check-input apgar-m5"> <label class="form-check-label">Ekstremitas fleksi sedikit</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_otot" value="2" class="form-check-input apgar-m5"> <label class="form-check-label">Gerakan aktif</label></div></td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Refleks</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_refleks" value="0" class="form-check-input apgar-m5" checked> <label class="form-check-label">Tak bereaksi</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_refleks" value="1" class="form-check-input apgar-m5"> <label class="form-check-label">Gerakan sedikit</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_refleks" value="2" class="form-check-input apgar-m5"> <label class="form-check-label">Menangis / Bersin</label></div></td>
+        </tr>
+        <tr>
+            <td class="text-start fw-bold">Warna Kulit</td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_warna" value="0" class="form-check-input apgar-m5" checked> <label class="form-check-label">Biru / Pucat</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_warna" value="1" class="form-check-input apgar-m5"> <label class="form-check-label">Tubuh kemerahan, kaki biru</label></div></td>
+            <td class="text-start"><div class="form-check"><input type="radio" name="apgar_m5_warna" value="2" class="form-check-input apgar-m5"> <label class="form-check-label">Kemerahan seluruhnya</label></div></td>
+        </tr>
+    </tbody>
+</table>
             </div>
 
             <input type="hidden" name="apgar_m1_total" id="hidden_apgar_m1" value="0">
