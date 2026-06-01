@@ -19,7 +19,13 @@ body { font-family: 'Poppins', sans-serif; background-color: #fdf2f5; margin: 0;
 .sidebar .nav-link i { margin-right: 15px; width: 20px; }
 
 /* Di sini letak perubahannya, padding-top digabung langsung ke .main-content */
-.main-content { margin-left: 250px; padding: 30px; padding-top: 100px !important; }
+.main-content { 
+    margin-left: 250px; 
+    padding: 30px;
+    padding-top: 90px !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
 
 .text-pink { color: #f687b3; }
 .logout-btn { background: none; border: none; color: white; width: 100%; text-align: left; }
