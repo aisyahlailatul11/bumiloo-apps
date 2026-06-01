@@ -13,6 +13,7 @@ class Konsultasi extends Model
         'user_id',
         'bidan_id',
         'pesan',
-        'sender'
+        'sender',
+        'tipe_pesan'
     ];
 }

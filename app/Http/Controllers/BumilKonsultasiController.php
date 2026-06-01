@@ -16,14 +16,30 @@ class BumilKonsultasiController extends Controller
     {
         $userId = Auth::id();
 
-        // 1. Ambil data pendaftaran milik user yang sedang login untuk validasi awal
-        $pendaftaran = DB::table('tb_pendaftaran')->where('user_id', $userId)->first();
+        // 1. Ambil data pendaftaran terakhir milik user ini
+$pendaftaran = DB::table('tb_pendaftaran')
+    ->where('user_id', $userId)
+    ->latest()
+    ->first();
 
-        if (!$pendaftaran) {
-            return redirect()->back()->with('error', 'Data pendaftaran Anda tidak ditemukan. Silakan lakukan pendaftaran terlebih dahulu.');
-        }
+// 2. Proses Logika Percabangan (Update jika sudah ada, Insert jika belum ada data pendaftaran)
+if ($pendaftaran) {
+    DB::table('tb_pendaftaran')
+        ->where('id', $pendaftaran->id)
+        ->update([
+            'status_konsultasi' => 'menunggu',
+            'updated_at' => Carbon::now()
+        ]);
+} else {
+    DB::table('tb_pendaftaran')->insert([
+        'user_id' => $userId,
+        'status_konsultasi' => 'menunggu',
+        'created_at' => Carbon::now(),
+        'updated_at' => Carbon::now()
+    ]);
+}
 
-        // 2. Ambil data pesan terakhir dari bidan yang bertipe 'request_offline' untuk mendapatkan id bidan
+        // 3. Ambil data pesan terakhir dari bidan yang bertipe 'request_offline' untuk mendapatkan id bidan
         $pesanBidan = DB::table('konsultasis')
             ->where('user_id', $userId)
             ->where('sender', 'bidan')
@@ -34,7 +50,7 @@ class BumilKonsultasiController extends Controller
         // Tentukan bidan_id (jika tidak ada pesan sebelumnya, pakai default fallback atau kosongkan)
         $bidanId = $pesanBidan ? $pesanBidan->bidan_id : null;
 
-        // 3. Tambahkan baris baru ke tabel 'konsultasis' sebagai tanda Bumil menyetujui / mengajukan jadwal
+        // 4. Tambahkan baris baru ke tabel 'konsultasis' sebagai tanda Bumil menyetujui / mengajukan jadwal
         DB::table('konsultasis')->insert([
             'user_id'    => $userId,
             'bidan_id'   => $bidanId,
@@ -45,56 +61,25 @@ class BumilKonsultasiController extends Controller
             'updated_at' => now(),
         ]);
 
-        // 4. Jika ada tabel daftar_pasien dan memiliki kolom status_konsultasi, kita update secara opsional
-        if (!empty($pendaftaran->nik)) {
-            $pasienExists = DB::table('daftar_pasien')->where('nik', $pendaftaran->nik)->first();
-            if ($pasienExists) {
-                // Gunakan try-catch agar jika kolom tidak ada di daftar_pasien, program tidak ikut crash
-                try {
-                    DB::table('daftar_pasien')
-                        ->where('id', $pasienExists->id)
-                        ->update([
-                            'status_konsultasi' => 'menunggu',
-                            'updated_at' => now()
-                        ]);
-                } catch (\Exception $e) {
-                    // Abaikan jika kolom tidak ada di daftar_pasien
-                }
-            }
+        // === CARI KODE INI (Mulai dari poin ke-5 di controller Anda) ===
+
+// 5. Pastikan $pendaftaran tidak null sebelum membaca properti 'nik'
+if ($pendaftaran && !empty($pendaftaran->nik)) {
+    $pasienExists = DB::table('daftar_pasien')->where('nik', $pendaftaran->nik)->first();
+    if ($pasienExists) {
+        try {
+            DB::table('daftar_pasien')
+                ->where('id', $pasienExists->id)
+                ->update([
+                    'status_konsultasi' => 'menunggu', // Mengisi kolom status_konsultasi di daftar_pasien
+                    'updated_at' => now()
+                ]);
+        } catch (\Exception $e) {
+            // Abaikan jika terjadi kendala kolom
         }
-
-        return redirect()->back()->with('success', 'Jadwal offline berhasil diajukan! Pesan konfirmasi telah dikirim ke Bidan.');
     }
-    public function ajukanJadwal(Request $request){
-    // 1. Ambil ID Ibu Hamil yang sedang login
-    $userId = auth()->id();
+}
 
-    // 2. Cari data pendaftaran terakhir milik user ini di tb_pendaftaran
-    $pendaftaran = DB::table('tb_pendaftaran')
-        ->where('user_id', $userId) // <--- Sesuaikan 'user_id' jika nama kolom di tabel Anda berbeda (misal: 'pasien_id')
-        ->latest()
-        ->first();
-
-    // 3. Proses Logika Percabangan (Update atau Insert)
-    if ($pendaftaran) {
-        // JIKA SUDAH ADA DATA: Cukup update status_konsultasi menjadi 'menunggu'
-        DB::table('tb_pendaftaran')
-            ->where('id', $pendaftaran->id)
-            ->update([
-                'status_konsultasi' => 'menunggu',
-                'updated_at' => Carbon::now()
-            ]);
-    } else {
-        // JIKA BELUM ADA DATA: Buat baris baru di tb_pendaftaran
-        DB::table('tb_pendaftaran')->insert([
-            'user_id' => $userId,
-            'status_konsultasi' => 'menunggu',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
-        ]);
-    }
-
-    // 4. Kembalikan user ke halaman sebelumnya dengan membawa alert sukses
-    return redirect()->back()->with('success', 'Pendaftaran Konsultasi Offline Bunda berhasil diajukan!');
+return redirect()->back()->with('success', 'Jadwal offline berhasil diajukan! Pesan konfirmasi telah dikirim ke Bidan.');
     }
 }
