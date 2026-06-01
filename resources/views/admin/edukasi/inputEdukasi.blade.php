@@ -158,12 +158,14 @@
     <div class="form-card">
         <h2 class="form-title">Tambah Edukasi</h2>
 
+        {{-- Flash Message Sukses --}}
         @if(session('success'))
             <div style="margin-bottom: 20px; padding: 16px; background-color: #d1fae5; border-left: 4px solid #10b981; color: #065f46; border-radius: 0 12px 12px 0; font-size: 14px; font-weight: 600;">
                 {{ session('success') }}
             </div>
         @endif
 
+        {{-- Error Validasi Form --}}
         @if ($errors->any())
             <div style="margin-bottom: 20px; padding: 16px; background-color: #fee2e2; border-left: 4px solid #ef4444; color: #991b1b; border-radius: 0 12px 12px 0; font-size: 14px; font-weight: 600;">
                 <ul style="list-style-type: disc; padding-left: 20px; margin: 0;">
@@ -174,16 +176,19 @@
             </div>
         @endif
 
+        {{-- Form Tag Pembuka yang Benar (Membungkus Seluruh Elemen Form hingga Footer) --}}
         <form action="{{ route('admin.edukasi.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
+            {{-- Input Judul Edukasi --}}
             <div class="form-row-grid">
-                <label for="judul" class="form-label-custom">Judul Edukasi</label>
+                <label for="judul_edukasi" class="form-label-custom">Judul Edukasi</label>
                 <div>
-                    <input type="text" id="judul" name="judul" placeholder="Masukkan Judul Edukasi..." required class="input-custom-field">
+                    <input type="text" id="judul_edukasi" name="judul_edukasi" placeholder="Masukkan Judul Edukasi..." required class="input-custom-field">
                 </div>
             </div>
 
+            {{-- Input Kategori --}}
             <div class="form-row-grid">
                 <label for="kategori" class="form-label-custom">Kategori</label>
                 <div>
@@ -191,13 +196,15 @@
                 </div>
             </div>
 
+            {{-- Input Konten Edukasi --}}
             <div class="form-row-grid-top">
-                <label for="deskripsi" class="form-label-custom" style="margin-top: 10px;">Konten Edukasi</label>
+                <label for="konten_edukasi" class="form-label-custom" style="margin-top: 10px;">Konten Edukasi</label>
                 <div>
-                    <textarea id="deskripsi" name="deskripsi" placeholder="Masukkan Konten Edukasi..." required class="input-custom-field" style="resize: none; height: 160px;"></textarea>
+                    <textarea id="konten_edukasi" name="konten_edukasi" placeholder="Masukkan Konten Edukasi..." required class="input-custom-field" style="resize: none; height: 160px;"></textarea>
                 </div>
             </div>
 
+            {{-- Upload Gambar Berkas --}}
             <div class="form-row-grid-top">
                 <label class="form-label-custom" style="margin-top: 10px;">Upload Gambar</label>
                 <div>
@@ -208,13 +215,14 @@
                     </div>
                     
                     <div class="preview-image-box">
-                        <img id="output_image" src="{{ asset('usgibuhamil.png') }}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23ccc\' stroke-width=\'1.5\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><path d=\'M21 15l-5-5L5 21\'/></svg>'" />
+                        <img id="output_image" src="{{ asset('build/images/usgibuhamil.png') }}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23ccc\' stroke-width=\'1.5\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\'/><path d=\'M21 15l-5-5L5 21\'/></svg>'" />
                     </div>
                     
                     <p class="info-size-text">*Ukuran Gambar Maksimal 2 MB</p>
                 </div>
             </div>
 
+            {{-- Action Row Footer Di dalam Tag Form --}}
             <div class="action-row-footer">
                 <button type="submit" class="btn-submit-pink">
                     <i class="fa-solid fa-floppy-disk"></i>
