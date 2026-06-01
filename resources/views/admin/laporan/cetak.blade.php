@@ -145,8 +145,12 @@
 </div>{{-- end .wrapper --}}
 
 <script>
-    // Auto print saat halaman terbuka (opsional — hapus jika tidak diinginkan)
-    // window.onload = function() { window.print(); };
+    // Auto print langsung saat halaman dibuka
+    window.onload = function() {
+        setTimeout(function() {
+            window.print();
+        }, 500);
+    };
 </script>
 
 </body>
