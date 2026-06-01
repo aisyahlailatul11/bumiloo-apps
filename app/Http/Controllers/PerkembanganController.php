@@ -71,7 +71,7 @@ class PerkembanganController extends Controller
             'tinggi_badan'        => 'required|numeric|min:0',
             'tekanan_darah'       => 'required|string',
             'riwayat_penyakit'    => 'required|string',
-            'riwayat_alergi'      => 'required|string',
+            'riwayat_alergi'      => 'nullable|string',
             'imt'                 => 'required|numeric|min:0',
             'lila'                => 'required|numeric|between:10,99.99',
             'tinggi_fundus'       => 'required|numeric|min:0',

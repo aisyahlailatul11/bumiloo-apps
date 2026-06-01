@@ -86,6 +86,7 @@
         <div class="row mb-4">
             <div class="col-md-6">
                 <label class="form-label">Riwayat Penyakit <span class="text-danger">*</span></label>
+                <input type="hidden" name="riwayat_penyakit" id="hidden_riwayat_penyakit" value="-">
                 <select id="select_riwayat_penyakit" class="form-select mb-2 rounded-3" required>
                     <option value="-">-- Riwayat Penyakit --</option>
                     <option value="-">Tidak Ada (-)</option>
@@ -96,7 +97,7 @@
                     <option value="Lainnya">Lainnya...</option>
                 </select>
                 <div id="riwayat_manual_box" style="display:none;">
-                    <input type="text" name="riwayat_penyakit" id="input_riwayat_penyakit" class="form-control rounded-3" placeholder="Tulis riwayat penyakit" required value="-">
+                    <input type="text" id="input_riwayat_penyakit" class="form-control rounded-3" placeholder="Tulis riwayat penyakit" required value="-">
                 </div>
             </div>
             <div class="col-md-6">
@@ -200,7 +201,7 @@
             <div class="row mb-4">
                <div class="col-md-4 mb-3">
                     <label class="form-label">Bentuk / Ukuran Plasenta <span class="text-danger">*</span></label>
-                        <select id="select_bentuk_plasenta" class="form-select mb-2">
+                        <select name="plasenta_bentuk_ukuran" id="select_bentuk_plasenta" class="form-select mb-2">
                         <option value="Lengkap / Normal">Lengkap / Normal</option>
                         <option value="Tidak Lengkap (Robek/Tertinggal Sebagian)">Tidak Lengkap (Robek/Tertinggal Sebagian)</option>
                         <option value="Ukuran Kecil / Tipis">Ukuran Kecil / Tipis</option>
@@ -208,7 +209,7 @@
                 </div>
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Tali Pusat</label>
-                   <select id="select_tali_pusat" class="form-select mb-2">
+                   <select name="plasenta_tali_pusat" id="select_tali_pusat" class="form-select mb-2">
         <option value="Normal">Normal (±50-60 cm, Pembuluh Darah Lengkap)</option>
         <option value="Lilitan Tali Pusat">Lilitan Tali Pusat</option>
         <option value="Simpul Tali Pusat">Simpul Tali Pusat (True/False Knot)</option>
@@ -404,7 +405,7 @@
             <div class="row mb-3">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Macam Persalinan <span class="text-danger">*</span></label>
-                    <select id="select_macam_persalinan" class="form-select mb-2">
+                    <select name="macam_persalinan" id="select_macam_persalinan" class="form-select mb-2">
                         <option value="Normal Spontan (Letak Belakang Kepala)">Normal Spontan (Letak Belakang Kepala)</option>
                         <option value="Normal Spontan (Letak Sungsang / Darurat)">Normal Spontan (Letak Sungsang / Darurat)</option>
                     </select>
@@ -654,24 +655,29 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Penyakit manual box handler
-    const selectPenyakit = document.getElementById('select_riwayat_penyakit');
-    const boxManual = document.getElementById('riwayat_manual_box');
-    const inputManual = document.getElementById('input_riwayat_penyakit');
+// Penyakit manual box handler
+const selectPenyakit = document.getElementById('select_riwayat_penyakit');
+const boxManual = document.getElementById('riwayat_manual_box');
+const inputManualPenyakit = document.getElementById('input_riwayat_penyakit');
 
-    if (selectPenyakit && boxManual && inputManual) {
-        selectPenyakit.addEventListener('change', function() {
-            if (this.value === 'Lainnya') {
-                boxManual.style.display = 'block';
-                inputManual.required = true;
-                inputManual.value = '';
-            } else {
-                boxManual.style.display = 'none';
-                inputManual.required = false;
-                inputManual.value = this.value; 
-            }
-        });
-    }
-
+if (selectPenyakit && boxManual && inputManualPenyakit) {
+    selectPenyakit.addEventListener('change', function() {
+        if (this.value === 'Lainnya') {
+            boxManual.style.display = 'block';
+            inputManualPenyakit.required = true;
+            inputManualPenyakit.value = '';
+            // Kosongkan name dari select agar tidak bentrok
+            selectPenyakit.removeAttribute('name');
+            inputManualPenyakit.setAttribute('name', 'riwayat_penyakit');
+        } else {
+            boxManual.style.display = 'none';
+            inputManualPenyakit.required = false;
+            // Kembalikan name ke select
+            selectPenyakit.setAttribute('name', 'riwayat_penyakit');
+            inputManualPenyakit.removeAttribute('name');
+        }
+    });
+}
     // Reset Form Handler
     const btnReset = document.getElementById('btnResetForm');
     if (btnReset) {
