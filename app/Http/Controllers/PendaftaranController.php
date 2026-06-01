@@ -43,15 +43,17 @@ class PendaftaranController extends Controller
             $validated['pekerjaan'] = $request->input('pekerjaan_lainnya', 'Lainnya');
         }
 
-        // 3. Tambahkan user_id
-        $data['status_konsultasi'] = 'menunggu'; 
-        $data['created_by'] = 'pasien';
-        $data['user_id'] = auth()->id();
+        // 3. Gabungkan data validasi dengan data tambahan
+        $data_final = array_merge($validated, [
+            'status_konsultasi' => 'menunggu',
+            'created_by'        => 'pasien', // Atau auth()->id() jika ingin menyimpan ID user
+            'user_id'           => auth()->id(),
+        ]);
 
-        // 4. Simpan ke Database
-        Pendaftaran::create($validated);
+        // 4. Simpan ke Database menggunakan $data_final
+        Pendaftaran::create($data_final);
 
         // 5. Arahkan ke Dashboard
-        return redirect()->route('bumil.dashboard')->with('success', 'Data pendaftaran berhasil disimpan! Selamat datang, Bunda.');
+        return redirect()->route('bumil.dashboard')->with('success', 'Data pendaftaran berhasil disimpan!');
     }
 }
