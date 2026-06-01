@@ -55,9 +55,10 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     Route::get('/pendaftaran', [PendaftaranController::class, 'create'])->name('pendaftaran.create');
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
-    // ARTIKEL BUMIL
-    Route::get('/artikel', [ArtikelController::class, 'index'])->name('bumil.artikel');
-    
+    // ARTIKEL / EDUKASI BUMIL
+    Route::get('/artikel', [BumilController::class, 'artikel'])->name('bumil.artikel');
+    Route::get('/artikel/{id}', [BumilController::class, 'detailArtikel'])->name('bumil.artikel.detail');
+
     // RIWAYAT PERKEMBANGAN
     Route::get('/riwayat-perkembangan', [BumilController::class, 'riwayatPerkembangan'])->name('bumil.riwayatPerkembangan');
 

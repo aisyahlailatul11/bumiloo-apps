@@ -32,38 +32,67 @@ class BumilController extends Controller implements HasMiddleware // WAJIB ada "
     // 2. Jika Bumil, cari data pendaftaran
     // Kita cek dulu berdasarkan user_id (Online), jika tidak ada, baru berdasarkan NIK (Offline)
     $data = DB::table('tb_pendaftaran')
-                ->where('user_id', $user->id)
-                ->first();
+        ->where('user_id', $user->id)
+        ->first();
 
     // 3. Jika belum ketemu via user_id, cari via NIK 
-    // (Penting: Pastikan tabel 'users' punya kolom 'nik')
+    // Pastikan tabel 'users' punya kolom 'nik'
     if (!$data && !empty($user->nik)) {
         $data = DB::table('tb_pendaftaran')
-                    ->where('nik', $user->nik)
-                    ->first();
-        
-        // Opsional: Jika ketemu via NIK, kita bisa otomatis isi user_id-nya 
-        // agar ke depannya sistem lebih cepat mencarinya
+            ->where('nik', $user->nik)
+            ->first();
+
+        // Jika ketemu via NIK, otomatis isi user_id
         if ($data) {
             DB::table('tb_pendaftaran')
                 ->where('id', $data->id)
                 ->update(['user_id' => $user->id]);
         }
     }
+
     // 4. Jika tetap tidak ada data sama sekali, baru paksa ke pendaftaran
     if (!$data) {
-    return redirect()->route('pendaftaran.create')
-                     ->with('info', 'Silakan lengkapi formulir pendaftaran.');
+        return redirect()->route('pendaftaran.create')
+            ->with('info', 'Silakan lengkapi formulir pendaftaran.');
     }
 
     // 5. Tampilkan dashboard
-$artikels = \App\Models\Artikel::latest()->take(5)->get();
-$populer  = \App\Models\Artikel::latest()->take(3)->get();
+    // Mengambil 4 artikel edukasi terbaru dari tabel edukasis
+    $artikels = Edukasi::latest()->take(4)->get();
 
-return view('bumil.dashboard', compact('data', 'artikels', 'populer'));
+    return view('bumil.dashboard', compact('data', 'artikels'));
+}
+public function artikel(Request $request)
+{
+    $query = Edukasi::query();
+
+    if ($request->filled('search')) {
+        $query->where(function ($q) use ($request) {
+            $q->where('judul_edukasi', 'like', '%' . $request->search . '%')
+              ->orWhere('konten_edukasi', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    if ($request->filled('kategori')) {
+        $query->where('kategori', $request->kategori);
+    }
+
+    $artikels = $query->latest()->paginate(6)->withQueryString();
+
+    $kategoris = Edukasi::select('kategori')
+        ->whereNotNull('kategori')
+        ->distinct()
+        ->pluck('kategori');
+
+    return view('bumil.artikel', compact('artikels', 'kategoris'));
 }
 
+public function detailArtikel($id)
+{
+    $artikel = Edukasi::findOrFail($id);
 
+    return view('bumil.detailArtikel', compact('artikel'));
+}
    public function konsultasi()
 {
     $pesans = DB::table('konsultasis')
