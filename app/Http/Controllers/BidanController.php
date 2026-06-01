@@ -129,6 +129,15 @@ public function kirimKonsultasi(Request $request, $user_id)
 
     return redirect()->route('bidan.konsultasi.detail', $user_id);
 }
+// BidanController.php
+public function cekKunjunganPasien($pasien_id)
+{
+    $sudahAda = \App\Models\Perkembangan::where('pasien_id', $pasien_id)->exists();
+    
+    return response()->json([
+        'sudah_ada' => $sudahAda
+    ]);
+}
 public function requestOffline($user_id)
 {
     DB::table('konsultasis')->insert([

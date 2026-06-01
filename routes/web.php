@@ -114,9 +114,6 @@ Route::prefix('master')->group(function () {
     Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
     Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
     Route::get('/edukasi/create', [ArtikelController::class, 'create'])->name('admin.edukasi.create');
-    Route::get('/edukasi/edit/{id}', [ArtikelController::class, 'edit'])->name('admin.edukasi.edit');
-    Route::put('/edukasi/update/{id}', [ArtikelController::class, 'update'])->name('admin.edukasi.update');
-
     // Laporan Admin
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.pdf');
@@ -148,7 +145,8 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
     Route::get('/jadwal', [AdminController::class, 'jadwalBidan'])->name('bidan.jadwal');
     Route::get('/cek-kunjungan/{pasien_id}', [PerkembanganController::class, 'cekKunjungan'])
     ->name('bidan.cekKunjungan');
-
+    // routes/web.php
+    Route::get('/cek-kunjungan-pasien/{pasien_id}', [BidanController::class, 'cekKunjunganPasien'])->name('bidan.cekKunjunganPasien');
     // KONSULTASI BIDAN
     Route::get('/konsultasi', [BidanController::class, 'konsultasi'])->name('bidan.konsultasi');
     Route::get('/konsultasi/{user_id}', [BidanController::class, 'detailKonsultasi'])->name('bidan.konsultasi.detail');
