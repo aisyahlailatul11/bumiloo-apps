@@ -14,44 +14,42 @@ class PendaftaranController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // 1. Validasi Data
-        $validated = $request->validate([
-            'nik' => 'required|unique:tb_pendaftaran,nik|digits:16', 
-            'nama' => 'required|string|max:255',
-            'tempat_lahir' => 'required|string',
-            'tgl_lahir' => 'required|date',
-            'umur' => 'required|integer',
-            'alamat' => 'required|string',
-            'no_hp' => 'required|string|max:20',
-            'agama' => 'required|string',
-            'pendidikan' => 'required|string',
-            'gol_darah' => 'required|string',
-            'pekerjaan' => 'required|string',
-            'nama_suami' => 'required|string|max:255',
-            'tgllahir_suami' => 'required|date',
-            'usia_suami' => 'required|integer',
-            'hpht' => 'required|date',
-        ], [
-            'nik.unique' => 'NIK ini sudah terdaftar di sistem Bumiloo.',
-            'nik.digits' => 'NIK harus tepat 16 digit.',
-            // Tambahkan pesan error lain jika perlu
-        ]);
+{
+    // 1. Validasi Data
+    $validated = $request->validate([
+        'nik' => 'required|unique:tb_pendaftaran,nik|digits:16', 
+        'nama' => 'required|string|max:255',
+        'tempat_lahir' => 'required|string',
+        'tgl_lahir' => 'required|date',
+        'umur' => 'required|integer',
+        'alamat' => 'required|string',
+        'no_hp' => 'required|string|max:20',
+        'agama' => 'required|string',
+        'pendidikan' => 'required|string',
+        'gol_darah' => 'required|string',
+        'pekerjaan' => 'required|string',
+        'nama_suami' => 'required|string|max:255',
+        'tgllahir_suami' => 'required|date',
+        'usia_suami' => 'required|integer',
+        'hpht' => 'required|date',
+    ], [
+        'nik.unique' => 'NIK ini sudah terdaftar di sistem Bumiloo.',
+        'nik.digits' => 'NIK harus tepat 16 digit.',
+    ]);
 
-        // 2. Logika Pekerjaan
-        if ($request->pekerjaan === 'Lainnya') {
-            $validated['pekerjaan'] = $request->input('pekerjaan_lainnya', 'Lainnya');
-        }
+    // 2. Gunakan cara 'new' agar kita bisa set data sistem secara eksplisit
+    $pendaftaran = new \App\Models\Pendaftaran();
+    $pendaftaran->fill($validated); // Isi data dari form
 
-        // 3. Tambahkan user_id
-        $data['status_konsultasi'] = 'menunggu'; 
-        $data['created_by'] = 'pasien';
-        $data['user_id'] = auth()->id();
+    // 3. Set data sistem secara OTOMATIS (Ini kuncinya!)
+    $pendaftaran->user_id = auth()->id(); // Mengambil ID dari user yang sedang login
+    $pendaftaran->created_by = 'pasien';   // Otomatis tandai sebagai 'pasien'
+    $pendaftaran->status_konsultasi = 'menunggu';
 
-        // 4. Simpan ke Database
-        Pendaftaran::create($validated);
+    // 4. Simpan
+    $pendaftaran->save(); 
 
-        // 5. Arahkan ke Dashboard
-        return redirect()->route('bumil.dashboard')->with('success', 'Data pendaftaran berhasil disimpan! Selamat datang, Bunda.');
-    }
+    return redirect()->route('bumil.dashboard')
+                     ->with('success', 'Pendaftaran berhasil, Selamat datang Bunda!');
+}
 }
