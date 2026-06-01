@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Routing\Controllers\HasMiddleware; // Tambahkan ini di bagian use
-use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware; // Harus ada
+use Illuminate\Routing\Controllers\Middleware;    // Harus ada
 
-class BumilController extends Controller
+class BumilController extends Controller implements HasMiddleware // WAJIB ada "implements HasMiddleware"
 {
     /**
      * Menampilkan dashboard khusus ibu hamil
@@ -16,33 +16,49 @@ class BumilController extends Controller
     public static function middleware(): array
     {
         return [
-            'auth', // Menggantikan $this->middleware('auth')
+            'auth', // Middleware auth dijalankan di sini
         ];
     }
 
-public function index()
+    public function index()
 {
-    // 1. Keamanan: Cek Role Terlebih Dahulu
-    // Admin dan Bidan tidak boleh masuk ke sini
-    if (auth()->user()->role !== 'Bumil') {
-        return redirect()->route('login')->with('error', 'Akses ditolak! Anda tidak memiliki akses ke dashboard ini.');
-    }
+    $user = auth()->user();
 
-    // 2. Ambil data pendaftaran milik user yang sedang login
+    // 1. Arahkan Admin & Bidan ke dashboard mereka masing-masing
+    if ($user->role === 'Admin') return redirect()->route('admin.dashboard');
+    if ($user->role === 'Bidan') return redirect()->route('bidan.dashboard');
+
+    // 2. Jika Bumil, cari data pendaftaran
+    // Kita cek dulu berdasarkan user_id (Online), jika tidak ada, baru berdasarkan NIK (Offline)
     $data = DB::table('tb_pendaftaran')
-                ->where('user_id', Auth::id())
+                ->where('user_id', $user->id)
                 ->first();
 
-    // 3. Keamanan: Jika user Bumil belum daftar, paksa kembali ke form pendaftaran
-    if (!$data) {
-        return redirect()->route('pendaftaran.create')
-                         ->with('info', 'Silakan lengkapi formulir pendaftaran terlebih dahulu.');
+    // 3. Jika belum ketemu via user_id, cari via NIK 
+    // (Penting: Pastikan tabel 'users' punya kolom 'nik')
+    if (!$data && !empty($user->nik)) {
+        $data = DB::table('tb_pendaftaran')
+                    ->where('nik', $user->nik)
+                    ->first();
+        
+        // Opsional: Jika ketemu via NIK, kita bisa otomatis isi user_id-nya 
+        // agar ke depannya sistem lebih cepat mencarinya
+        if ($data) {
+            DB::table('tb_pendaftaran')
+                ->where('id', $data->id)
+                ->update(['user_id' => $user->id]);
+        }
     }
 
-    // 4. Tampilkan halaman dashboard untuk Bumil yang valid
+    // 4. Jika tetap tidak ada data sama sekali, baru paksa ke pendaftaran
+    if (!$data) {
+        return redirect()->route('pendaftaran.create')
+                         ->with('info', 'Silakan lengkapi formulir pendaftaran.');
+    }
+
+    // 5. Tampilkan dashboard
     return view('bumil.dashboard', compact('data'));
 }
-
 
    public function konsultasi()
 {

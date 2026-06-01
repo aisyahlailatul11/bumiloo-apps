@@ -23,30 +23,33 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Middleware Auth (Proteksi Login)
-Route::middleware(['auth', 'verified'])->group(function () {
+// Middleware Auth (Proteksi Login) - HAPUS 'verified' agar tidak error
+Route::middleware(['auth'])->group(function () {
     
-    // REDIRECTOR DASHBOARD (Biarkan tetap di sini)
+    // REDIRECTOR DASHBOARD
     Route::get('/dashboard', function () {
         $user = auth()->user();
 
+        // 1. Arahkan Admin & Bidan ke dashboard mereka masing-masing
         if ($user->role === 'Admin') return redirect()->route('admin.dashboard');
         if ($user->role === 'Bidan') return redirect()->route('bidan.dashboard');
         
-        $sudahDaftar = DB::table('tb_pendaftaran')->where('user_id', $user->id)->exists();
+        // 2. Cek apakah bumil sudah punya data (Online via user_id atau Offline via NIK)
+        $sudahDaftar = DB::table('tb_pendaftaran')
+                            ->where('user_id', $user->id)
+                            ->orWhere('nik', $user->nik)
+                            ->exists();
             
         return $sudahDaftar
             ? redirect()->route('bumil.dashboard')
             : redirect()->route('pendaftaran.create');
     })->name('dashboard');
-
-    // Route Pendaftaran (Pindahkan ke dalam grup Bumil di bawah agar lebih rapi)
 });
 
 // ==========================================
 // --- GRUP ROUTE IBU HAMIL (BUMIL) ---
 // ==========================================
-Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
+Route::middleware(['auth'])->prefix('bumil')->group(function () {
 
     // Dashboard Bumil 
     Route::get('/dashboard', [BumilController::class, 'index'])->name('bumil.dashboard');
