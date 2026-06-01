@@ -261,9 +261,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#f875aa', borderWidth: 2 }]
         },
         options: { maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { display: false }, x: { grid: { display: false } } }
-        }
+    plugins: { legend: { display: false } },
+    scales: {
+        y: {
+            display: true,
+            min: 0,
+            max: 5,
+            ticks: { stepSize: 1, font: { size: 10 } },
+            grid: { color: 'rgba(0,0,0,0.05)' }
+        },
+        x: { grid: { display: false } }
+    }
+}
     });
 
     // Chart Trimester
@@ -292,9 +301,18 @@ document.addEventListener("DOMContentLoaded", function () {
                 fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#f875aa', borderWidth: 2 }]
         },
         options: { maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: { y: { display: false }, x: { grid: { display: false } } }
-        }
+    plugins: { legend: { display: false } },
+    scales: {
+        y: {
+            display: true,
+            min: 0,
+            max: 5,
+            ticks: { stepSize: 1, font: { size: 10 } },
+            grid: { color: 'rgba(0,0,0,0.05)' }
+        },
+        x: { grid: { display: false } }
+    }
+}
     });
 });
 
