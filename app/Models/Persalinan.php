@@ -9,7 +9,7 @@ class Persalinan extends Model
 {
     use HasFactory;
 
-    protected $table = 'persalinan';
+    protected $table = 'tb_persalinan';
     protected $guarded = ['id'];
 
     public function perkembangan()
