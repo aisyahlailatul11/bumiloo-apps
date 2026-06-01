@@ -113,7 +113,7 @@ Route::prefix('master')->group(function () {
     Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
     Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
     Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
-
+    Route::get('/edukasi/create', [ArtikelController::class, 'create'])->name('admin.edukasi.create');
     // Laporan Admin
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.pdf');

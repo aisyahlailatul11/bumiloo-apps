@@ -13,12 +13,19 @@ class DataBidanController extends Controller
 
     if (!$b) {
         $b = (object) [
-            'id' => 1, 
-            'nama' => 'Siti Fatimah, Amd.Keb', 
-            'email' => 'bidan@demo.com', 
-            'nip' => '-', 
-            'sip' => '-'
-        ];
+    'id'                => 1, 
+    'nama'              => 'Siti Fatimah, Amd.Keb', 
+    'email'             => 'bidan@demo.com', 
+    'nip'               => '-', 
+    'sip'               => '-',
+    'status'            => '-',        // ✅ tambah ini
+    'no_hp'             => '-',        // ✅ tambah ini
+    'alamat_praktik'    => '-',        // ✅ tambah ini
+    'status_akreditasi' => '-',        // ✅ tambah ini
+    'jadwal_praktik'    => '-',        // ✅ tambah ini
+    'detail_tambahan'   => '-',        // ✅ tambah ini
+    'profil_singkat'    => '-',        // ✅ tambah ini
+];
     }
     return view('admin.master.dataBidan', compact('b'));
 }
