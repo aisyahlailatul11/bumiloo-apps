@@ -11,37 +11,46 @@
 }
 
 .reminder-card {
-    border-radius: 22px;
+    border-radius: 24px;
     border: none;
-    box-shadow: 0 6px 20px rgba(233, 30, 140, 0.10);
+    box-shadow: 0 8px 24px rgba(233, 30, 140, 0.12);
 }
 
 .jadwal-item {
-    border-left: 5px solid #f062a6;
-    border-radius: 16px;
+    background: #fae5f1;
+    border-left: 6px solid #28a745;
+    border-radius: 20px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.jadwal-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 
 #calendar {
     background: #fff;
-    border-radius: 18px;
-    padding: 12px;
+    border-radius: 20px;
+    padding: 14px;
 }
 
 .fc .fc-toolbar {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 
 .fc .fc-toolbar-title {
-    font-size: 18px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 800;
     color: #e91e8c;
 }
 
 .fc .fc-button {
-    border-radius: 20px !important;
-    padding: 5px 10px !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
+    border-radius: 22px !important;
+    padding: 6px 14px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
 }
 
 .fc .fc-button-primary {
@@ -54,40 +63,59 @@
     border-color: #e91e8c !important;
 }
 
+.fc-scroller {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+.fc-scroller::-webkit-scrollbar {
+    width: 8px;
+}
+
+.fc-scroller::-webkit-scrollbar-track {
+    background: #ffeaf4;
+    border-radius: 10px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+    background: #f062a6;
+    border-radius: 10px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb:hover {
+    background: #e91e8c;
+}
+
 .fc .fc-col-header-cell {
     background: #fff0f7;
-    padding: 8px 0;
+    padding: 10px 0;
 }
 
 .fc .fc-col-header-cell-cushion {
     color: #e91e8c;
-    font-size: 12px;
-    font-weight: 700;
+    font-size: 13px;
+    font-weight: 800;
     text-decoration: none;
-}
-
-.fc .fc-daygrid-day {
-    background: #fff;
 }
 
 .fc .fc-daygrid-day-number {
     color: #444;
-    font-size: 13px;
+    font-size: 14px;
     text-decoration: none;
     padding: 8px;
 }
 
 .fc .fc-day-today {
-    background: #fff0f7 !important;
+    background: #fff5fa !important;
 }
 
 .fc .fc-daygrid-event {
     background: #f062a6 !important;
     border: none !important;
-    border-radius: 12px;
-    padding: 3px 6px;
+    border-radius: 14px;
+    padding: 4px 7px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .fc-theme-standard td,
@@ -96,15 +124,21 @@
 }
 
 .fc .fc-scrollgrid {
-    border-radius: 16px;
+    border-radius: 18px;
     overflow: hidden;
     border-color: #f8d7e8;
 }
 
 .tips-box {
-    background: #fff0f7;
+    background: #ffffff;
+    border-left: 6px solid #f062a6;
     border-radius: 22px;
-    box-shadow: 0 6px 20px rgba(233, 30, 140, 0.08);
+    box-shadow: 0 8px 24px rgba(233, 30, 140, 0.14);
+}
+
+.badge-green {
+    background-color: #28a745;
+    color: #fff;
 }
 </style>
 @endsection
@@ -114,10 +148,7 @@
 <div class="container-fluid py-3">
 
     <div class="mb-4">
-        <h4 class="fw-bold mb-1">
-            Reminder
-        </h4>
-
+        <h4 class="fw-bold mb-1">Reminder</h4>
         <p class="text-muted mb-0">
             Pengingat jadwal penting kehamilan Bunda
         </p>
@@ -146,7 +177,7 @@
                             Daftar Pengingat
                         </h5>
 
-                        <span class="badge bg-danger rounded-pill px-3 py-2">
+                        <span class="badge badge-green rounded-pill px-3 py-2">
                             {{ count($jadwals) }} Jadwal
                         </span>
                     </div>
@@ -176,7 +207,7 @@
                                     </small>
                                 </div>
 
-                                <span class="badge bg-danger rounded-pill px-3 py-2">
+                                <span class="badge badge-green rounded-pill px-3 py-2">
                                     Janji Temu
                                 </span>
 
@@ -197,7 +228,7 @@
     </div>
 
     <div class="tips-box mt-4 p-4">
-        <h6 class="fw-bold text-danger mb-2">
+        <h6 class="fw-bold text-pink mb-2">
             Tips Kehamilan
         </h6>
 
