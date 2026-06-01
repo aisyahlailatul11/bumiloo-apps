@@ -90,12 +90,8 @@ Route::prefix('master')->group(function () {
     Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
 
     //create data pasien
-    Route::post('/admin/master/pasien/store', [AdminController::class, 'storeDataPasien'])
-     ->name('admin.master.store');
     Route::get('/admin/master/pasien/create', [AdminController::class, 'createDataPasien'])
-     ->name('master.createDataPasien'); 
-    Route::get('/admin/master/pasien', [AdminController::class, 'masterPasien'])
-     ->name('admin.master.pasien');
+     ->name('master.createDataPasien');
 
     Route::get('/bidan', [DataBidanController::class, 'dataBidan'])->name('master.bidan');
     
@@ -111,6 +107,7 @@ Route::prefix('master')->group(function () {
 
     // FITUR EDUKASI ADMIN
     Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
+    Route::get('/edukasi/create', [ArtikelController::class, 'create'])->name('admin.edukasi.create');
     Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
     Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
 
