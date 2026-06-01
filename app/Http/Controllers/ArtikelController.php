@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Artikel; // <--- PASTIKAN BARIS INI ADA AGAR TIDAK ERROR LAGI!
+use App\Models\Artikel; 
 use Illuminate\Support\Facades\Storage;
 
 class ArtikelController extends Controller
@@ -33,7 +33,7 @@ class ArtikelController extends Controller
         return view('admin.edukasi.inputEdukasi');
     }
 
-// 3. PROSES SIMPAN ARTIKEL BARU DARI ADMIN
+    // 3. PROSES SIMPAN ARTIKEL BARU DARI ADMIN
     public function store(Request $request)
     {
         // Validasi membaca input dari form blade
@@ -50,13 +50,13 @@ class ArtikelController extends Controller
             $imageName = $imagePath;
         }
 
-        // PERBAIKAN UTAMA: Mengembalikan nama kolom kiri ke struktur asli database kamu
-        \App\Models\Artikel::create([
-    'judul_edukasi'  => $request->judul_edukasi,
-    'kategori'       => $request->kategori,
-    'konten_edukasi' => $request->konten_edukasi,
-    'gambar'         => $imageName,
-]);
+        // Simpan data ke database
+        Artikel::create([
+            'judul_edukasi'  => $request->judul_edukasi,
+            'kategori'       => $request->kategori,
+            'konten_edukasi' => $request->konten_edukasi,
+            'gambar'         => $imageName,
+        ]);
 
         // Dialihkan kembali ke rute daftar edukasi admin setelah sukses
         return redirect()->route('admin.edukasi')->with('success', 'Artikel edukasi berhasil ditambahkan!');
@@ -67,7 +67,7 @@ class ArtikelController extends Controller
     {
         $artikel = Artikel::findOrFail($id);
         
-        // Mengarah ke file editEdukasi.blade.php yang akan kita buat
+        // Mengarah ke file editEdukasi.blade.php kamu
         return view('admin.edukasi.editEdukasi', compact('artikel'));
     }
 
@@ -106,10 +106,6 @@ class ArtikelController extends Controller
 
         return redirect()->route('admin.edukasi')->with('success', 'Data berhasil diupdate!');
     }
-
-    // =========================================================================
-    // JANGAN UBAH APAPUN DI BAWAH BARIS INI (BIARKAN FUNGSI DESTROY KAMU TETAP DISINI)
-    // =========================================================================
 
     // 4. PROSES HAPUS ARTIKEL (TIDAK DIUBAH SAMA SEKALI)
     public function destroy($id)

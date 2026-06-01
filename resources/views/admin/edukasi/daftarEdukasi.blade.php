@@ -1,108 +1,265 @@
 @extends('layouts.masterAdmin')
 
-@section('title', 'Daftar Edukasi - Admin Bumiloo')
+@section('title', 'Daftar Edukasi - Bumiloo')
 
 @section('content')
-<div class="min-h-screen flex flex-col px-4 py-4" style="background-color: #fcf8fa;">
-    <div class="flex-grow">
-        
-        {{-- HEADER: JUDUL & TOMBOL TAMBAH --}}
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom" style="border-color: rgba(244, 114, 182, 0.2) !important;">
-            <h2 class="fw-bold text-dark m-0" style="font-size: 28px;">Daftar Edukasi</h2>
-            <a href="{{ route('admin.edukasi.create') }}" class="btn text-white px-3 py-2 rounded-3 fw-semibold d-flex align-items-center shadow-sm" style="background-color: #f472b6; font-size: 14px;">
-                <i class="bi bi-plus-lg me-1"></i> + Tambah Edukasi
-            </a>
+<style>
+    .content-container {
+        padding: 40px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .page-title {
+        font-size: 32px;
+        font-weight: 800;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .btn-tambah {
+        background-color: #f472b6;
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s;
+    }
+
+    .btn-tambah:hover {
+        background-color: #ec4899;
+        transform: translateY(-1px);
+    }
+
+    /* Card Memanjang */
+    .artikel-card-row {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid rgba(244, 114, 182, 0.15);
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .artikel-img {
+        width: 150px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 10px;
+        background-color: #f3f4f6;
+    }
+
+    .artikel-body {
+        flex: 1;
+        cursor: pointer; /* Menandakan bisa diklik untuk baca */
+    }
+
+    .artikel-kategori {
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: #f472b6;
+        margin-bottom: 4px;
+    }
+
+    .artikel-judul {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 8px 0;
+    }
+
+    .artikel-snippet {
+        font-size: 14px;
+        color: #6b7280;
+        margin: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .artikel-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-action-edit {
+        background-color: #3b82f6;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-action-edit:hover {
+        background-color: #2563eb;
+    }
+
+    .btn-action-hapus {
+        background-color: #ef4444;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 13px;
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-action-hapus:hover {
+        background-color: #dc2626;
+    }
+
+    /* Modal untuk baca artikel */
+    .modal-baca {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+    .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 700px;
+        width: 100%;
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+    }
+    .close-modal {
+        position: absolute;
+        top: 20px; right: 20px;
+        font-size: 24px; cursor: pointer; color: #9ca3af;
+    }
+</style>
+
+<div class="content-container">
+    <div class="header-row">
+        <h2 class="page-title">Daftar Artikel Edukasi</h2>
+        <a href="{{ route('admin.edukasi.create') }}" class="btn-tambah">
+            <i class="fa-solid fa-plus"></i> Tambah Edukasi
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div style="margin-bottom: 20px; padding: 16px; background-color: #d1fae5; border-left: 4px solid #10b981; color: #065f46; border-radius: 8px; font-size: 14px; font-weight: 600;">
+            {{ session('success') }}
         </div>
+    @endif
 
-        {{-- ALERT NOTIFIKASI BERHASIL (TAMBAH/HAPUS) --}}
-        @if(session('success'))
-            <div class="alert alert-success border-0 shadow-sm rounded-3 mb-4 d-flex align-items-center" role="alert" style="background-color: #d1fae5; color: #065f46; border-left: 4px solid #10b981 !important;">
-                <i class="bi bi-check-circle-fill me-2"></i>
-                <div class="fw-semibold">
-                    {{ session('success') }}
-                </div>
+    {{-- Looping Data Artikel dalam bentuk Card Memanjang --}}
+    @forelse($artikels as $artikel)
+        <div class="artikel-card-row">
+            <img src="{{ $artikel->gambar ? asset('storage/' . $artikel->gambar) : 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'100\' height=\'100\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23ccc\' stroke-width=\'1.5\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\'/><path d=\'M21 15l-5-5L5 21\'/></svg>' }}" class="artikel-img" alt="Gambar Artikel">
+            
+            <div class="artikel-body" onclick="bacaArtikel('{{ addslashes($artikel->judul_edukasi) }}', '{{ addslashes($artikel->kategori) }}', '{{ base64_encode($artikel->konten_edukasi) }}')">
+                <div class="artikel-kategori">{{ $artikel->kategori }}</div>
+                <h3 class="artikel-judul">{{ $artikel->judul_edukasi }}</h3>
+                <div class="artikel-snippet">{!! strip_tags($artikel->konten_edukasi) !!}</div>
+                <small style="color: #9ca3af; margin-top: 5px; display: block;">Klik area tulisan ini untuk membaca penuh</small>
             </div>
-        @endif
 
-        {{-- LIST DATA ARTIKEL EDUKASI --}}
-        <div class="row">
-            <div class="col-lg-12">
-                
-                @forelse($artikels as $edu)
-                    {{-- CARD CONTAINER --}}
-                    <div class="card border rounded-4 p-3 mb-3 shadow-sm position-relative" style="border: 1px solid rgba(244, 114, 182, 0.2) !important; background-color: #ffffff;">
-                        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-stretch">
-                            
-                            {{-- GAMBAR THUMBNAIL (ADAPTIF DATA DUMMY / STORAGE HASIL UPLOAD) --}}
-                            <div class="me-3 mb-3 mb-md-0 flex-shrink-0 shadow-sm rounded-3 overflow-hidden" style="width: 180px; height: 120px;">
-                                @if($edu->gambar)
-                                    @if(str_contains($edu->gambar, 'artikel-images/'))
-                                        {{-- Jika hasil upload form Admin (disimpan di storage) --}}
-                                        <img src="{{ Storage::url($edu->gambar) }}" alt="{{ $edu->judul_edukasi }}" class="w-100 h-100" style="object-fit: cover;">
-                                    @else
-                                        {{-- Jika data bawaan awal (diambil langsung dari folder sesuai foto aset Anda) --}}
-                                        <img src="{{ asset('build/images/' . $edu->gambar) }}" alt="{{ $edu->judul_edukasi }}" class="w-100 h-100" style="object-fit: cover;">
-                                    @endif
-                                @else
-                                    {{-- Fallback jika tidak ada data gambar sama sekali --}}
-                                    <img src="{{ asset('build/images/usgibuhamil.png') }}" alt="Default Image" class="w-100 h-100" style="object-fit: cover;">
-                                @endif
-                            </div>
-                            
-                            {{-- BODY INFO --}}
-                            <div class="flex-grow-1 d-flex flex-column justify-content-between pe-md-5">
-                                <div class="mb-4 mb-md-0">
-                                    {{-- JUDUL ARTIKEL --}}
-                                    <h5 class="fw-bold text-dark mb-1" style="font-size: 16px;">{{ $edu->judul_edukasi }}</h5>
-                                    
-                                    {{-- TAG KATEGORI --}}
-                                    <span class="badge mb-2 px-2 py-1" style="font-size: 11px; border-radius: 6px; background-color: rgba(244, 114, 182, 0.1); color: #ec4899; border: 1px solid rgba(244, 114, 182, 0.2);">
-                                        {{ $edu->kategori }}
-                                    </span>
-                                    
-                                    {{-- KONTEN / DESKRIPSI --}}
-                                    <p class="text-secondary small mb-0 text-justify" style="line-height: 1.5; font-size: 13px; color: #4b5563 !important;">
-                                        {{ Str::limit($edu->konten_edukasi, 230) }}
-                                    </p>
-                                </div>
-                                
-                                {{-- WAKTU UPLOAD --}}
-                                <div class="text-muted small mt-2" style="font-size: 11px; font-weight: 500;">
-                                    <i class="bi bi-clock me-1"></i> {{ $edu->created_at->diffForHumans() }}
-                                </div>
-                            </div>
-                            
-                            {{-- TOMBOL AKSI (EDIT & HAPUS) --}}
-                            <div class="position-absolute bottom-0 end-0 m-3 d-flex gap-2">
-                                {{-- Tombol Edit --}}
-                            <a href="{{ route('admin.edukasi.edit', $edu->id) }}" 
-                                class="btn btn-sm text-dark px-3 py-1.5 d-flex align-items-center fw-bold shadow-sm" 
-                                style="font-size: 12px; background-color: #ffda6a; border: none; border-radius: 8px;">
-                                <i class="bi bi-pencil-square me-1"></i> Edit
-                            </a>
-                                
-    {{-- Tombol Hapus --}}
-    <form action="{{ route('admin.edukasi.destroy', $edu->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel edukasi ini?')">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-sm text-white px-3 py-1.5 d-flex align-items-center fw-bold shadow-sm" style="font-size: 12px; background-color: #ef4444; border: none; border-radius: 8px;">
-            <i class="bi bi-trash me-1"></i> Hapus
-        </button>
-    </form>
+            <div class="artikel-actions">
+                <a href="{{ route('admin.edukasi.edit', $artikel->id) }}" class="btn-action-edit">
+                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                </a>
+                {{-- Memanggil fungsi SweetAlert2 confirmDelete --}}
+                <button type="button" class="btn-action-hapus" onclick="confirmDelete('{{ $artikel->id }}', '{{ addslashes($artikel->judul_edukasi) }}')">
+                    <i class="fa-solid fa-trash"></i> Hapus
+                </button>
+            </div>
+        </div>
+    @empty
+        <div style="text-align: center; padding: 40px; color: #9ca3af; background: white; border-radius: 16px;">
+            Belum ada artikel edukasi yang ditambahkan.
+        </div>
+    @endforelse
 </div>
 
-                        </div>
-                    </div>
-                @empty
-                    {{-- KONDISI JIKA TIDAK ADA DATA --}}
-                    <div class="text-center p-5 bg-white rounded-4 border border-dashed shadow-sm" style="border-color: rgba(244, 114, 182, 0.3) !important;">
-                        <i class="bi bi-book text-muted" style="font-size: 48px; color: #f472b6 !important;"></i>
-                        <p class="text-muted mt-2 mb-0 fw-semibold">Belum ada data edukasi yang ditambahkan.</p>
-                    </div>
-                @endforelse
-
-            </div>
-        </div>
+{{-- Pop up Modal untuk Membaca Artikel Secara Penuh --}}
+<div id="modalBaca" class="modal-baca">
+    <div class="modal-content">
+        <span class="close-modal" onclick="tutupModal()">&times;</span>
+        <span id="modalKategori" style="color:#f472b6; font-weight:700; font-size:12px; text-transform:uppercase;"></span>
+        <h2 id="modalJudul" style="margin-top:5px; margin-bottom:20px; font-weight:800; color:#1f2937;"></h2>
+        <hr style="border:0; border-top:1px solid #e5e7eb; margin-bottom:20px;">
+        <div id="modalKonten" style="color:#374151; line-height:1.7; font-size:15px;"></div>
     </div>
 </div>
+
+{{-- SweetAlert2 JS --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    function confirmDelete(id, nama) {
+        Swal.fire({
+            title: 'Yakin ingin menghapus artikel?',
+            text: "Artikel \"" + nama + "\" akan terhapus permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#EF4444',
+            cancelButtonColor: '#94A3B8',
+            confirmButtonText: 'Ya, Hapus',
+            cancelButtonText: 'Batal',
+            customClass: { popup: 'rounded-[24px]' }
+        }).then((result) => {
+            if (result.isConfirmed) { 
+                let form = document.createElement('form');
+                form.action = "/admin/edukasi/hapus/" + id;
+                form.method = 'POST';
+                form.innerHTML = `@csrf @method('DELETE')`;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        })
+    }
+
+    function bacaArtikel(judul, kategori, kontenBase64) {
+        document.getElementById('modalJudul').innerText = judul;
+        document.getElementById('modalKategori').innerText = kategori;
+        // Decode base64 konten HTML agar text style (Bold/Italic/Underline) tampil sempurna
+        document.getElementById('modalKonten').innerHTML = atob(kontenBase64);
+        document.getElementById('modalBaca').style.display = 'flex';
+    }
+
+    function tutupModal() {
+        document.getElementById('modalBaca').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        let modal = document.getElementById('modalBaca');
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
 @endsection
