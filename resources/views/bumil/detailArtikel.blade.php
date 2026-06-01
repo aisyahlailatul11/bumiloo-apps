@@ -1,6 +1,6 @@
 @extends('layouts.masterBumil')
 
-@section('title',$artikel->judul_edukasi)
+@section('title', $artikel->judul_edukasi)
 
 @section('content')
 
@@ -22,14 +22,14 @@
         </span>
 
         @if($artikel->gambar)
-
             <img src="{{ Storage::url($artikel->gambar) }}"
-                 class="img-fluid rounded mb-4">
-
+                 class="img-fluid rounded mb-4" 
+                 alt="{{ $artikel->judul_edukasi }}">
         @endif
 
-        <div>
-            {!! nl2br(e($artikel->konten_edukasi)) !!}
+        {{-- BAGIAN YANG DIPERBAIKI: Menggunakan font Poppins agar teks cetakan editor rapi --}}
+        <div class="content-edukasi-render" style="font-family: 'Poppins', sans-serif; color: #374151; font-size: 16px; line-height: 1.8;">
+            {!! $artikel->konten_edukasi !!}
         </div>
 
     </div>
