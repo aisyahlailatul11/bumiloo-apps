@@ -104,7 +104,7 @@
         <h4 class="section-title">Edukasi untuk Bunda</h4>
 
         <a href="{{ route('bumil.artikel') }}" class="btn-selengkapnya">
-            Artikel Selengkapnya
+            Selengkapnya
         </a>
     </div>
 
