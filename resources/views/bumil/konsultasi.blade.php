@@ -281,7 +281,6 @@
                                 </div>
                                 <div>
                                     <h6 class="fw-bold mb-0 text-dark" style="font-size: 20px;">Bidan Siti Fatimah, S.Tr.Keb</h6>
-                                    <small class="text-success fw-bold" style="font-size: 15px;">Online</small>
                                 </div>
                             </div>
                             <a href="{{ route('bumil.dashboard') }}" class="btn btn-end-chat">
@@ -360,9 +359,6 @@
                             <form action="{{ route('bumil.konsultasi.kirim') }}" method="POST" class="m-0">
                                 @csrf
                                 <div class="input-wrapper-custom">
-                                    <button type="button" class="btn-clip-attachment">
-                                        <i class="fas fa-paperclip"></i>
-                                    </button>
                                     <input type="text" name="pesan" class="input-chat-field" placeholder="Ketik pesan....." required autocomplete="off">
                                     <button type="submit" class="btn-send-round">
                                         <i class="fas fa-paper-plane" style="font-size: 13px; margin-left: -2px;"></i>
