@@ -137,6 +137,37 @@
         </div>
 
         {{-- FOOTER --}}
+        {{-- STEMPEL DIGITAL --}}
+<div class="text-center mt-4 mb-2">
+    <div class="d-inline-block">
+       <svg viewBox="0 0 240 240" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <path id="arcAtasDetail" d="M 120,120 m -95,0 a 95,95 0 1,1 190,0"/>
+        <path id="arcBawahDetail" d="M 120,120 m -95,0 a 95,95 0 0,0 190,0"/>
+    </defs>
+    <circle cx="120" cy="120" r="108" fill="none" stroke="#f875aa" stroke-width="2.5"/>
+    <circle cx="120" cy="120" r="82"  fill="none" stroke="#f875aa" stroke-width="1.2"/>
+    <circle cx="120" cy="120" r="81" fill="white"/>
+    <text font-size="11.5" font-weight="700" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="3.5">
+        <textPath href="#arcAtasDetail" startOffset="4%">TTD DIGITAL BIDAN SAH</textPath>
+    </text>
+    <text font-size="11" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="2.5">
+        <textPath href="#arcBawahDetail" startOffset="15%">• PUSKESMAS BUMILOO •</textPath>
+    </text>
+    <circle cx="120" cy="103" r="20" fill="#f875aa"/>
+    <polyline points="110,103 118,112 132,93" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="120" y="136" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial, sans-serif">Siti Fatimah, S.Tr.Keb.</text>
+    <line x1="55" y1="144" x2="185" y2="144" stroke="#f875aa" stroke-width="1"/>
+    <text x="120" y="158" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="Arial, sans-serif">
+        {{ $riwayat->tanggal_pemeriksaan ? \Carbon\Carbon::parse($riwayat->tanggal_pemeriksaan)->translatedFormat('d M Y') : '-' }}
+    </text>
+    </svg>
+        <small class="d-block text-muted mt-1" style="font-size:11px;">
+            <i class="bi bi-check-circle-fill text-success"></i>
+            Dokumen ini telah ditandatangani secara digital
+        </small>
+    </div>
+</div>
         <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap gap-2">
             <a href="{{ route('bumil.riwayatPerkembangan') }}" class="btn btn-outline-secondary rounded-pill px-4">
                 <i class="bi bi-arrow-left"></i>

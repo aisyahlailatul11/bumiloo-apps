@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth; // ← jadi ini
 use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Controllers\HasMiddleware; // Harus ada
 use Illuminate\Routing\Controllers\Middleware;    // Harus ada
@@ -57,7 +57,11 @@ class BumilController extends Controller implements HasMiddleware // WAJIB ada "
     }
 
     // 5. Tampilkan dashboard
-    return view('bumil.dashboard', compact('data'));
+    // 5. Tampilkan dashboard
+$artikels = \App\Models\Artikel::latest()->take(5)->get();
+$populer  = \App\Models\Artikel::latest()->take(3)->get();
+
+return view('bumil.dashboard', compact('data', 'artikels', 'populer'));
 }
 
    public function konsultasi()

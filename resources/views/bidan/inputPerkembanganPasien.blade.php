@@ -436,12 +436,34 @@
                 <small class="text-muted d-block mt-1">*Nama terkunci otomatis sebagai penanggung jawab rekam medis.</small>
             </div>
             <div class="col-md-4 text-center border-start">
-                <label class="form-label d-block fw-bold mb-2">Verifikasi TTD Elektronik</label>
-                <div class="p-3 bg-white border border-dashed rounded-3 d-inline-block shadow-sm">
-                    <i class="fas fa-qrcode fa-3x text-muted mb-1"></i>
-                    <span class="d-block text-success fw-bold" style="font-size:11px;"><i class="fas fa-check-circle"></i> QR Code Otomatis Aktif</span>
-                </div>
-            </div>
+    <label class="form-label d-block fw-bold mb-2">TTD Digital Bidan</label>
+    <div id="stempelContainer">
+        <svg viewBox="0 0 240 240" width="180" height="180" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <path id="arcAtas" d="M 120,120 m -95,0 a 95,95 0 1,1 190,0"/>
+        <path id="arcBawah" d="M 120,120 m -95,0 a 95,95 0 0,0 190,0"/>
+    </defs>
+    <circle cx="120" cy="120" r="108" fill="none" stroke="#f875aa" stroke-width="2.5"/>
+    <circle cx="120" cy="120" r="82"  fill="none" stroke="#f875aa" stroke-width="1.2"/>
+    <circle cx="120" cy="120" r="81" fill="white"/>
+    <text font-size="11.5" font-weight="700" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="3.5">
+        <textPath href="#arcAtas" startOffset="4%">TTD DIGITAL BIDAN SAH</textPath>
+    </text>
+    <text font-size="11" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="2.5">
+        <textPath href="#arcBawah" startOffset="15%">• PUSKESMAS BUMILOO •</textPath>
+    </text>
+    <circle cx="120" cy="103" r="20" fill="#f875aa"/>
+    <polyline points="110,103 118,112 132,93" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="120" y="136" text-anchor="middle" font-size="12" font-weight="700" fill="#1e293b" font-family="Arial, sans-serif">Siti Fatimah, S.Tr.Keb.</text>
+    <line x1="55" y1="144" x2="185" y2="144" stroke="#f875aa" stroke-width="1"/>
+    <text id="stempelTanggal" x="120" y="158" text-anchor="middle" font-size="10.5" fill="#64748b" font-family="Arial, sans-serif">-- Menunggu Tanggal --</text>
+    
+</svg>
+    </div>
+    <small class="text-muted d-block mt-1" style="font-size:10px;">
+        <i class="fas fa-check-circle text-success"></i> Stempel aktif otomatis saat disimpan
+    </small>
+</div>
         </div>
 
         <div class="text-end gap-2 d-flex justify-content-end">
@@ -741,5 +763,27 @@ window.validasiFormPerkembangan = function(event) {
     }
     return true;
 };
+// ==========================================
+// UPDATE TANGGAL STEMPEL OTOMATIS
+// ==========================================
+function updateTanggalStempel() {
+    const inputTgl = document.getElementById('tanggal_pemeriksaan');
+    const elStempelTgl = document.getElementById('stempelTanggal');
+    if (!inputTgl || !elStempelTgl) return;
+
+    const val = inputTgl.value;
+    if (val) {
+        const d = new Date(val);
+        const bulan = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+        elStempelTgl.textContent = d.getDate() + ' ' + bulan[d.getMonth()] + ' ' + d.getFullYear();
+    } else {
+        elStempelTgl.textContent = '-- Menunggu Tanggal --';
+    }
+}
+
+if (inputTanggalPeriksa) {
+    inputTanggalPeriksa.addEventListener('change', updateTanggalStempel);
+}
+updateTanggalStempel(); // jalankan saat load
 </script>
 @endsection
