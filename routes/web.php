@@ -23,30 +23,33 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Middleware Auth (Proteksi Login)
-Route::middleware(['auth', 'verified'])->group(function () {
+// Middleware Auth (Proteksi Login) - HAPUS 'verified' agar tidak error
+Route::middleware(['auth'])->group(function () {
     
-    // REDIRECTOR DASHBOARD (Biarkan tetap di sini)
+    // REDIRECTOR DASHBOARD
     Route::get('/dashboard', function () {
         $user = auth()->user();
 
+        // 1. Arahkan Admin & Bidan ke dashboard mereka masing-masing
         if ($user->role === 'Admin') return redirect()->route('admin.dashboard');
         if ($user->role === 'Bidan') return redirect()->route('bidan.dashboard');
         
-        $sudahDaftar = DB::table('tb_pendaftaran')->where('user_id', $user->id)->exists();
+        // 2. Cek apakah bumil sudah punya data (Online via user_id atau Offline via NIK)
+        $sudahDaftar = DB::table('tb_pendaftaran')
+                            ->where('user_id', $user->id)
+                            ->orWhere('nik', $user->nik)
+                            ->exists();
             
         return $sudahDaftar
             ? redirect()->route('bumil.dashboard')
             : redirect()->route('pendaftaran.create');
     })->name('dashboard');
-
-    // Route Pendaftaran (Pindahkan ke dalam grup Bumil di bawah agar lebih rapi)
 });
 
 // ==========================================
 // --- GRUP ROUTE IBU HAMIL (BUMIL) ---
 // ==========================================
-Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
+Route::middleware(['auth'])->prefix('bumil')->group(function () {
 
     // Dashboard Bumil 
     Route::get('/dashboard', [BumilController::class, 'index'])->name('bumil.dashboard');
@@ -90,12 +93,8 @@ Route::prefix('master')->group(function () {
     Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
 
     //create data pasien
-    Route::post('/admin/master/pasien/store', [AdminController::class, 'storeDataPasien'])
-     ->name('admin.master.store');
     Route::get('/admin/master/pasien/create', [AdminController::class, 'createDataPasien'])
-     ->name('master.createDataPasien'); 
-    Route::get('/admin/master/pasien', [AdminController::class, 'masterPasien'])
-     ->name('admin.master.pasien');
+     ->name('master.createDataPasien');
 
     Route::get('/bidan', [DataBidanController::class, 'dataBidan'])->name('master.bidan');
     
@@ -111,6 +110,7 @@ Route::prefix('master')->group(function () {
 
     // FITUR EDUKASI ADMIN
     Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
+    Route::get('/edukasi/create', [ArtikelController::class, 'create'])->name('admin.edukasi.create');
     Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
     Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
 
