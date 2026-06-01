@@ -56,30 +56,13 @@ class BumilController extends Controller implements HasMiddleware // WAJIB ada "
                      ->with('info', 'Silakan lengkapi formulir pendaftaran.');
     }
 
-<<<<<<< Updated upstream
-    // 5. Tampilkan dashboard
     // 5. Tampilkan dashboard
 $artikels = \App\Models\Artikel::latest()->take(5)->get();
 $populer  = \App\Models\Artikel::latest()->take(3)->get();
 
 return view('bumil.dashboard', compact('data', 'artikels', 'populer'));
 }
-=======
-    // 5. PENYEBAB UTAMA: Tentukan nama tabel edukasi kamu yang benar di phpMyAdmin
-    // Silakan ganti 'edukasis' di bawah dengan nama tabel aslimu jika tebakan ini meleset
-    // Proses ambil data aman (mencegah error forelse di blade)
-    try {
-        $artikels = DB::table($edukasis)->latest()->get();
-        $populer = DB::table($edukasis)->latest()->take(5)->get();
-    } catch (\Exception $e) {
-            $artikels = collect([]);
-            $populer = collect([]);
-    }
-    
-    // 6. Tampilkan dashboard
-    return view('bumil.dashboard', compact('data'));
-    }
->>>>>>> Stashed changes
+
 
    public function konsultasi()
 {

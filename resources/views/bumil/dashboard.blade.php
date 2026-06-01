@@ -12,9 +12,6 @@
                 {{-- HERO BANNER --}}
                 <div class="hero-banner mb-4">
                     <img src="{{ asset('images/frame65.png') }}" alt="Hero Banner" class="img-fluid rounded-4 shadow-sm">
-                    <div class="mt-2 text-end">
-                        <a href="#" class="hero-btn text-decoration-none fw-bold text-pink">Baca artikel hari ini →</a>
-                    </div>
                 </div>
 
                 {{-- GANTI FOREACH LAMA KAMU DENGAN BLOK FORELSE INI --}}
@@ -75,34 +72,5 @@
 @empty
     <p class="text-muted small mb-0">Belum ada artikel populer.</p>
 @endforelse
-                </div>
-
-                {{-- REKOMENDASI --}}
-                <div class="rekomen-card text-white p-4 rounded-4 shadow-sm mb-4 position-relative overflow-hidden" style="background-color: #f687b3;">
-                    <div class="rekomen-card-title fw-bold h5">Rekomendasi untuk Bunda</div>
-                    <div class="rekomen-card-desc small mb-3">Temukan artikel yang sesuai dengan kebutuhan Bunda.</div>
-                    <a href="#" class="btn btn-light btn-sm rounded-pill px-3 fw-bold" style="color: #f687b3;">Lihat Rekomendasi</a>
-                    <div class="rekomen-illustration position-absolute end-0 bottom-0 opacity-25">
-                        <img src="{{ asset('images/checklist.png') }}" alt="Checklist" width="80">
-                    </div>
-                </div>
-
-                {{-- KATEGORI POPULER --}}
-                <div class="rc-card bg-white p-4 rounded-4 shadow-sm border-0">
-                    <div class="rc-card-header d-flex justify-content-between align-items-center mb-3">
-                        <div class="rc-card-title fw-bold">Kategori Populer</div>
-                        <a href="#" class="link-semua text-decoration-none small" style="color: #f687b3;">Lihat semua</a>
-                    </div>
-                    <div class="tag-wrap d-flex flex-wrap gap-2">
-                        <span class="badge rounded-pill bg-info text-white px-3 py-2">Olahraga</span>
-                        <span class="badge rounded-pill bg-warning text-dark px-3 py-2">Rutinitas Bunda</span>
-                        <span class="badge rounded-pill bg-success text-white px-3 py-2">Makanan sehat</span>
-                        <span class="badge rounded-pill bg-primary text-white px-3 py-2">Kesehatan si kecil</span>
-                        <span class="badge rounded-pill bg-danger text-white px-3 py-2">Nutrisi</span>
-                    </div>
-                </div>
-            </div>{{-- /col-right --}}
-        </div>
-    </div>
-</div>
+        
 @endsection
