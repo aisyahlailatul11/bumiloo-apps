@@ -9,10 +9,20 @@
     .chat-page-container {
         font-family: 'Poppins', sans-serif !important;
         background-color: #fff3fb !important; 
-        padding: 20px;
-        min-height: calc(100vh - 40px); 
+        padding: 0px; 
+        min-height: calc(100vh - 120px); 
         display: flex;
-        align-items: column;
+        flex-direction: column;
+        position: relative !important; 
+        width: auto !important; /* Mengikuti container induk, bukan full screen */
+    }
+
+    /* Perbaikan Layout Row agar tidak menutupi Sidebar */
+    .chat-main-row {
+        width: 100% !important;
+        margin: 0 !important;
+        position: relative;
+        z-index: 1; /* Pastikan berada di bawah level z-index sidebar */
     }
 
     .chat-row-layout {
@@ -272,13 +282,14 @@
         </div>
     @endif
     
-    <div class="row w-100 m-0 flex-nowrap flex-grow-1">
+    {{-- FIX: Mengganti class row pembungkus agar melunak dan tidak menabrak sidebar --}}
+    <div class="chat-main-row">
         
         <div class="flex-grow-1">
             <div class="row chat-row-layout g-4">
 
                 {{-- SISI KANAN: CHAT ROOM UTAMA --}}
-                <div class="col-md-20">
+                <div class="col-md-12">
                     <div class="card chat-room-card">
                         <div class="chat-header-custom">
                             <div class="d-flex align-items-center">
@@ -296,7 +307,7 @@
                         </div>
 
                         <div class="chat-body-custom">
-                            <div class="text-center mb-8">
+                            <div class="text-center mb-4"> {{-- Diubah ke mb-4 biar gak kejauhan dibanding mb-8 --}}
                                 <span class="badge bg-white text-dark border px-4 py-2 rounded-4" style="font-size: 11px; box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.05);">Hari ini</span>
                             </div>
 
@@ -319,7 +330,6 @@
                                                     halo Bunda, jika bersedia untuk melakukan konsultasi offline di PMB silakan klik link pendaftaran berikut ya HPL bunda sudah mendekati 2 hari ini saya khawatir nyeri yang bunda rasakan tanda persalinan
                                                 </p>
                                                 
-                                                {{-- 🔥 LOGIKA MENEMBAK STATUS KONSULTASI DI TB_PENDAFTARAN 🔥 --}}
                                                 @php
                                                     $dataPendaftaran = \DB::table('tb_pendaftaran')
                                                         ->where('user_id', auth()->id())
@@ -328,19 +338,16 @@
                                                 @endphp
 
                                                 @if($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'menunggu')
-                                                    {{-- Status 'menunggu' -> Tombol dikunci (Kuning) --}}
                                                     <button type="button" class="btn text-white w-100 py-2 fw-bold text-center" disabled
                                                             style="background:#ffc107; border-radius:12px; font-size: 12px; cursor: not-allowed;">
                                                         <i class="fas fa-spinner fa-spin me-1"></i> ⏳ Menunggu Konfirmasi Bidan
                                                     </button>
                                                 @elseif($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'terjadwal')
-                                                    {{-- Status 'terjadwal' -> Muncul badge sukses (Hijau) --}}
                                                     <div class="alert alert-success text-center py-2 px-3 fw-bold m-0" 
                                                          style="border-radius:12px; font-size: 12px; border: none; background-color: #d1fae5; color: #065f46;">
                                                         <i class="fas fa-check-circle me-1"></i> Sudah Terjadwal
                                                     </div>
                                                 @else
-                                                    {{-- Belum ada status / Data Kosong -> Muncul tombol buat daftar --}}
                                                     <form action="{{ route('konsultasi.ajukan') }}" method="POST" id="formAjukanJadwal">
                                                         @csrf
                                                         <button type="submit" class="btn text-white w-100 py-2 fw-bold text-center"
