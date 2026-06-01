@@ -110,10 +110,16 @@ Route::prefix('master')->group(function () {
     Route::delete('/jadwal/{id}', [AdminController::class, 'jadwalDestroy'])->name('jadwal.destroy');
 
     // FITUR EDUKASI ADMIN
-    Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
-    Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
-    Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
-    Route::get('/edukasi/create', [ArtikelController::class, 'create'])->name('admin.edukasi.create');
+    // Pastikan baris ini berada di dalam grup admin Anda yang sudah ada
+Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
+Route::get('/edukasi/create', [ArtikelController::class, 'create'])->name('admin.edukasi.create');
+Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
+
+// TAMBAHKAN DUA ROUTE BARIS INI:
+Route::get('/edukasi/edit/{id}', [ArtikelController::class, 'edit'])->name('admin.edukasi.edit');
+Route::put('/edukasi/update/{id}', [ArtikelController::class, 'update'])->name('admin.edukasi.update');
+
+Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
     // Laporan Admin
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.pdf');
