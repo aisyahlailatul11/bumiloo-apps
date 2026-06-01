@@ -75,19 +75,21 @@
                             {{-- TOMBOL AKSI (EDIT & HAPUS) --}}
                             <div class="position-absolute bottom-0 end-0 m-3 d-flex gap-2">
                                 {{-- Tombol Edit --}}
-                                <a href="#" class="btn btn-sm text-dark px-3 py-1.5 d-flex align-items-center fw-bold shadow-sm" style="font-size: 12px; background-color: #ffda6a; border: none; border-radius: 8px;">
-                                    <i class="bi bi-pencil-square me-1"></i> Edit
-                                </a>
+                            <a href="{{ route('admin.edukasi.edit', $edu->id) }}" 
+                                class="btn btn-sm text-dark px-3 py-1.5 d-flex align-items-center fw-bold shadow-sm" 
+                                style="font-size: 12px; background-color: #ffda6a; border: none; border-radius: 8px;">
+                                <i class="bi bi-pencil-square me-1"></i> Edit
+                            </a>
                                 
-                                {{-- Tombol Hapus --}}
-                                <form action="{{ route('admin.edukasi.destroy', $edu->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel edukasi ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm text-white px-3 py-1.5 d-flex align-items-center fw-bold shadow-sm" style="font-size: 12px; background-color: #ef4444; border: none; border-radius: 8px;">
-                                        <i class="bi bi-trash me-1"></i> Hapus
-                                    </button>
-                                </form>
-                            </div>
+    {{-- Tombol Hapus --}}
+    <form action="{{ route('admin.edukasi.destroy', $edu->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus artikel edukasi ini?')">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-sm text-white px-3 py-1.5 d-flex align-items-center fw-bold shadow-sm" style="font-size: 12px; background-color: #ef4444; border: none; border-radius: 8px;">
+            <i class="bi bi-trash me-1"></i> Hapus
+        </button>
+    </form>
+</div>
 
                         </div>
                     </div>

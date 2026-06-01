@@ -62,6 +62,51 @@ class ArtikelController extends Controller
         return redirect()->route('admin.edukasi')->with('success', 'Artikel edukasi berhasil ditambahkan!');
     }
 
+    // 5. TAMPILAN FORM EDIT (Mengambil data lama berdasarkan ID)
+    public function edit($id)
+    {
+        $artikel = Artikel::findOrFail($id);
+        
+        // Mengarah ke file editEdukasi.blade.php yang akan kita buat
+        return view('admin.edukasi.editEdukasi', compact('artikel'));
+    }
+
+    // 6. PROSES UPDATE DATA DI DATABASE
+    public function update(Request $request, $id)
+    {
+        // Validasi input
+        $request->validate([
+            'judul_edukasi'   => 'required|string|max:255',
+            'kategori'        => 'required|string|max:100',
+            'konten_edukasi'  => 'required|string',
+            'gambar'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        $artikel = Artikel::findOrFail($id);
+        $imageName = $artikel->gambar; // Simpan nama gambar lama dulu
+
+        // Jika admin mengupload gambar baru
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama dari storage jika ada dan bukan gambar bawaan asset
+            if ($artikel->gambar && !str_contains($artikel->gambar, 'build/images/')) {
+                Storage::disk('public')->delete($artikel->gambar);
+            }
+            // Simpan gambar baru
+            $imagePath = $request->file('gambar')->store('artikel-images', 'public');
+            $imageName = $imagePath;
+        }
+
+        // Update data ke database
+        $artikel->update([
+            'judul_edukasi'  => $request->judul_edukasi,
+            'kategori'       => $request->kategori,
+            'konten_edukasi' => $request->konten_edukasi,
+            'gambar'         => $imageName,
+        ]);
+
+        return redirect()->route('admin.edukasi')->with('success', 'Data berhasil diupdate!');
+    }
+
     // =========================================================================
     // JANGAN UBAH APAPUN DI BAWAH BARIS INI (BIARKAN FUNGSI DESTROY KAMU TETAP DISINI)
     // =========================================================================

@@ -11,6 +11,7 @@ class Artikel extends Model
 
     // Masukkan nama tabel database kamu di bawah ini jika namanya bukan 'artikels' (misal: 'tb_artikel')
     // protected $table = 'tb_artikel';
+    protected $table = 'edukasis';
 
     /**
      * Atribut yang dapat diisi secara massal (Mass Assignment).
