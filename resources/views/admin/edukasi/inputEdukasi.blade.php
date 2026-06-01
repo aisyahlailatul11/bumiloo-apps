@@ -145,7 +145,7 @@
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js"></script>
 <script>
-    // Inisialisasi Rich Text Editor dengan Placeholder ber-font Poppins
+    // Inisialisasi Rich Text Editor
     const quill = new Quill('#editor-konten', {
         modules: { toolbar: '#toolbar-container' },
         theme: 'snow',
@@ -168,17 +168,12 @@
         }
     }
 
-    // Ambil isi editor & tangkap kategori baru sebelum form dikirim ke Controller
+    // Pindahkan isi editor ke input tersembunyi (ALERT SUDAH DIHAPUS)
     document.getElementById('formEdukasi').onsubmit = function() {
         var konten = document.querySelector('input[name=konten_edukasi]');
         konten.value = quill.root.innerHTML;
-        
-        if(quill.getText().trim().length === 0) {
-            alert('Konten edukasi tidak boleh kosong!');
-            return false;
-        }
 
-        // Trik manipulasi nilai dropdown jika admin menulis kategori baru
+        // Logika dropdown kategori kustom
         const selectObj = document.getElementById('kategori_select');
         const inputBaru = document.getElementById('kategori_baru');
         if (selectObj.value === 'buat_baru' && inputBaru.value.trim() !== '') {
@@ -186,7 +181,7 @@
             opt.value = inputBaru.value.trim();
             opt.text = inputBaru.value.trim();
             selectObj.appendChild(opt);
-            selectObj.value = inputBaru.value.trim(); // Nilai input teks dialihkan masuk ke request 'kategori'
+            selectObj.value = inputBaru.value.trim();
         }
     };
 
