@@ -12,28 +12,21 @@
 
                 <div class="card-header bg-white border-0 p-3">
                     <h6 class="fw-bold mb-3 text-pink">Semua Chat</h6>
-
                     <input type="text" id="searchChat" class="form-control" placeholder="Cari pasien...">
                 </div>
 
                 <div class="list-group list-group-flush" id="chatList">
-
                     @forelse ($konsultasis as $item)
-
                     <a href="{{ route('bidan.konsultasi.detail', $item->user_id) }}"
                         class="list-group-item list-group-item-action border-0 py-3 chat-item {{ $user_id == $item->user_id ? 'active-chat' : '' }}">
 
                         <div class="d-flex align-items-center">
-
                             <img src="https://ui-avatars.com/api/?name={{ urlencode($item->nama_pasien) }}&background=f8b6d2&color=fff"
                                 class="rounded-circle me-3" width="50" height="50">
 
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold nama-pasien">
-                                        {{ $item->nama_pasien }}
-                                    </span>
-
+                                    <span class="fw-bold nama-pasien">{{ $item->nama_pasien }}</span>
                                     <small class="text-muted">
                                         {{ \Carbon\Carbon::parse($item->waktu_terakhir)->format('H:i') }}
                                     </small>
@@ -43,17 +36,13 @@
                                     Pesan konsultasi pasien
                                 </small>
                             </div>
-
                         </div>
-
                     </a>
-
                     @empty
                     <div class="text-center p-4 text-muted">
                         Belum ada chat dari pasien.
                     </div>
                     @endforelse
-
                 </div>
 
             </div>
@@ -65,71 +54,56 @@
 
                 {{-- HEADER --}}
                 <div class="chat-header border-bottom">
-
                     <img src="https://ui-avatars.com/api/?name={{ urlencode($pasien->name ?? 'Pasien') }}&background=f8b6d2&color=fff"
                         class="rounded-circle me-3" width="52" height="52">
 
                     <div>
-                        <h6 class="fw-bold mb-0">
-                            {{ $pasien->name ?? 'Pasien' }}
-                        </h6>
+                        <h6 class="fw-bold mb-0">{{ $pasien->name ?? 'Pasien' }}</h6>
                         <small class="text-success">Online</small>
                     </div>
 
                     <form action="{{ route('bidan.konsultasi.requestOffline', $user_id) }}" method="POST"
                         class="ms-auto">
                         @csrf
-
                         <button type="submit" class="btn btn-sm btn-pink">
                             Request Konsultasi Offline
                         </button>
                     </form>
-
                 </div>
 
                 {{-- BODY CHAT --}}
                 <div class="chat-body" id="chatBody">
-
                     @forelse ($pesans as $chat)
 
                     @if ($chat->sender == 'bumil')
-
                     <div class="message-left mb-3">
                         <div class="bubble-left">
                             {{ $chat->pesan }}
                         </div>
-
                         <div>
                             <small class="text-muted">
                                 {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
                             </small>
                         </div>
                     </div>
-
                     @else
-
                     <div class="message-right mb-3 text-end">
                         <div class="bubble-right">
                             {{ $chat->pesan }}
                         </div>
-
                         <div>
                             <small class="text-muted">
                                 {{ \Carbon\Carbon::parse($chat->created_at)->format('H:i') }}
                             </small>
                         </div>
                     </div>
-
                     @endif
 
                     @empty
-
                     <div class="text-center text-muted mt-5">
                         Belum ada pesan.
                     </div>
-
                     @endforelse
-
                 </div>
 
                 {{-- INPUT CHAT --}}
@@ -138,8 +112,8 @@
                         class="d-flex align-items-center gap-2">
                         @csrf
 
-                        <input type="text" name="pesan" class="form-control rounded-pill" placeholder="Tulis pesan..."
-                            required>
+                        <input type="text" name="pesan" class="form-control rounded-pill"
+                            placeholder="Tulis pesan..." required>
 
                         <button type="submit" class="btn btn-send rounded-circle">
                             <i class="fas fa-paper-plane"></i>
@@ -151,16 +125,22 @@
         </div>
 
     </div>
-
 </div>
 
 <style>
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
 .text-pink {
     color: #f26aa8;
 }
 
 .chat-page {
-    height: calc(100vh - 60px);
+    height: auto;
+    min-height: calc(100vh - 60px);
     padding: 15px 24px 20px 24px;
     overflow: hidden;
 }
@@ -170,7 +150,8 @@
 }
 
 .chat-wrapper {
-    height: calc(100% - 55px);
+    height: calc(100vh - 180px);
+    overflow: hidden;
 }
 
 .chat-col {
@@ -189,7 +170,9 @@
     flex-direction: column;
 }
 
-.chat-list-card .card-header {
+.chat-list-card .card-header,
+.chat-header,
+.chat-footer {
     flex-shrink: 0;
 }
 
@@ -200,12 +183,12 @@
 #chatList {
     flex: 1;
     min-height: 0;
+    max-height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .chat-header {
-    flex-shrink: 0;
     background: #fff;
     padding: 16px 20px;
     display: flex;
@@ -214,7 +197,7 @@
 
 .chat-body {
     flex: 1;
-    min-height: 0;
+    min-height: 300px;
     overflow-y: auto;
     overflow-x: hidden;
     background: #fff7fb;
@@ -222,9 +205,8 @@
 }
 
 .chat-footer {
-    flex-shrink: 0;
     background: #fff;
-    padding: 14px 20px 16px 20px;
+    padding: 10px 20px;
 }
 
 .chat-item {
@@ -267,11 +249,40 @@
     padding: 8px 16px;
 }
 
+.btn-pink:hover,
+.btn-send:hover {
+    background: #e85b9d;
+    color: white;
+}
+
 .btn-send {
     background: #f26aa8;
     color: white;
     width: 42px;
     height: 42px;
+}
+
+/* SCROLL KIRI DAN KANAN */
+#chatList::-webkit-scrollbar,
+.chat-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+#chatList::-webkit-scrollbar-track,
+.chat-body::-webkit-scrollbar-track {
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
+#chatList::-webkit-scrollbar-thumb,
+.chat-body::-webkit-scrollbar-thumb {
+    background: #bdbdbd;
+    border-radius: 10px;
+}
+
+#chatList::-webkit-scrollbar-thumb:hover,
+.chat-body::-webkit-scrollbar-thumb:hover {
+    background: #8f8f8f;
 }
 </style>
 
