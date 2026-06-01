@@ -65,8 +65,7 @@ class BumilKonsultasiController extends Controller
 
         return redirect()->back()->with('success', 'Jadwal offline berhasil diajukan! Pesan konfirmasi telah dikirim ke Bidan.');
     }
-    public function ajukanJadwal(Request $request)
-{
+    public function ajukanJadwal(Request $request){
     // 1. Ambil ID Ibu Hamil yang sedang login
     $userId = auth()->id();
 

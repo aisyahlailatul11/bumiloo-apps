@@ -2,17 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Artikel extends Model
 {
-    // UBAH DI SINI: Arahkan ke nama tabel asli di database kamu, yaitu 'edukasis'
-    protected $table = 'edukasis';
-    
+    use HasFactory;
+
+    // Masukkan nama tabel database kamu di bawah ini jika namanya bukan 'artikels' (misal: 'tb_artikel')
+    // protected $table = 'tb_artikel';
+
+    /**
+     * Atribut yang dapat diisi secara massal (Mass Assignment).
+     * Kolom-kolom ini wajib didaftarkan agar bisa diproses oleh fungsi Artikel::create() di Controller.
+     */
     protected $fillable = [
-        'judul', 
-        'kategori', 
-        'deskripsi', 
-        'gambar'
+        'judul_edukasi',
+        'kategori',
+        'konten_edukasi',
+        'gambar',
     ];
 }
