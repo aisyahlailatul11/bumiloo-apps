@@ -9,19 +9,22 @@
         body { font-family: Arial, sans-serif; font-size: 10px; color: #222; background: #fff; }
         .wrapper { padding: 15mm; }
 
-        /* KOP */
-        .kop { display: table; width: 100%; border-bottom: 3px double #333; padding-bottom: 10px; margin-bottom: 15px; }
-        .kop-left { display: table-cell; vertical-align: middle; width: 60px; }
+        /* KOP - Menggunakan sistem tabel yang presisi */
+        .kop { display: table; width: 100%; border-bottom: 3px double #333; padding-bottom: 10px; margin-bottom: 15px; table-layout: fixed; }
+        
+        .kop-left { display: table-cell; vertical-align: middle; width: 120px; }
         .kop-left img { width: 50px; }
-        .kop-brand { display: table-cell; vertical-align: middle; color: #e83e8c; font-size: 14px; font-weight: 900; }
+        
         .kop-center { display: table-cell; vertical-align: middle; text-align: center; }
-        .kop-center h2 { font-size: 14px; }
-        .kop-right { display: table-cell; vertical-align: middle; text-align: right; font-size: 9px; }
+        .kop-center h2 { font-size: 14px; margin-bottom: 2px; }
+        .kop-center p { font-size: 9px; }
+        
+        .kop-right-img { display: table-cell; vertical-align: middle; width: 120px; text-align: right; }
+        .kop-right-img img { width: 50px; height: 50px; object-fit: contain; }
 
-        /* JUDUL */
+        /* JUDUL & LAINNYA */
         .judul { text-align: center; margin-bottom: 20px; }
         .judul h2 { text-transform: uppercase; margin-bottom: 5px; }
-        
         .section-title { font-weight: bold; margin-bottom: 8px; text-transform: uppercase; border-left: 3px solid #e83e8c; padding-left: 8px; }
         .para { line-height: 1.6; margin-bottom: 15px; text-align: justify; }
 
@@ -40,17 +43,20 @@
 
 @php
     use Carbon\Carbon;
-    // Mengambil tanggal dari database jika ada, jika tidak default ke hari ini
     $tAwal = request('tanggal_awal') ? Carbon::parse(request('tanggal_awal'))->translatedFormat('d F Y') : Carbon::now()->startOfMonth()->translatedFormat('d F Y');
     $tAkhir = request('tanggal_akhir') ? Carbon::parse(request('tanggal_akhir'))->translatedFormat('d F Y') : Carbon::now()->endOfMonth()->translatedFormat('d F Y');
 @endphp
 
 <div class="kop">
     <div class="kop-left"><img src="{{ public_path('images/Logo_bumiloo.png') }}"></div>
-    <div class="kop-brand">Bumiloo</div>
+    
     <div class="kop-center">
         <h2>Praktik Bidan Mandiri Siti Fatimah</h2>
         <p>Jl. Melati No. 2, Kab. Jember</p>
+    </div>
+
+    <div class="kop-right-img">
+        <img src="{{ public_path('images/logokebidanan.png') }}">
     </div>
 </div>
 
