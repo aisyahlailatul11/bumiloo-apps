@@ -90,8 +90,12 @@ Route::prefix('master')->group(function () {
     Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
 
     //create data pasien
+    Route::post('/admin/master/pasien/store', [AdminController::class, 'storeDataPasien'])
+     ->name('admin.master.store');
     Route::get('/admin/master/pasien/create', [AdminController::class, 'createDataPasien'])
-     ->name('master.createDataPasien');
+     ->name('master.createDataPasien'); 
+    Route::get('/admin/master/pasien', [AdminController::class, 'masterPasien'])
+     ->name('admin.master.pasien');
 
     Route::get('/bidan', [DataBidanController::class, 'dataBidan'])->name('master.bidan');
     

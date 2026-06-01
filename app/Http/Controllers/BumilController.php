@@ -5,28 +5,45 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Routing\Controllers\HasMiddleware; // Tambahkan ini di bagian use
+use Illuminate\Routing\Controllers\Middleware;
 
 class BumilController extends Controller
 {
     /**
      * Menampilkan dashboard khusus ibu hamil
      */
-    public function index()
+    public static function middleware(): array
     {
-        // 1. Ambil data pendaftaran milik user yang sedang login
-        $data = DB::table('tb_pendaftaran')
-                    ->where('user_id', Auth::id())
-                    ->first();
-
-        // 2. Keamanan: Jika user belum daftar, paksa kembali ke form pendaftaran
-        if (!$data) {
-            return redirect()->route('pendaftaran.create')
-                             ->with('info', 'Silakan lengkapi formulir pendaftaran terlebih dahulu.');
-        }
-
-        // 3. Tampilkan halaman dashboard dan kirim datanya
-        return view('bumil.dashboard', compact('data'));
+        return [
+            'auth', // Menggantikan $this->middleware('auth')
+        ];
     }
+
+public function index()
+{
+    // 1. Keamanan: Cek Role Terlebih Dahulu
+    // Admin dan Bidan tidak boleh masuk ke sini
+    if (auth()->user()->role !== 'Bumil') {
+        return redirect()->route('login')->with('error', 'Akses ditolak! Anda tidak memiliki akses ke dashboard ini.');
+    }
+
+    // 2. Ambil data pendaftaran milik user yang sedang login
+    $data = DB::table('tb_pendaftaran')
+                ->where('user_id', Auth::id())
+                ->first();
+
+    // 3. Keamanan: Jika user Bumil belum daftar, paksa kembali ke form pendaftaran
+    if (!$data) {
+        return redirect()->route('pendaftaran.create')
+                         ->with('info', 'Silakan lengkapi formulir pendaftaran terlebih dahulu.');
+    }
+
+    // 4. Tampilkan halaman dashboard untuk Bumil yang valid
+    return view('bumil.dashboard', compact('data'));
+}
+
+
    public function konsultasi()
 {
     $pesans = DB::table('konsultasis')

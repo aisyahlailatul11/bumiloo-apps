@@ -12,23 +12,11 @@ class Pendaftaran extends Model
     protected $table = 'tb_pendaftaran';
 
     protected $fillable = [
-        'user_id', 
-        'nik',
-        'nama',
-        'tempat_lahir',
-        'tgl_lahir',
-        'umur',
-        'alamat',
-        'no_hp',
-        'agama',
-        'pendidikan',
-        'gol_darah',
-        'pekerjaan',
-        'nama_suami',
-        'tgllahir_suami',
-        'usia_suami',
-        'hpht'
-    ];
+    'nik', 'nama', 'tempat_lahir', 'tgl_lahir', 'umur', 'alamat', 
+    'no_hp', 'agama', 'pendidikan', 'gol_darah', 'pekerjaan', 
+    'nama_suami', 'tgllahir_suami', 'usia_suami', 'hpht', 
+    'status_konsultasi', 'user_id', 'created_by' // <--- HARUS ADA
+];
 
     // Relasi ke User (Jika ingin mengambil data akun yang mendaftar)
     public function user()

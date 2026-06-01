@@ -67,6 +67,49 @@ class AdminController extends Controller
     }
 
 //DATA PASIEN (MASTER)
+public function storeDataPasien(Request $request)
+{
+    // 1. Validasi
+    $data = $request->validate([
+        'nik' => 'required|unique:tb_pendaftaran,nik|digits:16',
+        'nama' => 'required',
+        'tempat_lahir' => 'required|string',
+        'tgl_lahir' => 'required|date',
+        'umur' => 'required|integer',
+        'alamat' => 'required|string',
+        'no_hp' => 'required|string|max:20',
+        'agama' => 'required|string',
+        'pendidikan' => 'required|string',
+        'gol_darah' => 'required|string',
+        'pekerjaan' => 'required|string',
+        'nama_suami' => 'required|string|max:255',
+        'tgllahir_suami' => 'required|date',
+        'usia_suami' => 'required|integer',
+        'hpht' => 'required|date',
+    ], [
+        'nik.unique' => 'NIK ini sudah terdaftar di sistem Bumiloo.',
+        'nik.digits' => 'NIK harus tepat 16 digit.',
+    ]);
+
+    // 2. Logika Pekerjaan "Lainnya"
+    // Karena $data sudah berisi semua input yang tervalidasi, 
+    // kita cukup update key 'pekerjaan' di dalam array $data tersebut.
+    if ($request->filled('pekerjaan_manual')) {
+        $data['pekerjaan'] = $request->input('pekerjaan_manual');
+    }
+    
+    // 3. Tambahkan status default
+    $data['created_by'] = 'admin'; 
+    $data['user_id'] = null;
+    $data['status_konsultasi'] = 'langsung_aktif'; 
+
+    // 4. Simpan ke database
+    \App\Models\Pendaftaran::create($data);
+
+    // 5. Redirect balik ke halaman Data Pasien
+    return redirect()->route('admin.master.pasien')
+                 ->with('success', 'Data pasien berhasil disimpan!');
+}
 
 public function createDataPasien()
     {
@@ -86,8 +129,8 @@ public function masterPasien(Request $request)
 
     //Filter Status 
     if ($request->has('status') && $request->status != 'semua') {
-        $query->where('status_konsultasi', $request->status);
-    }
+    $query->where('status_konsultasi', $request->status);
+}
 
     // Eksekusi query
     $pasiens = $query->latest()->get();

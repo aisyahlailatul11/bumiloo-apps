@@ -3,81 +3,22 @@
 @section('title', 'Tambah Data Pasien')
 
 @section('content')
-<style>
-    /* Styling Container Form */
-    .jwl-form-container {
-        background: #FFFFFF;
-        padding: 40px;
-        border-radius: 24px;
-        border: 1px solid #E2E8F0;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-    }
+<main class="p-10" style="font-family: 'Poppins', sans-serif; background-color: #F8FAFC; min-height: 100vh;">
+    
+    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px;">
+        <h1 style="font-size: 28px; font-weight: 700; color: #0F172A;">Tambah Data Pasien</h1>
+        <a href="{{ route('admin.master.pasien') }}" style="color: #64748B; text-decoration: none; font-weight: 600;">&larr; Kembali</a>
+    </div>
 
-    /* Grid Layout */
-    .form-grid-3 {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-    }
-
-    /* Input & Select Styling */
-    .form-input {
-        width: 100%;
-        padding: 12px 16px;
-        border: 1.5px solid #CBD5E1;
-        border-radius: 12px;
-        font-size: 14px;
-        transition: 0.3s;
-    }
-    .form-input:focus {
-        border-color: #F84F8F;
-        box-shadow: 0 0 0 4px rgba(248, 79, 143, 0.1);
-        outline: none;
-    }
-
-    /* Label Styling */
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #475569;
-        font-size: 13px;
-    }
-
-    /* Section Divider */
-    .section-divider {
-        grid-column: span 3;
-        font-size: 18px;
-        font-weight: 700;
-        color: #F84F8F;
-        margin: 30px 0 15px 0;
-        border-bottom: 2px solid #FBCFE8;
-        padding-bottom: 10px;
-    }
-
-    /* Button Styling */
-    .btn-submit-premium {
-        background: #F84F8F;
-        color: white;
-        padding: 14px 40px;
-        border-radius: 12px;
-        font-weight: 700;
-        border: none;
-        float: right;
-        margin-top: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-    .btn-submit-premium:hover {
-        background: #e03e7a;
-        transform: translateY(-2px);
-    }
-</style>
-
-<main class="p-10" style="font-family: 'Poppins', sans-serif;">
-    <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Tambah Data Pasien</h1>
+    <div class="jwl-form-box">
+        <form action="{{ route('admin.master.store') }}" method="POST">
+            @csrf
 
     <div class="form-grid-3">
+        <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" name="nama" value="{{ old('nama') }}" class="form-input" placeholder="Nama Lengkap" required>
+                </div>
                 <div class="form-group">
                     <label>NIK Pasien</label>
                     <input type="text" name="nik" value="{{ old('nik') }}" class="form-input" placeholder="16 Digit Nomor KTP" maxlength="16" required>
@@ -89,9 +30,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" class="form-input readonly-medis" value="{{ Auth::user()->name }}" disabled>
-                    <input type="hidden" name="nama" value="{{ Auth::user()->name }}">
+                    <label>Tempat Lahir</label>
+                    <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" class="form-input" placeholder="Kota Kelahiran" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Tanggal Lahir Ibu</label>
+                    <input type="date" id="tgl_lahir" name="tgl_lahir" value="{{ old('tgl_lahir') }}" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Umur Ibu</label>
+                    <input type="number" id="umur" name="umur" value="{{ old('umur') }}" class="form-input readonly-medis" placeholder="Otomatis" readonly required>
                 </div>
 
                 <!-- Agama -->
@@ -105,11 +55,6 @@
                         <option value="Hindu" {{ old('agama') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
                         <option value="Budha" {{ old('agama') == 'Budha' ? 'selected' : '' }}>Budha</option>
                     </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Tempat Lahir</label>
-                    <input type="text" name="tempat_lahir" value="{{ old('tempat_lahir') }}" class="form-input" placeholder="Kota Kelahiran" required>
                 </div>
 
                 <!-- Pendidikan -->
@@ -127,11 +72,6 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Tanggal Lahir Ibu</label>
-                    <input type="date" id="tgl_lahir" name="tgl_lahir" value="{{ old('tgl_lahir') }}" class="form-input" required>
-                </div>
-
                <!-- Golongan Darah -->
                 <div class="form-group dropdown-container">
                     <label>Golongan Darah</label>
@@ -143,69 +83,69 @@
                     <option value="O" {{ old('gol_darah') == 'O' ? 'selected' : '' }}>O</option>
                 </select>
             </div>
-
-                <div class="form-group">
-                    <label>Umur Ibu</label>
-                    <input type="number" id="umur" name="umur" value="{{ old('umur') }}" class="form-input readonly-medis" placeholder="Otomatis" readonly required>
-                </div>
-
-                <!-- Pekerjaan Ibu -->
-                 <div class="form-group dropdown-container">
-                    <label>Pekerjaan Ibu</label>
-                    <select id="pekerjaan_select" class="form-input" onchange="togglePekerjaan(this.value)">
-                        <option value="">Pilih Pekerjaan</option>
-                        <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
-                        <option value="PNS / ASN">PNS / ASN</option>
-                        <option value="Karyawan Swasta">Karyawan Swasta</option>
-                        <option value="Wiraswasta">Wiraswasta</option>
-                        <option value="Lainnya">Lainnya...</option>
-                    </select>
-                    <div id="kotak_lainnya" style="display:none; margin-top:10px;">
-        <input type="text" id="input_manual" name="pekerjaan" class="form-input" placeholder="Tulis Pekerjaan Anda">
-    </div>
-</div>
-
-                <div class="form-group" style="grid-column: span 2;">
-                    <label>Alamat Domisili</label>
-                    <input type="text" name="alamat" value="{{ old('alamat') }}" class="form-input" placeholder="Nama Jalan, RT/RW, Desa, Kecamatan" required>
-                </div>
-
-                <div class="section-divider">Data Suami</div>
-
-                <div class="form-group">
-                    <label>Nama Suami</label>
-                    <input type="text" name="nama_suami" value="{{ old('nama_suami') }}" class="form-input" placeholder="Nama Suami" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Tanggal Lahir Suami</label>
-                    <input type="date" id="tgllahir_suami" name="tgllahir_suami" value="{{ old('tgllahir_suami') }}" class="form-input" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Umur Suami</label>
-                    <input type="number" id="usia_suami" name="usia_suami" value="{{ old('usia_suami') }}" class="form-input readonly-medis" placeholder="Otomatis" readonly required>
-                </div>
-
-                <div class="kalkulator-medis-box">
-                    <div class="form-group">
-                        <label>HPHT (Hari Pertama Haid Terakhir)</label>
-                        <input type="date" id="hpht" name="hpht" value="{{ old('hpht') }}" class="form-input" style="border-color: #F9A8D4;" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Estimasi Persalinan (HPL / EDD)</label>
-                        <input type="date" id="hpl_screen" class="form-input readonly-medis" style="background-color: #FFF !important; color: #DB2777 !important; border-color: #F9A8D4 !important;" readonly>
-                    </div>
-                </div>
+        
+        <div class="form-group dropdown-container">
+            <label>Pekerjaan Ibu</label>
+            <select id="pekerjaan_select" class="form-input" onchange="togglePekerjaan(this.value)">
+                <option value="">Pilih Pekerjaan</option>
+                <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
+                <option value="PNS / ASN">PNS / ASN</option>
+                <option value="Karyawan Swasta">Karyawan Swasta</option>
+                <option value="Wiraswasta">Wiraswasta</option>
+                <option value="Lainnya">Lainnya...</option>
+            </select>
+            <div id="kotak_lainnya" style="display:none; margin-top:10px;">
+                <input type="text" id="input_manual" name="pekerjaan" class="form-input" placeholder="Tulis Pekerjaan Anda">
             </div>
+        </div>
 
-            <button type="submit" class="btn-submit-premium">
-                Daftar 
-            </button>
-            <div style="clear: both;"></div>
-        </form>
+        <div class="form-group" style="grid-column: span 2;">
+            <label>Alamat Domisili</label>
+            <input type="text" name="alamat" value="{{ old('alamat') }}" class="form-input" placeholder="Nama Jalan, RT/RW, Desa, Kecamatan" required>
+        </div>
+
+        <div class="form-group" style="grid-column: span 3;">
+            <label>HPHT (Hari Pertama Haid Terakhir)</label>
+            <input type="date" id="hpht" name="hpht" class="form-input" style="border-color: #F9A8D4; width: 32%;" required>
+        </div>
+
+        <div class="section-divider" style="grid-column: span 3;">Data Suami</div>
+
+        <div class="form-group">
+            <label>Nama Suami</label>
+            <input type="text" name="nama_suami" value="{{ old('nama_suami') }}" class="form-input" placeholder="Nama Suami" required>
+        </div>
+
+        <div class="form-group">
+            <label>Tanggal Lahir Suami</label>
+            <input type="date" id="tgllahir_suami" name="tgllahir_suami" value="{{ old('tgllahir_suami') }}" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+            <label>Umur Suami</label>
+            <input type="number" id="usia_suami" name="usia_suami" value="{{ old('usia_suami') }}" class="form-input readonly-medis" placeholder="Otomatis" readonly required>
+        </div>
+
     </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+        <button type="submit" class="btn-submit-premium">Simpan</button>
+    </div>
+</form>
+    </div>
+</main>
+
+<style>
+    .jwl-form-box { background: #FFFFFF; padding: 40px; border-radius: 24px; border: 1px solid #E2E8F0; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .form-input { width: 100%; padding: 12px 16px; border: 1.5px solid #CBD5E1; border-radius: 12px; font-size: 14px; }
+    .form-input:focus { border-color: #F84F8F; outline: none; box-shadow: 0 0 0 4px rgba(248, 79, 143, 0.1); }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #475569; font-size: 13px; }
+    .section-divider { grid-column: span 3; font-size: 18px; font-weight: 700; color: #F84F8F; margin: 25px 0 15px 0; border-bottom: 2px solid #FBCFE8; padding-bottom: 5px; }
+    .readonly-medis { background-color: #F1F5F9; color: #64748B; cursor: not-allowed; }
+    .btn-submit-premium { background: #F84F8F; color: white; padding: 14px 40px; border-radius: 12px; font-weight: 700; border: none; cursor: pointer; margin-top: 30px; transition: 0.3s; }
+    .btn-submit-premium:hover { background: #e03e7a; transform: translateY(-2px); }
+</style>
 
     <script>
     // 1. Logika Toggle Pekerjaan
@@ -246,21 +186,7 @@
         document.getElementById('usia_suami').value = calcAge(this.value);
     });
 
-    // 3. Kalkulator HPL (HPHT + 7 hari - 3 bulan + 1 tahun)
-    document.getElementById('hpht').addEventListener('change', function() {
-        if (!this.value) return;
-        let hpl = new Date(this.value);
-        hpl.setDate(hpl.getDate() + 7);
-        hpl.setMonth(hpl.getMonth() - 3);
-        hpl.setFullYear(hpl.getFullYear() + 1);
-
-        let y = hpl.getFullYear();
-        let m = String(hpl.getMonth() + 1).padStart(2, '0');
-        let d = String(hpl.getDate()).padStart(2, '0');
-        document.getElementById('hpl_screen').value = `${y}-${m}-${d}`;
-    });
-
-    // 4. Inisialisasi saat halaman pertama kali dibuka
+    // 3. Inisialisasi saat halaman pertama kali dibuka
     window.addEventListener('DOMContentLoaded', () => {
         // Kalkulasi ulang jika data lama (old) tersedia
         if(document.getElementById('tgl_lahir').value) document.getElementById('umur').value = calcAge(document.getElementById('tgl_lahir').value);
@@ -280,7 +206,4 @@
 </script>
     @include('partials.alerts')
 
-</body>
-</html>
-</main>
 @endsection

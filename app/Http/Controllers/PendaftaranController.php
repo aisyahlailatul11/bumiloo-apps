@@ -39,14 +39,14 @@ class PendaftaranController extends Controller
         ]);
 
         // 2. Logika Pekerjaan
-        // Kita gunakan $request->pekerjaan karena sudah tervalidasi
-        // Jika pilih 'Lainnya', kita ganti nilainya dengan input 'pekerjaan_lainnya'
         if ($request->pekerjaan === 'Lainnya') {
             $validated['pekerjaan'] = $request->input('pekerjaan_lainnya', 'Lainnya');
         }
 
         // 3. Tambahkan user_id
-        $validated['user_id'] = Auth::id();
+        $data['status_konsultasi'] = 'menunggu'; 
+        $data['created_by'] = 'pasien';
+        $data['user_id'] = auth()->id();
 
         // 4. Simpan ke Database
         Pendaftaran::create($validated);
