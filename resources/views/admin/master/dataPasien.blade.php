@@ -15,21 +15,33 @@
     </div>
 
     <div style="display: flex; justify-content: space-between; align-items: center; background: #FFF; padding: 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-        <div style="display: flex; gap: 10px;">
-            @foreach(['semua' => 'Semua', 'menunggu' => 'Menunggu', 'terjadwal' => 'Terjadwal', 'Datang Langsung' => 'Offline'] as $key => $label)
-            <a href="?status={{ $key }}" 
+    
+    <div style="display: flex; gap: 10px;">
+        @php
+            $filters = ['semua' => 'Semua', 'menunggu' => 'Menunggu', 'terjadwal' => 'Terjadwal', 'offline' => 'Offline'];
+        @endphp
+
+        @foreach($filters as $key => $label)
+            <a href="{{ request()->fullUrlWithQuery(['status' => $key, 'cari' => request('cari')]) }}" 
                style="padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600; 
                background-color: {{ request('status', 'semua') == $key ? '#F84F8F' : '#E2E8F0' }}; 
                color: {{ request('status', 'semua') == $key ? '#FFF' : '#4A5568' }};">
                 {{ $label }}
             </a>
-            @endforeach
-        </div>
-        <form action="{{ route('admin.master.pasien') }}" method="GET" style="display: flex; gap: 10px;">
-            <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari nama..." style="padding: 10px; border-radius: 8px; border: 1px solid #ddd;">
-            <button type="submit" style="padding: 10px 20px; background: #3B82F6; color: white; border: none; border-radius: 8px;">Cari</button>
-        </form>
+        @endforeach
     </div>
+
+    <form action="{{ route('admin.master.pasien') }}" method="GET" style="display: flex; gap: 10px; margin: 0;">
+        <input type="hidden" name="status" value="{{ request('status', 'semua') }}">
+        
+        <input type="text" name="cari" value="{{ request('cari') }}" placeholder="Cari nama..." 
+               style="padding: 10px 15px; border-radius: 8px; border: 1px solid #CBD5E1; width: 250px;">
+        
+        <button type="submit" style="padding: 10px 20px; background: #3B82F6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+            Cari
+        </button>
+    </form>
+</div>
 
     <div style="width: 100%; overflow-x: auto; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); background: white;">
         <table style="width: 100%; min-width: 1300px; border-collapse: collapse;">
@@ -39,6 +51,7 @@
                     <th style="padding: 16px; text-align: center">Nama</th>
                     <th style="padding: 16px; text-align: center">NIK</th>
                     <th style="padding: 16px; text-align: center">No. HP</th>
+                    <th style="padding: 16px; text-align: center">Email</th>
                     <th style="padding: 16px; text-align: center">Tempat Lahir</th>
                     <th style="padding: 16px; text-align: center">Tgl Lahir</th>
                     <th style="padding: 16px; text-align: center">Umur</th>
@@ -60,6 +73,7 @@
                     <td style="padding: 12px; font-weight: bold;">{{ $p->nama }}</td>
                     <td style="padding: 12px;">{{ $p->nik }}</td>
                     <td style="padding: 12px;">{{ $p->no_hp }}</td>
+                    <td style="padding: 12px;">{{ $p->email }}</td>
                     <td style="padding: 12px;">{{ $p->tempat_lahir }}</td>
                     <td style="padding: 12px;">{{ $p->tgl_lahir }}</td>
                     <td style="padding: 12px;">{{ $p->umur }}</td>
@@ -76,6 +90,7 @@
         $status = strtolower(trim($p->status_konsultasi ?? ''));
     @endphp
 
+    {{-- KITA SAMAKAN LOGIKANYA: Selama statusnya 'terjadwal', tampilkan edit --}}
     @if($status == 'terjadwal')
         <a href="{{ route('jadwal.index', ['pendaftaran_id' => $p->id]) }}" 
            style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background-color: #FF9500; border-radius: 12px; box-shadow: 0 4px 6px rgba(255, 149, 0, 0.2); text-decoration: none; color: white;" 
@@ -83,16 +98,18 @@
            <i class="fa fa-edit"></i>
         </a>
 
-    @elseif($status == 'menunggu' || empty($status))
+    {{-- KALAU MENUNGGU, DATANG LANGSUNG, ATAU KOSONG, TAMPILKAN TOMBOL + --}}
+    @elseif($status == 'menunggu' || $status == 'datang langsung' || empty($status))
         <a href="{{ route('jadwal.index', ['pendaftaran_id' => $p->id]) }}" 
            style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center; background-color: #4CD964; border-radius: 12px; box-shadow: 0 4px 6px rgba(76, 217, 100, 0.2); text-decoration: none; color: white; font-weight: bold; font-size: 20px;" 
            title="Buat Jadwal">
            +
         </a>
 
+    {{-- Status lain selain itu (misal: selesai/batal) --}}
     @else
         <span style="color: #6B7280; background: #F3F4F6; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600;">
-            OFFLINE
+            {{ strtoupper($status) }}
         </span>
     @endif
 </td>

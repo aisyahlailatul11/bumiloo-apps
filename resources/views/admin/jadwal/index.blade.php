@@ -24,65 +24,61 @@
     
     <h1 style="font-size: 28px; font-weight: 700; color: #0F172A; margin: 0 0 20px 0;">Jadwal Konsultasi Pasien</h1>
 
-    <div class="jwl-form-box" style="margin-bottom: 35px;">
-        <p style="font-size: 20px; font-weight: 700; color: #0F172A; margin: 0 0 25px 0;">
-            {{ isset($editJadwal) ? 'Edit Jadwal' : 'Form Pembuatan Jadwal Baru' }}
-        </p>
+<div class="jwl-form-box" style="margin-bottom: 35px;">
+    <p style="font-size: 20px; font-weight: 700; color: #0F172A; margin: 0 0 25px 0;">
+        {{ isset($editJadwal) ? 'Edit Jadwal' : 'Form Pembuatan Jadwal Baru' }}
+    </p>
 
-        <form action="{{ isset($editJadwal) ? route('jadwal.update', $editJadwal->id) : route('jadwal.store') }}" method="POST" style="margin: 0; display: flex; flex-direction: column; width: 100%;">
-            @csrf
-            @if(isset($editJadwal)) 
-            @method('PUT') 
-            @endif
+    <form action="{{ isset($editJadwal) ? route('jadwal.update', $editJadwal->id) : route('jadwal.store') }}" method="POST">
+        @csrf
+        @if(isset($editJadwal)) @method('PUT') @endif
+        
+        <input type="hidden" name="pendaftaran_id" value="{{ $pasienTerpilih->id ?? ($editJadwal->pendaftaran_id ?? '') }}">
 
-            <div class="jwl-form-row">
-                <div class="jwl-form-group">
-                    <label class="jwl-label">Nama Pasien</label>
-                    <input type="text" name="nama" value="{{ $pasienTerpilih->nama_pasien ?? ($pasienTerpilih->nama ?? ($editJadwal->nama_pasien ?? '')) }}" readonly class="jwl-input jwl-input-readonly">
-                </div>
-                <div class="jwl-form-group">
-                    <label class="jwl-label">NIK</label>
-                    <input type="text" name="nik" value="{{ $pasienTerpilih->nik ?? ($editJadwal->nik ?? '') }}" readonly class="jwl-input jwl-input-readonly">
-                </div>
+        <div class="jwl-form-row">
+            <div class="jwl-form-group">
+                <label class="jwl-label">Nama Pasien</label>
+                <input type="text" value="{{ $pasienTerpilih->nama ?? ($editJadwal->nama_pasien ?? '') }}" readonly class="jwl-input jwl-input-readonly">
             </div>
-
-            <div class="jwl-form-row">
-                <div class="jwl-form-group">
-                    <label class="jwl-label">Tanggal Lahir</label>
-                    <input type="text" name="tgl_lahir" value="{{ (isset($pasienTerpilih) && $pasienTerpilih->tgl_lahir) ? date('d/m/Y', strtotime($pasienTerpilih->tgl_lahir)) : ((isset($editJadwal) && $editJadwal->tgl_lahir) ? date('d/m/Y', strtotime($editJadwal->tgl_lahir)) : '') }}" readonly class="jwl-input jwl-input-readonly">
-                </div>
-                <div class="jwl-form-group">
-                    <label class="jwl-label">No. HP</label>
-                    <input type="text" name="no_hp" value="{{ $pasienTerpilih->no_hp ?? ($editJadwal->no_hp ?? '') }}" readonly class="jwl-input jwl-input-readonly">
-                </div>
+            <div class="jwl-form-group">
+                <label class="jwl-label">NIK</label>
+                <input type="text" value="{{ $pasienTerpilih->nik ?? ($editJadwal->nik ?? '') }}" readonly class="jwl-input jwl-input-readonly">
             </div>
+        </div>
 
-            <hr style="border: 0; border-top: 1px solid #F1F5F9; margin: 10px 0 25px 0;">
-
-            <div class="jwl-form-row">
-                <div class="jwl-form-group">
-                    <label class="jwl-label">Tgl Pemeriksaan</label>
-                    <input type="date" name="tgl_pemeriksaan" value="{{ $editJadwal->tgl_pemeriksaan ?? '' }}" required class="jwl-input">
-                </div>
-                <div class="jwl-form-group">
-                    <label class="jwl-label">Jam</label>
-                    <input type="time" name="jam" value="{{ $editJadwal->jam ?? '' }}" required class="jwl-input">
-                </div>
+        <div class="jwl-form-row">
+            <div class="jwl-form-group">
+                <label class="jwl-label">Tanggal Lahir</label>
+                <input type="text" value="{{ (isset($pasienTerpilih) && $pasienTerpilih->tgl_lahir) ? date('d/m/Y', strtotime($pasienTerpilih->tgl_lahir)) : '' }}" readonly class="jwl-input jwl-input-readonly">
             </div>
+            <div class="jwl-form-group">
+                <label class="jwl-label">No. HP</label>
+                <input type="text" value="{{ $pasienTerpilih->no_hp ?? ($editJadwal->no_hp ?? '') }}" readonly class="jwl-input jwl-input-readonly">
+            </div>
+        </div>
 
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
-    <label style="font-size: 14px; font-weight: 600; color: #334155; width: 120px;">
-        Keterangan
-    </label>
-    
-    <select name="keterangan" required 
-            style="min-width: 280px; padding: 8px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 14px;">
-        <option value="" disabled selected>--Pilih Keterangan--</option>
-        <option value="Pemeriksaan Awal">Pemeriksaan Awal</option>
-        <option value="Kontrol Rutin">Kontrol Rutin</option>
-        <option value="Persalinan">Persalinan</option>
-    </select>
-</div>
+        <hr style="border: 0; border-top: 1px solid #F1F5F9; margin: 20px 0;">
+
+        <div class="jwl-form-row">
+            <div class="jwl-form-group">
+                <label class="jwl-label">Tgl Pemeriksaan</label>
+                <input type="date" name="tgl_pemeriksaan" value="{{ $editJadwal->tgl_pemeriksaan ?? '' }}" required class="jwl-input">
+            </div>
+            <div class="jwl-form-group">
+                <label class="jwl-label">Jam</label>
+                <input type="time" name="jam" value="{{ $editJadwal->jam ?? '' }}" required class="jwl-input">
+            </div>
+        </div>
+
+        <div class="jwl-form-group" style="margin-bottom: 25px;">
+            <label class="jwl-label">Keterangan</label>
+            <select name="keterangan" required class="jwl-input">
+                <option value="" disabled {{ !isset($editJadwal) ? 'selected' : '' }}>--Pilih Keterangan--</option>
+                <option value="Pemeriksaan Awal" {{ (isset($editJadwal) && $editJadwal->keterangan == 'Pemeriksaan Awal') ? 'selected' : '' }}>Pemeriksaan Awal</option>
+                <option value="Kontrol Rutin" {{ (isset($editJadwal) && $editJadwal->keterangan == 'Kontrol Rutin') ? 'selected' : '' }}>Kontrol Rutin</option>
+                <option value="Persalinan" {{ (isset($editJadwal) && $editJadwal->keterangan == 'Persalinan') ? 'selected' : '' }}>Persalinan</option>
+            </select>
+        </div>
 
             <div style="display: flex; justify-content: flex-end; width: 100%; gap: 12px;">
                 @if(isset($editJadwal))
@@ -118,18 +114,35 @@
                 <p>Jumlah Data Jadwal: {{ $jadwals->count() }}</p>
                 <tbody>
                     @forelse($jadwals as $j)
-                    <tr style="border-bottom: 1px solid #F1F5F9; transition: all 0.2s;" onmouseover="this.style.backgroundColor='#FFF1F6'" onmouseout="this.style.backgroundColor='transparent'">
-                        <td style="padding: 18px 20px; font-weight: 500; color: #0F172A;">{{ $j->nama ?? $j->nama_pasien }}</td>
-                        <td style="padding: 18px 20px;">{{ $j->nik }}</td>
-                        <td style="padding: 18px 20px;">{{ $j->tgl_lahir }}</td>
-                        <td style="padding: 18px 20px;">{{ $j->no_hp }}</td>
-                        <td style="padding: 18px 20px;">{{ $j->user?->user?->email ?? 'Tidak Ditemukan' }}
-                        <td style="padding: 18px 20px; font-weight: 500; color: #F84F8F;">{{ date('d-m-Y', strtotime($j->tgl_pemeriksaan)) }}</td>
-                        <td style="padding: 18px 20px; font-weight: 600;">{{ $j->jam }} WIB</td>
-                        <td style="padding: 14px 20px; text-align: center;">
-    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+    <tr style="border-bottom: 1px solid #F1F5F9; transition: all 0.2s;" 
+        onmouseover="this.style.backgroundColor='#FFF1F6'" 
+        onmouseout="this.style.backgroundColor='transparent'">
         
-        <button type="button" 
+        <!-- Nama Pasien (Ambil dari relasi pendaftaran kalau ada) -->
+        <td style="padding: 18px 20px; font-weight: 500; color: #0F172A;">
+            {{ $j->pendaftaran->nama ?? $j->nama_pasien }}
+        </td>
+        
+        <td style="padding: 18px 20px;">{{ $j->nik }}</td>
+        <td style="padding: 18px 20px;">{{ date('d-m-Y', strtotime($j->tgl_lahir)) }}</td>
+        <td style="padding: 18px 20px;">{{ $j->no_hp }}</td>
+        
+        <!-- Email (Logika Online/Offline) -->
+         <td style="padding: 18px 20px;">
+    @if($j->pendaftaran)
+        {{ $j->pendaftaran->user ? $j->pendaftaran->user->email : ($j->pendaftaran->email ?? 'Tidak Ada Email') }}
+    @else
+        <span style="color: red; font-size: 12px;">Data Pasien Tidak Ditemukan</span>
+    @endif
+</td>
+        
+        <td style="padding: 18px 20px; font-weight: 500; color: #F84F8F;">
+            {{ date('d-m-Y', strtotime($j->tgl_pemeriksaan)) }}
+        </td>
+        <td style="padding: 18px 20px; font-weight: 600;">{{ $j->jam }} WIB</td>
+        
+        <td style="padding: 14px 20px; text-align: center;">
+            <button type="button" 
                 onclick="confirmDelete('{{ $j->id }}', '{{ $j->nama_pasien ?? 'Pasien' }}')" 
                 style="width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background-color: #FF3B30; border-radius: 12px; box-shadow: 0 4px 6px rgba(255, 59, 48, 0.2); border: none; cursor: pointer; transition: 0.2s;" 
                 title="Hapus Jadwal Konsultasi"
@@ -138,15 +151,13 @@
             <i class="fa fa-trash" style="color: #FFFFFF; font-size: 16px;"></i>
         </button>
     </div>
-</td>
-</tr>
-                    @empty
-                    <tr>
-                        <td colspan="7" style="text-align: center; color: #94A3B8; padding: 40px; font-style: italic;">
-                            Belum ada jadwal konsultasi yang terdaftar di dalam database.
-                        </td>
-                    </tr>
-                    @endforelse
+        </td>
+    </tr>
+@empty
+    <tr>
+        <td colspan="8" style="padding: 20px; text-align: center;">Tidak ada data jadwal</td>
+    </tr>
+@endforelse
                 </tbody>
             </table>
         </div>

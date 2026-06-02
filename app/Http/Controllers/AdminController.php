@@ -73,6 +73,7 @@ public function storeDataPasien(Request $request)
     $data = $request->validate([
         'nik' => 'required|unique:tb_pendaftaran,nik|digits:16',
         'nama' => 'required',
+        'email' => 'nullable|email',
         'tempat_lahir' => 'required|string',
         'tgl_lahir' => 'required|date',
         'umur' => 'required|integer',
@@ -119,18 +120,24 @@ public function createDataPasien()
 
 public function masterPasien(Request $request)
 {
-    // Mulai query dari model Pendaftaran
+    // Mulai query
     $query = \App\Models\Pendaftaran::query();
 
-    //Pencarian (berdasarkan nama pasien)
-    if ($request->has('cari') && $request->cari != '') {
+    // 1. Pencarian
+    if ($request->filled('cari')) {
         $query->where('nama', 'like', '%' . $request->cari . '%');
     }
 
-    //Filter Status 
-    if ($request->has('status') && $request->status != 'semua') {
-    $query->where('status_konsultasi', $request->status);
-}
+    // 2. Filter Status (Bagian ini yang diperbaiki)
+    if ($request->filled('status') && $request->status != 'semua') {
+        if ($request->status == 'offline') {
+            // Kita terjemahkan 'offline' dari tombol menjadi 'Datang Langsung'
+            $query->where('status_konsultasi', 'Datang Langsung');
+        } else {
+            // Untuk 'menunggu' atau 'terjadwal', kita pakai langsung
+            $query->where('status_konsultasi', $request->status);
+        }
+    }
 
     // Eksekusi query
     $pasiens = $query->latest()->get();
@@ -143,64 +150,54 @@ public function masterPasien(Request $request)
     public function jadwalIndex(Request $request)
 {
     $pasienTerpilih = null;
-    $jadwalEdit = null; // Ini untuk data jadwal jika sedang mode edit
-
-    // 1. Ambil data pasien jika ada pendaftaran_id
     if ($request->has('pendaftaran_id')) {
         $pasienTerpilih = \App\Models\Pendaftaran::find($request->pendaftaran_id);
     }
 
-    // 2. Ambil data jadwal jika sedang mode edit
-    if ($request->has('edit_id')) {
-        $jadwalEdit = Jadwal::find($request->edit_id);
-        
-        // Jika jadwal ditemukan, pastikan data pasien juga ada 
-        // (kita ambil lewat relasi atau query manual)
-        if ($jadwalEdit) {
-            $pasienTerpilih = \App\Models\Pendaftaran::find($jadwalEdit->pendaftaran_id);
-        }
+    // Ambil data jadwal: Jika sudah ada jadwal untuk pasien ini, tampilkan di form
+    $jadwalEdit = null;
+    if ($pasienTerpilih) {
+        $jadwalEdit = Jadwal::where('pendaftaran_id', $pasienTerpilih->id)->first();
     }
 
-    // 3. Ambil semua jadwal untuk tabel di bawah form
     $jadwals = Jadwal::latest()->get();
 
-    // Kirim ketiganya ke view
     return view('admin.jadwal.index', compact('jadwals', 'jadwalEdit', 'pasienTerpilih'));
 }
 
     public function jadwalStore(Request $request)
 {
     $request->validate([
-        'nama'            => 'required',
-        'nik'             => 'required|unique:jadwals,nik,NULL,id,tgl_pemeriksaan,' . $request->tgl_pemeriksaan,
+        'pendaftaran_id' => 'required|exists:tb_pendaftaran,id',
         'tgl_pemeriksaan' => 'required|date',
-        'jam'             => 'required',
-        'keterangan'      => 'required',
+        'jam' => 'required',
+        'keterangan' => 'required',
     ]);
 
-    //Simpan data jadwal ke database
-   $jadwal = Jadwal::create([
-    'nama_pasien'     => $request->nama,    
-    'nik'             => $request->nik,
-    'no_hp'           => $request->no_hp,
-    'tgl_lahir'       => $request->tgl_lahir,
-    'tgl_pemeriksaan' => $request->tgl_pemeriksaan,
-    'jam'             => $request->jam,
-    'keterangan'      => $request->keterangan,
-]);
+    // Ambil data pasien dari tabel pendaftaran
+    $pendaftaran = \App\Models\Pendaftaran::findOrFail($request->pendaftaran_id);
 
-    $pendaftaran = \App\Models\Pendaftaran::where('nik', $request->nik)->first();
+    // UpdateOrCreate: Jika pendaftaran_id sudah ada, dia UPDATE. Jika belum, dia CREATE.
+    $jadwal = Jadwal::updateOrCreate(
+        ['pendaftaran_id' => $request->pendaftaran_id],
+        [
+            'nama_pasien'     => $pendaftaran->nama,
+            'nik'             => $pendaftaran->nik,
+            'no_hp'           => $pendaftaran->no_hp,
+            'tgl_lahir'       => $pendaftaran->tgl_lahir,
+            'tgl_pemeriksaan' => $request->tgl_pemeriksaan,
+            'jam'             => $request->jam,
+            'keterangan'      => $request->keterangan,
+        ]
+    );
 
-   // Update status_konsultasi jadi 'terjadwal' jika pendaftarannya ketemu
-    if ($pendaftaran) {
-        $pendaftaran->update([
-            'status_konsultasi' => 'terjadwal'
-        ]);
-    }
+    // Update status pasien
+    $pendaftaran->update(['status_konsultasi' => 'terjadwal']);
 
-    $this->kirimEmailJadwal($jadwal, false);
+    // Kirim Email
+    $this->kirimEmailJadwal($pendaftaran, $jadwal, false);
 
-    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil dibuat dan status diperbarui!');
+    return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil disimpan!');
 }
 
     public function jadwalUpdate(Request $request, $id)
@@ -220,22 +217,24 @@ public function masterPasien(Request $request)
             'keterangan'      => $request->keterangan,
         ]);
 
-        $this->kirimEmailJadwal($jadwal, true);
+        $this->kirimEmailJadwal($jadwal->pendaftaran, $jadwal, true);
 
     return redirect()->route('jadwal.index')->with('success', 'Jadwal berhasil diperbarui dan email dikirim ulang!');
 }
 
-private function kirimEmailJadwal($jadwal, $isUpdate = false) // Tambahkan parameter $isUpdate
+private function kirimEmailJadwal($pendaftaran, $jadwal, $isUpdate = false)
 {
-    $user = \App\Models\User::where('name', $jadwal->nama_pasien)->first(); 
-    
-    if ($user && $user->email) {
-        \Illuminate\Support\Facades\Mail::to($user->email)
-            ->send(new \App\Mail\JadwalKontrol($jadwal, $isUpdate)); // Oper parameter ke sini
-    } else {
-        \Log::error('Gagal kirim email: User tidak ditemukan untuk nama: ' . $jadwal->nama_pasien);
+    // Cek apakah online (punya user_id) atau offline
+    $emailTujuan = $pendaftaran->user_id 
+                   ? \App\Models\User::find($pendaftaran->user_id)->email 
+                   : $pendaftaran->email;
+
+    if ($emailTujuan) {
+        \Illuminate\Support\Facades\Mail::to($emailTujuan)
+            ->send(new \App\Mail\JadwalKontrol($jadwal, $isUpdate));
     }
 }
+
     public function jadwalDestroy($id)
     {
         $jadwal = Jadwal::findOrFail($id);

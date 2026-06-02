@@ -38,8 +38,8 @@
 
     <form action="{{ route('bidan.pasien.store') }}" method="POST" class="card shadow p-4 mb-5 card-custom-form" id="formPasien" onsubmit="return validasiFormBumil(event)">
     @csrf
-        <input type="hidden" name="id" id="id_pasien" value="{{ $pasien->id ?? '' }}">
-        <input type="hidden" name="pendaftaran_id" value="{{ $pendaftaran_id ?? request()->route('id') }}">
+    <input type="hidden" name="id" value="{{ $pasien->id ?? '' }}">
+    <input type="hidden" name="pendaftaran_id" value="{{ $pasien->id ?? '' }}">
 
         <div class="row mb-3">
             <div class="col-md-6">

@@ -45,10 +45,11 @@ class PendaftaranController extends Controller
 
         // 3. Gabungkan data validasi dengan data tambahan
         $data_final = array_merge($validated, [
-            'status_konsultasi' => 'menunggu',
-            'created_by'        => 'pasien', // Atau auth()->id() jika ingin menyimpan ID user
-            'user_id'           => auth()->id(),
-        ]);
+        'email'             => auth()->user()->email, 
+        'status_konsultasi' => 'menunggu',
+        'created_by'        => 'pasien', 
+        'user_id'           => auth()->id(), 
+    ]);
 
         // 4. Simpan ke Database menggunakan $data_final
         Pendaftaran::create($data_final);

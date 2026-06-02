@@ -15,7 +15,7 @@ class Pendaftaran extends Model
     'nik', 'nama', 'tempat_lahir', 'tgl_lahir', 'umur', 'alamat', 
     'no_hp', 'agama', 'pendidikan', 'gol_darah', 'pekerjaan', 
     'nama_suami', 'tgllahir_suami', 'usia_suami', 'hpht', 
-    'status_konsultasi', 'user_id', 'created_by' // <--- HARUS ADA
+    'status_konsultasi', 'user_id', 'created_by', 'email' // <--- HARUS ADA
 ];
 
     // Relasi ke User (Jika ingin mengambil data akun yang mendaftar)

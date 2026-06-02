@@ -162,13 +162,13 @@
                 @endphp
 
                 <div class="col-12">
-                    <div class="card pasien-card-custom shadow-sm rounded-4 border-0" 
-                         onclick="window.location='{{ route('bidan.inputDaftarPasien', $pasien->id) }}'">
-                        <div class="card-body p-3 d-flex align-items-center">
-                            
-                            <div class="me-3 d-none d-sm-flex icon-solid-circle {{ $bgSolidCircle }}">
-                                <i class="fas {{ $iconClass }} fa-lg"></i>
-                            </div>
+    <div class="card pasien-card-custom shadow-sm rounded-4 border-0" 
+         <div class="card pasien-card-custom shadow-sm rounded-4 border-0" 
+     onclick="{{ $pasien->pendaftaran_id ? "window.location='".route('bidan.inputDaftarPasien', $pasien->pendaftaran_id)."'" : "alert('Data Pendaftaran Tidak Ditemukan!')" }}">
+        <div class="card-body p-3 d-flex align-items-center">
+            
+            <div class="me-3 d-none d-sm-flex icon-solid-circle {{ $bgSolidCircle }}">
+                <i class="fas {{ $iconClass }} fa-lg"></i></div>
 
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center gap-2 flex-wrap mb-1">

@@ -158,7 +158,7 @@ select.form-input {
                  <div class="form-group dropdown-container">
                     <label>Agama</label>
                     <select name="agama" class="form-input" required>
-                        <option value="">Pilih Agama</option>
+                        <option value="">--Pilih Agama--</option>
                         <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
                         <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
                         <option value="Katolik" {{ old('agama') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
@@ -176,7 +176,7 @@ select.form-input {
                  <div class="form-group dropdown-container">
                     <label>Pendidikan</label>
                     <select name="pendidikan" class="form-input" required>
-                        <option value="">Pilih Pendidikan</option>
+                        <option value="">--Pilih Pendidikan--</option>
                         <option value="SD" {{ old('pendidikan') == 'SD' ? 'selected' : '' }}>SD / Sederajat</option>
                         <option value="SMP" {{ old('pendidikan') == 'SMP' ? 'selected' : '' }}>SMP / Sederajat</option>
                         <option value="SMA" {{ old('pendidikan') == 'SMA' ? 'selected' : '' }}>SMA / Sederajat</option>
@@ -196,7 +196,7 @@ select.form-input {
                 <div class="form-group dropdown-container">
                     <label>Golongan Darah</label>
                     <select name="gol_darah" class="form-input" required>
-                    <option value="">Pilih Gol. Darah</option>
+                    <option value="">--Pilih Gol. Darah--</option>
                     <option value="A" {{ old('gol_darah') == 'A' ? 'selected' : '' }}>A</option>
                     <option value="B" {{ old('gol_darah') == 'B' ? 'selected' : '' }}>B</option>
                     <option value="AB" {{ old('gol_darah') == 'AB' ? 'selected' : '' }}>AB</option>
@@ -211,7 +211,7 @@ select.form-input {
 
                 <!-- Pekerjaan Ibu -->
                  <div class="form-group dropdown-container">
-                    <label>Pekerjaan Ibu</label>
+                    <label>--Pekerjaan Ibu--</label>
                     <select id="pekerjaan_select" class="form-input" onchange="togglePekerjaan(this.value)">
                         <option value="">Pilih Pekerjaan</option>
                         <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
