@@ -9,12 +9,81 @@
         padding: 24px 36px;
     }
 
-    .hero-banner img {
-        width: 100%;
-        max-height: 260px;
-        object-fit: cover;
+    .hero-banner {
+        background: linear-gradient(135deg, #FFD1E6 0%, #FFAEC9 100%);
         border-radius: 26px;
+        padding: 30px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        margin-bottom: 28px;
+        width: 100%;
+        box-sizing: border-box;
     }
+
+    .banner-text {
+        flex: 1;
+        max-width: 100%;
+    }
+
+    .banner-quote-icon {
+        font-size: 38px; /* Ukuran disesuaikan agar serasi dengan teks judul */
+        color: #222;
+        font-family: Georgia, serif;
+        font-weight: bold;
+        display: inline-block;
+        margin-right: 8px; /* Memberi jeda jarak tipis antara tanda petik dan huruf S */
+        vertical-align: middle; /* Memastikan tanda petik sejajar secara vertikal dengan teks */
+        line-height: 0; /* Mencegah tanda petik merusak tinggi baris kalimat */
+    }
+
+    .banner-title {
+        font-size: 40px;
+        font-weight: 800;
+        color: #222;
+        line-height: 1.3;
+        margin-bottom: 15px;
+    }
+
+    .banner-sub {
+        font-size: 20px;
+        color: #444;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .banner-image-wrapper {
+        flex-shrink: 0;
+        max-width: 35%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .banner-image-wrapper img {
+        width: auto;
+        height: 280px; /* Mengunci tinggi agar gambar tidak penyet */
+        object-fit: contain; /* Menjamin gambar tidak terpotong atau ketarik */
+    }
+
+    /* Responsif untuk Layar HP */
+    @media (max-width: 768px) {
+    .hero-banner {
+        flex-direction: column;
+        padding: 20px;
+        text-align: center;
+    }
+    .banner-text {
+        max-width: 100%;
+    }
+    .banner-image-wrapper {
+        max-width: 100%;
+    }
+    .banner-image-wrapper img {
+        height: 180px;
+    }
+}
 
     .section-header {
         display: flex;
@@ -96,8 +165,19 @@
 
 <div class="dashboard-bumil">
 
-    <div class="hero-banner">
-        <img src="{{ asset('images/frame65.png') }}" alt="Banner Bumiloo">
+        <div class="hero-banner">
+                <div class="banner-text">
+            <h2 class="banner-title">
+                <span class="banner-quote-icon">“</span>Setiap langkah kecil hari ini adalah awal dari masa depan Si Kecil yang indah.
+            </h2>
+            <p class="banner-sub">
+                Temani hari-hari Bunda dengan BUMILOO. Tempat berbagi cerita menyenangkan Si Kecil.
+            </p>
+        </div>
+
+        <div class="banner-image-wrapper">
+            <img src="{{ asset('images/gambardashboard.png') }}" alt="Ilustrasi Ibu Hamil">
+        </div>
     </div>
 
     <div class="section-header">
