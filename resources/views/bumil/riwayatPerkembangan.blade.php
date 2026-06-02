@@ -83,12 +83,12 @@
 
                     <div class="data-item">
                         <span>Tanggal Lahir</span>
-                        <strong>{{ $pendaftaran->tanggal_lahir ?? '-' }}</strong>
+                        <strong>{{ $pendaftaran->tgl_lahir ? \Carbon\Carbon::parse($pendaftaran->tgl_lahir)->format('d-m-Y') : '-' }}</strong>
                     </div>
 
                     <div class="data-item">
                         <span>Golongan Darah</span>
-                        <strong>{{ $pendaftaran->golongan_darah ?? '-' }}</strong>
+                        <strong>{{ $pendaftaran->gol_darah ?? '-' }}</strong>
                     </div>
 
                     <div class="data-item">
