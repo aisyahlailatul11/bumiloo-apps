@@ -1,17 +1,5 @@
 @extends('layouts.masterBumil')
 
-{{-- 1. QUERY PINDAH KE ATAS DENGAN PROTEKSI DATA NULL AGAR AMAN --}}
-@php
-    try {
-        $dataPendaftaran = \DB::table('tb_pendaftaran')
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->first();
-    } catch (\Exception $e) {
-        $dataPendaftaran = null;
-    }
-@endphp
-
 @section('content')
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght=400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -26,7 +14,7 @@
         display: flex;
         flex-direction: column;
         position: relative !important; 
-        width: auto !important;
+        width: auto !important; /* Mengikuti container induk, bukan full screen */
     }
 
     /* Perbaikan Layout Row agar tidak menutupi Sidebar */
@@ -34,7 +22,7 @@
         width: 100% !important;
         margin: 0 !important;
         position: relative;
-        z-index: 1;
+        z-index: 1; /* Pastikan berada di bawah level z-index sidebar */
     }
 
     .chat-row-layout {
@@ -216,6 +204,15 @@
         padding: 8px 0 !important;
     }
 
+    .btn-clip-attachment {
+        background: transparent !important;
+        border: none !important;
+        color: #94A3B8 !important;
+        font-size: 20px !important;
+        margin-right: 15px !important;
+        cursor: pointer;
+    }
+
     .btn-send-round {
         background: #F84F8F !important; 
         color: #FFFFFF !important;
@@ -268,7 +265,9 @@
     }
 </style>
     
+    {{-- FIX: Mengganti class row pembungkus agar melunak dan tidak menabrak sidebar --}}
     <div class="chat-main-row">
+        
         <div class="flex-grow-1">
             <div class="row chat-row-layout g-4">
 
@@ -290,7 +289,7 @@
                         </div>
 
                         <div class="chat-body-custom">
-                            <div class="text-center mb-4">
+                            <div class="text-center mb-4"> {{-- Diubah ke mb-4 biar gak kejauhan dibanding mb-8 --}}
                                 <span class="badge bg-white text-dark border px-4 py-2 rounded-4" style="font-size: 11px; box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.05);">Hari ini</span>
                             </div>
 
@@ -311,23 +310,24 @@
                                             @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
                                                 <p class="mb-3 text-dark" style="font-size: 13.5px;">
                                                     Bunda disarankan untuk melakukan konsultasi offline/pemeriksaan langsung. Silakan klik tombol Ajukan Jadwal Offline untuk mengajukan jadwal.
-                                                </p>
-
+                                                
                                                 @php
-                                                    $status = strtolower(trim($dataPendaftaran->status_konsultasi ?? ''));
+                                                    $dataPendaftaran = \DB::table('tb_pendaftaran')
+                                                        ->where('user_id', auth()->id())
+                                                        ->latest()
+                                                        ->first();
                                                 @endphp
 
-                                                {{-- SINKRONISASI LOGIKA KONDISIONAL BERDASARKAN HASIL TERBARU ADMIN --}}
-                                                @if($status == 'terjadwal')
+                                                @if($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'menunggu')
+                                                    <button type="button" class="btn text-white w-100 py-2 fw-bold text-center" disabled
+                                                            style="background:#ffc107; border-radius:12px; font-size: 12px; cursor: not-allowed;">
+                                                        <i class="fas fa-spinner fa-spin me-1"></i> ⏳ Menunggu Konfirmasi Bidan
+                                                    </button>
+                                                @elseif($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'terjadwal')
                                                     <div class="alert alert-success text-center py-2 px-3 fw-bold m-0" 
                                                          style="border-radius:12px; font-size: 12px; border: none; background-color: #d1fae5; color: #065f46;">
                                                         <i class="fas fa-check-circle me-1"></i> Sudah Terjadwal
                                                     </div>
-                                                @elseif($status == 'menunggu' || $status == 'request_offline' || $status == 'datang langsung')
-                                                    <button type="button" class="btn text-white w-100 py-2 fw-bold text-center" disabled
-                                                            style="background:#ffc107; border-radius:12px; font-size: 12px; cursor: not-allowed;">
-                                                        <i class="fas fa-spinner fa-spin me-1"></i> Menunggu Konfirmasi Bidan
-                                                    </button>
                                                 @else
                                                     <form action="{{ route('konsultasi.ajukan') }}" method="POST" id="formAjukanJadwal">
                                                         @csrf
@@ -337,6 +337,7 @@
                                                         </button>
                                                     </form>
                                                 @endif
+
                                             @else
                                                 <p class="mb-0" style="font-size: 13.5px; line-height: 1.6; white-space: pre-line;">{{ $chat->pesan }}</p>
                                             @endif
@@ -370,39 +371,38 @@
 
             </div>
         </div>
-    </div>
 
-    {{-- MODAL PROSES JADWAL --}}
-    <div class="modal fade" id="prosesJadwalModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content custom-modal-content">
-                <div class="modal-body text-center">
-                    <h3 class="modal-title-custom mb-3">Pendaftaran Konsultasi Offline<br>Bunda Sedang Diproses</h3>
-                    
-                    <div class="pink-spinner"></div>
-                    
-                    <p class="modal-desc-custom m-0 mt-3">
-                        Mohon bersabar ya Bunda, jadwal akan muncul setelah dikonfirmasi oleh Bidan.
-                    </p>
-                </div>
+    </div>
+</div>
+
+{{-- MODAL POPUP LOADING SPIN PINK --}}
+<div class="modal fade" id="prosesJadwalModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal-content">
+            <div class="modal-body text-center">
+                <h3 class="modal-title-custom mb-3">Pendaftaran Konsultasi Offline<br>Bunda Sedang Diproses</h3>
+                
+                <div class="pink-spinner"></div>
+                
+                <p class="modal-desc-custom m-0 mt-3">
+                    Mohon bersabar ya Bunda, jadwal akan muncul setelah dikonfirmasi oleh Bidan.
+                </p>
             </div>
         </div>
     </div>
-@endsection
+</div>
 
+{{-- JavaScript pemicu modal --}}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const form = document.getElementById('formAjukanJadwal');
         if(form) {
             form.addEventListener('submit', function(e) {
-                if (typeof bootstrap !== 'undefined') {
-                    var modalElement = document.getElementById('prosesJadwalModal');
-                    var myModal = new bootstrap.Modal(modalElement);
-                    myModal.show();
-                } else {
-                    console.error('Bootstrap tidak terdeteksi. Pastikan file master memuat bootstrap.js');
-                }
+                var modalElement = document.getElementById('prosesJadwalModal');
+                var myModal = new bootstrap.Modal(modalElement);
+                myModal.show();
             });
         }
     });
 </script>
+@endsection
