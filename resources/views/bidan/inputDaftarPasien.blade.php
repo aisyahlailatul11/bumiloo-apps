@@ -36,132 +36,138 @@
          </a>
     </div>
 
-    <form action="{{ route('bidan.pasien.store') }}" method="POST" class="card shadow p-4 mb-5 card-custom-form" id="formPasien" onsubmit="return validasiFormBumil(event)">
-    @csrf
-    <input type="hidden" name="id" value="{{ $pasien->id ?? '' }}">
-    <input type="hidden" name="pendaftaran_id" value="{{ $pasien->id ?? '' }}">
+    <div class="card border-0 shadow-sm p-4 mb-4" style="background-color: #FFFFFF; border-radius: 16px;">
+        
+        <form action="{{ route('bidan.pasien.store') }}" method="POST" id="formPasien">
+        @csrf
+        
+        <input type="hidden" name="pendaftaran_id" value="{{ $pendaftaran_id }}">
+        <input type="hidden" id="id_pasien" name="id_pasien" value="">
 
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">No. Pasien</label>
-                <input type="text" name="no_pasien" id="no_pasien_input" class="form-control" placeholder="No. Pasien Otomatis"
-                    value="{{ old('no_pasien', $pasien->no_pasien ?? $noPasienOtomatis ?? '') }}" readonly>
+        <input type="hidden" name="golongan_darah" value="{{ old('golongan_darah', $pasien->golongan_darah ?? '') }}">
+        <input type="hidden" name="pendidikan" value="{{ old('pendidikan', $pasien->pendidikan ?? '') }}">
+        <input type="hidden" name="agama" value="{{ old('agama', $pasien->agama ?? '') }}">
+        <input type="hidden" name="pekerjaan" value="{{ old('pekerjaan', $pasien->pekerjaan ?? '') }}">
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">No. Pasien</label>
+                    <input type="text" name="no_pasien" id="no_pasien_input" class="form-control bg-light" placeholder="No. Pasien Otomatis"
+                        value="{{ old('no_pasien', $pasien->no_pasien ?? $noPasienOtomatis ?? '') }}" readonly>
+                </div>
+            </div>    
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">NIK</label>
+                    <input type="text" name="nik" class="form-control bg-light" placeholder="Masukkan NIK 16 Digit" value="{{ old('nik', $pasien->nik ?? '') }}" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Nama Pasien</label>
+                    <input type="text" name="nama_pasien" value="{{ old('nama_pasien', $pasien->nama_pasien ?? '') }}" class="form-control bg-light" readonly required>
+                </div>
             </div>
-        </div>    
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">NIK</label>
-                <input type="text" name="nik" class="form-control" placeholder="Masukkan NIK 16 Digit" value="{{ old('nik', $pasien->nik ?? '') }}" readonly required>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Tempat Lahir</label>
+                    <input type="text" name="tempat_lahir" class="form-control bg-light" placeholder="Masukkan Tempat Lahir" value="{{ old('tempat_lahir', $pasien->tempat_lahir ?? '') }}" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Tanggal Lahir</label>
+                    <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control bg-light" value="{{ old('tanggal_lahir', $pasien->tanggal_lahir ?? '') }}" readonly required>
+                </div>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Nama Pasien</label>
-                <input type="text" name="nama_pasien" value="{{ old('nama_pasien', $pasien->nama_pasien ?? '') }}" class="form-control" readonly required>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Umur</label>
+                    <input type="number" name="umur" id="umur" class="form-control bg-light" value="{{ old('umur', $pasien->umur ?? '') }}" readonly>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Golongan Darah</label>
+                    <select class="form-select bg-light" disabled required>
+                        <option value="">-- Pilih Golongan Darah --</option>
+                        <option value="A" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'A' ? 'selected' : '' }}>A</option>
+                        <option value="B" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'B' ? 'selected' : '' }}>B</option>
+                        <option value="AB" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'AB' ? 'selected' : '' }}>AB</option>
+                        <option value="O" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'O' ? 'selected' : '' }}>O</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">Tempat Lahir</label>
-                <input type="text" name="tempat_lahir" class="form-control" placeholder="Masukkan Tempat Lahir" value="{{ old('tempat_lahir', $pasien->tempat_lahir ?? '') }}" required>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Alamat</label>
+                    <input type="text" name="alamat" class="form-control bg-light" placeholder="Masukkan Alamat" value="{{ old('alamat', $pasien->alamat ?? '') }}" readonly required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">No. HP</label>
+                     <input type="text" name="no_hp" class="form-control bg-light" placeholder="Masukkan Nomor HP" value="{{ old('no_hp', $pasien->no_hp ?? '') }}" readonly required>
+                </div>
             </div>
-            <div class="col-md-6">
-                <label class="form-label">Tanggal Lahir</label>
-                <input type="date" name="tanggal_lahir" id="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir', $pasien->tanggal_lahir ?? '') }}" required>
+            
+            <div class="row mb-3">
+                <div class="col-md-6">
+                   <label class="form-label text-secondary fw-semibold">Pendidikan</label>
+                    <select class="form-select bg-light" disabled required>
+                        <option value="SD" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SD' ? 'selected' : '' }}>SD / Sederajat</option>
+                        <option value="SMP" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SMP' ? 'selected' : '' }}>SMP / Sederajat</option>
+                        <option value="SMA" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SMA' ? 'selected' : '' }}>SMA / Sederajat</option>
+                        <option value="D3" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'D3' ? 'selected' : '' }}>D3 / Diploma</option>
+                        <option value="S1/D4" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S1/D4' ? 'selected' : '' }}>S1 / D4 / Sarjana</option>
+                        <option value="S2" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S2' ? 'selected' : '' }}>S2</option>
+                        <option value="S3" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S3' ? 'selected' : '' }}>S3</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Agama</label>
+                    <select class="form-select bg-light" disabled required>
+                        <option value="">-- Pilih Agama --</option>
+                        <option value="Islam" {{ old('agama', $pasien->agama ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                        <option value="Kristen" {{ old('agama', $pasien->agama ?? '') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
+                        <option value="Hindu" {{ old('agama', $pasien->agama ?? '') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                        <option value="Konghucu" {{ old('agama', $pasien->agama ?? '') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option> 
+                        <option value="Budha" {{ old('agama', $pasien->agama ?? '') == 'Budha' ? 'selected' : '' }}>Budha</option>
+                    </select>
+                </div>
             </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">Umur</label>
-                <input type="number" name="umur" id="umur" class="form-control" value="{{ old('umur', $pasien->umur ?? '') }}" readonly>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Golongan Darah</label>
-                <select name="golongan_darah" class="form-select" required>
-                    <option value="">-- Pilih Golongan Darah --</option>
-                    <option value="A" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'A' ? 'selected' : '' }}>A</option>
-                    <option value="B" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'B' ? 'selected' : '' }}>B</option>
-                    <option value="AB" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'AB' ? 'selected' : '' }}>AB</option>
-                    <option value="O" {{ old('golongan_darah', $pasien->golongan_darah ?? '') == 'O' ? 'selected' : '' }}>O</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <label class="form-label">Alamat</label>
-                <input type="text" name="alamat" class="form-control" placeholder="Masukkan Alamat" value="{{ old('alamat', $pasien->alamat ?? '') }}" readonly required>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">No. HP</label>
-                 <input type="text" name="no_hp" class="form-control" placeholder="Masukkan Nomor HP" value="{{ old('no_hp', $pasien->no_hp ?? '') }}" readonly required>
-            </div>
-        </div>
-        
-        <div class="row mb-3">
-            <div class="col-md-6">
-               <label class="form-label">Pendidikan</label>
-                <select name="pendidikan" class="form-select" required>
-                    <option value="SD" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SD' ? 'selected' : '' }}>SD / Sederajat</option>
-                    <option value="SMP" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SMP' ? 'selected' : '' }}>SMP / Sederajat</option>
-                    <option value="SMA" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'SMA' ? 'selected' : '' }}>SMA / Sederajat</option>
-                    <option value="D3" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'D3' ? 'selected' : '' }}>D3 / Diploma</option>
-                    <option value="S1/D4" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S1/D4' ? 'selected' : '' }}>S1 / D4 / Sarjana</option>
-                    <option value="S2" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S2' ? 'selected' : '' }}>S2</option>
-                    <option value="S3" {{ old('pendidikan', $pasien->pendidikan ?? '') == 'S3' ? 'selected' : '' }}>S3</option>
-                </select>
-            </div>
-            <div class="col-md-6">
-                <label class="form-label">Agama</label>
-                <select name="agama" class="form-select" required>
-                    <option value="">-- Pilih Agama --</option>
-                    <option value="Islam" {{ old('agama', $pasien->agama ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
-                    <option value="Kristen" {{ old('agama', $pasien->agama ?? '') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
-                    <option value="Hindu" {{ old('agama', $pasien->agama ?? '') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
-                    <option value="Konghucu" {{ old('agama', $pasien->agama ?? '') == 'Konghucu' ? 'selected' : '' }}>Konghucu</option> 
-                    <option value="Budha" {{ old('agama', $pasien->agama ?? '') == 'Budha' ? 'selected' : '' }}>Budha</option>
-                </select>
-            </div>
-        </div>
-        
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <label class="form-label">Pekerjaan</label>
-                <select id="pilihan_pekerjaan" name="pekerjaan" class="form-select" required
-                        onchange="document.getElementById('kotak_lainnya').style.setProperty('display', this.value === 'Lainnya' ? 'block' : 'none', 'important'); document.getElementById('input_manual').required = (this.value === 'Lainnya');">
-                     <option value="">Pilih Pekerjaan</option>
-                     <option value="Ibu Rumah Tangga"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Ibu Rumah Tangga' ? 'selected' : '' }}>Ibu Rumah Tangga</option>
-                     <option value="PNS / ASN"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'PNS / ASN' ? 'selected' : '' }}>PNS / ASN</option>
-                     <option value="Karyawan Swasta"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Karyawan Swasta' ? 'selected' : '' }}>Karyawan Swasta</option>
-                     <option value="Wiraswasta"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
-                     <option value="Lainnya"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya...</option>
-                </select>
-                
-                <div id="kotak_lainnya" class="mt-2" style="display: none !important;">
-                    <input type="text" id="input_manual" name="pekerjaan_lainnya" value="{{ old('pekerjaan_lainnya') }}" class="form-control" placeholder="Tulis Pekerjaan Anda" readonly required>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Pekerjaan</label>
+                    <select id="pilihan_pekerjaan" class="form-select bg-light" disabled required
+                            onchange="document.getElementById('kotak_lainnya').style.setProperty('display', this.value === 'Lainnya' ? 'block' : 'none', 'important'); document.getElementById('input_manual').required = (this.value === 'Lainnya');">
+                         <option value="">Pilih Pekerjaan</option>
+                         <option value="Ibu Rumah Tangga"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Ibu Rumah Tangga' ? 'selected' : '' }}>Ibu Rumah Tangga</option>
+                         <option value="PNS / ASN"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'PNS / ASN' ? 'selected' : '' }}>PNS / ASN</option>
+                         <option value="Karyawan Swasta"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Karyawan Swasta' ? 'selected' : '' }}>Karyawan Swasta</option>
+                         <option value="Wiraswasta"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Wiraswasta' ? 'selected' : '' }}>Wiraswasta</option>
+                         <option value="Lainnya"{{ old('pekerjaan', $pasien->pekerjaan ?? '') == 'Lainnya' ? 'selected' : '' }}>Lainnya...</option>
+                    </select>
+                    
+                    <div id="kotak_lainnya" class="mt-2" style="display: none !important;">
+                        <input type="text" id="input_manual" name="pekerjaan_lainnya" value="{{ old('pekerjaan_lainnya') }}" class="form-control bg-light" placeholder="Tulis Pekerjaan Anda" readonly required>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label text-secondary fw-semibold">Nama Suami</label>
+                    <input type="text" name="nama_suami" class="form-control bg-light" placeholder="Masukkan Nama Suami" value="{{ old('nama_suami', $pasien->nama_suami ?? '') }}" readonly required>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <label class="form-label">Nama Suami</label>
-                <input type="text" name="nama_suami" class="form-control" placeholder="Masukkan Nama Suami" value="{{ old('nama_suami', $pasien->nama_suami ?? '') }}" readonly required>
+            <div class="d-flex justify-content-end gap-2">
+                <button type="submit" class="btn btn-success" id="btnSimpan" style="border-radius: 8px;">
+                    <i class="fas fa-user-plus"></i> Tambah
+                </button>
+                
+                <button type="button" id="btnSelanjutnya" class="btn" style="background-color:#f875aa; color:white; border-radius: 8px;" onclick="keHalamanSelanjutnya()">
+                    Selanjutnya <i class="fas fa-angle-double-right"></i>
+                </button>
             </div>
-        </div>
-
-        <div class="d-flex justify-content-end gap-2">
-            <button type="submit" class="btn btn-success" id="btnSimpan" style="border-radius: 8px;">
-                <i class="fas fa-user-plus"></i> Tambah
-            </button>
-            
-            <button type="button" id="btnSelanjutnya" class="btn" style="background-color:#f875aa; color:white; border-radius: 8px;" onclick="keHalamanSelanjutnya()">
-                Selanjutnya <i class="fas fa-angle-double-right"></i>
-            </button>
-        </div>
-    </form>
-</div>
-
-<div class="psn-container w-full" style="padding: 10px 24px; background-color: #FFFFFF; min-height: auto;">
+        </form>
+    </div>
     <div style="margin-bottom: 10px;">
         <h1 style="font-size: 24px; font-weight: 700; color: #000000; margin: 0;">Data Pasien Ibu Hamil</h1>
     </div>
@@ -185,9 +191,9 @@
                     <th>Nama Suami</th>
                 </tr>
             </thead>
-           <tbody style="white-space: nowrap;">
-            @foreach($pasienMaster as $p)
-            <tr class="psn-row-normal" onclick="isiForm('{{ $p->id }}')" style="cursor:pointer;">
+            <tbody style="white-space: nowrap;">
+             @foreach($pasienMaster as $p)
+             <tr class="psn-row-normal" onclick="isiForm('{{ $p->id }}')" style="cursor:pointer;">
                     <td>{{ $p->no_pasien }}</td>
                     <td>{{ $p->nik }}</td>
                     <td>{{ $p->nama_pasien }}</td>
@@ -206,7 +212,6 @@
             </tbody>
         </table>
     </div>
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -270,22 +275,33 @@ function isiForm(id) {
             document.querySelector('[name="tempat_lahir"]').value = data.tempat_lahir || '';
             document.querySelector('[name="tanggal_lahir"]').value = data.tanggal_lahir || '';
             document.querySelector('[name="umur"]').value = data.umur || '';
+            
+            // Set data ke hidden input pembantu & tampilannya yang di-disabled
             document.querySelector('[name="golongan_darah"]').value = data.golongan_darah || '';
+            document.querySelectorAll('[name="golongan_darah"]')[1].previousElementSibling.value = data.golongan_darah || '';
+            
             document.querySelector('[name="alamat"]').value = data.alamat || '';
             document.querySelector('[name="no_hp"]').value = data.no_hp || '';
-            document.querySelector('[name="pendidikan"]').value = data.pendidikan || '';
             
-            if(document.querySelector('[name="agama"]')) document.querySelector('[name="agama"]').value = data.agama || '';
+            document.querySelector('[name="pendidikan"]').value = data.pendidikan || '';
+            document.querySelectorAll('[name="pendidikan"]')[1].previousElementSibling.value = data.pendidikan || '';
+            
+            if(document.querySelector('[name="agama"]')) {
+                document.querySelector('[name="agama"]').value = data.agama || '';
+                document.querySelectorAll('[name="agama"]')[1].previousElementSibling.value = data.agama || '';
+            }
             if(document.querySelector('[name="nama_suami"]')) document.querySelector('[name="nama_suami"]').value = data.nama_suami || '';
 
             // Bagian Logika Pekerjaan
             const selectPekerjaan = document.getElementById('pilihan_pekerjaan');
             const kotakLainnya = document.getElementById('kotak_lainnya');
             const inputManual = document.getElementById('input_manual');
+            const hiddenPekerjaan = document.querySelector('input[type="hidden"][name="pekerjaan"]');
             const opsiStandar = ['Ibu Rumah Tangga', 'PNS / ASN', 'Karyawan Swasta', 'Wiraswasta'];
             
             if (selectPekerjaan) {
                 if (data.pekerjaan) {
+                    if (hiddenPekerjaan) hiddenPekerjaan.value = data.pekerjaan;
                     if (opsiStandar.includes(data.pekerjaan)) {
                         selectPekerjaan.value = data.pekerjaan;
                         if(kotakLainnya) kotakLainnya.style.display = 'none';

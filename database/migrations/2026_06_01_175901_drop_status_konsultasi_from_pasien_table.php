@@ -6,21 +6,5 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-{
-    Schema::table('pasien', function (Blueprint $table) {
-        $table->dropColumn('status_konsultasi');
-    });
-}
-
-public function down(): void
-{
-    Schema::table('pasien', function (Blueprint $table) {
-        // Jika ingin mengembalikan kolom (rollback)
-        $table->string('status_konsultasi')->nullable();
-    });
-}
+   //
 };

@@ -60,54 +60,55 @@ class InputPasienController extends Controller
     }
 
     public function storePasien(Request $request)
-    {
-        $request->validate([
-            'nik' => 'required|numeric|digits:16',
-            'nama_pasien' => 'required|string|max:100',
-            'tanggal_lahir' => 'required|date',
-            'tempat_lahir' => 'required|string',
-            'golongan_darah' => 'required',
-            'alamat' => 'required',
-            'no_hp' => 'required',
-        ]);
+{
+    $request->validate([
+        'pendaftaran_id' => 'required', // <-- Tambahkan ini agar wajib dikirim dari view
+        'nik' => 'required|numeric|digits:16',
+        'nama_pasien' => 'required|string|max:100',
+        'tanggal_lahir' => 'required|date',
+        'tempat_lahir' => 'required|string',
+        'golongan_darah' => 'required',
+        'alamat' => 'required',
+        'no_hp' => 'required',
+    ]);
 
-        $umur = Carbon::parse($request->tanggal_lahir)->age;
+    $umur = Carbon::parse($request->tanggal_lahir)->age;
 
-        $pekerjaan = $request->pekerjaan === 'Lainnya'
-            ? $request->pekerjaan_lainnya
-            : $request->pekerjaan;
+    $pekerjaan = $request->pekerjaan === 'Lainnya'
+        ? $request->pekerjaan_lainnya
+        : $request->pekerjaan;
 
-        $pasienLama = Pasien::where('nik', $request->nik)->first();
+    $pasienLama = Pasien::where('nik', $request->nik)->first();
 
-        if ($pasienLama) {
-            $no_pasien = $pasienLama->no_pasien;
-        } else {
-            $totalPasien = Pasien::count() + 1;
-            $no_pasien = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
-        }
-
-        Pasien::updateOrCreate(
-            ['nik' => $request->nik],
-            [
-                'no_pasien'      => $no_pasien,
-                'nama_pasien'    => $request->nama_pasien,
-                'tempat_lahir'   => $request->tempat_lahir,
-                'tanggal_lahir'  => $request->tanggal_lahir,
-                'umur'           => $umur,
-                'golongan_darah' => $request->golongan_darah,
-                'alamat'         => $request->alamat,
-                'no_hp'          => $request->no_hp,
-                'pendidikan'     => $request->pendidikan,
-                'agama'          => $request->agama,
-                'pekerjaan'      => $pekerjaan,
-                'nama_suami'     => $request->nama_suami,
-            ]
-        );
-
-        // Diperbaiki: Supaya setelah submit, halaman tidak error/kosong, dia kembali membawa ID pendaftaran asal
-        return redirect()->route('bidan.inputDaftarPasien', ['id' => $request->pendaftaran_id])
-            ->with('sukses', 'Data Pemeriksaan Ibu Hamil Berhasil Disimpan!');
+    if ($pasienLama) {
+        $no_pasien = $pasienLama->no_pasien;
+    } else {
+        $totalPasien = Pasien::count() + 1;
+        $no_pasien = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
     }
+
+    Pasien::updateOrCreate(
+        ['nik' => $request->nik],
+        [
+            'no_pasien'      => $no_pasien,
+            'nama_pasien'    => $request->nama_pasien,
+            'tempat_lahir'   => $request->tempat_lahir,
+            'tanggal_lahir'  => $request->tanggal_lahir,
+            'umur'           => $umur,
+            'golongan_darah' => $request->golongan_darah,
+            'alamat'         => $request->alamat,
+            'no_hp'          => $request->no_hp,
+            'pendidikan'     => $request->pendidikan,
+            'agama'          => $request->agama,
+            'pekerjaan'      => $pekerjaan,
+            'nama_suami'     => $request->nama_suami,
+        ]
+    );
+
+    // Sekarang $request->pendaftaran_id dipastikan sudah ada isinya dan tidak akan kosong lagi
+    return redirect()->route('bidan.inputDaftarPasien', ['id' => $request->pendaftaran_id])
+        ->with('sukses', 'Data Pemeriksaan Ibu Hamil Berhasil Disimpan!');
+}
 
     public function showPasien($id)
     {
