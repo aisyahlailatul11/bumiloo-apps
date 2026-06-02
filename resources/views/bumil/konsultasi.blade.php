@@ -309,8 +309,7 @@
                                         <div class="bubble-bidan">
                                             @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
                                                 <p class="mb-3 text-dark" style="font-size: 13.5px;">
-                                                    halo Bunda, jika bersedia untuk melakukan konsultasi offline di PMB silakan klik link pendaftaran berikut ya HPL bunda sudah mendekati 2 hari ini saya khawatir nyeri yang bunda rasakan tanda persalinan
-                                                </p>
+                                                    Bunda disarankan untuk melakukan konsultasi offline/pemeriksaan langsung. Silakan klik tombol Ajukan Jadwal Offline untuk mengajukan jadwal.
                                                 
                                                 @php
                                                     $dataPendaftaran = \DB::table('tb_pendaftaran')

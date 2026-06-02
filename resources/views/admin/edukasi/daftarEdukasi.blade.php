@@ -5,7 +5,7 @@
 @section('content')
 <style>
     .content-container {
-        padding: 40px;
+        padding: 15px 15px;;
         box-sizing: border-box;
         width: 100%;
     }
@@ -14,6 +14,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-top: -15px;
         margin-bottom: 30px;
     }
 
@@ -100,7 +101,7 @@
     }
 
     .btn-action-edit {
-        background-color: #3b82f6;
+        background-color: #fcf63d;
         color: white;
         padding: 10px 16px;
         border-radius: 8px;
@@ -113,7 +114,7 @@
     }
 
     .btn-action-edit:hover {
-        background-color: #2563eb;
+        background-color: #ebeb2565;
     }
 
     .btn-action-hapus {
@@ -169,12 +170,6 @@
             <i class="fa-solid fa-plus"></i> Tambah Edukasi
         </a>
     </div>
-
-    @if(session('success'))
-        <div style="margin-bottom: 20px; padding: 16px; background-color: #d1fae5; border-left: 4px solid #10b981; color: #065f46; border-radius: 8px; font-size: 14px; font-weight: 600;">
-            {{ session('success') }}
-        </div>
-    @endif
 
     {{-- Looping Data Artikel dalam bentuk Card Memanjang --}}
     @forelse($artikels as $artikel)
