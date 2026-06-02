@@ -137,9 +137,9 @@
 
 {{-- TANDA TANGAN --}}
 <div class="ttd">
-    <p>Dicetak pada: {{ date('d/m/Y H:i') }}</p>
+    <p>Dicetak pada: {{ date('d/m/Y') }}</p>
     <div class="ttd-space"></div>
-    <p><b>Super Admin Bumiloo</b></p>
+    <p><b>(...................................)</b></p>
 </div>
 
 </div>{{-- end .wrapper --}}
