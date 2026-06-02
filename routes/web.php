@@ -40,7 +40,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
             : redirect()->route('pendaftaran.create');
     })->name('dashboard');
 
-    // Route Pendaftaran (Pindahkan ke dalam grup Bumil di bawah agar lebih rapi)
 });
 
 // ==========================================
@@ -56,7 +55,7 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pendaftaran.store');
 
     // ARTIKEL / EDUKASI BUMIL
-    Route::get('/artikel', [BumilController::class, 'artikel'])->name('bumil.artikel');
+    Route::get('/bumil/artikel', [ArtikelController::class, 'artikel'])->name('bumil.artikel');
     Route::get('/artikel/{id}', [BumilController::class, 'detailArtikel'])->name('bumil.artikel.detail');
 
     // RIWAYAT PERKEMBANGAN

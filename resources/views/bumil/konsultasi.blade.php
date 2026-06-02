@@ -1,408 +1,155 @@
 @extends('layouts.masterBumil')
 
 @section('content')
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght=400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 <style>
-    /* Kontainer utama halaman konsultasi */
-    .chat-page-container {
-        font-family: 'Poppins', sans-serif !important;
-        background-color: #fff3fb !important; 
-        padding: 0px; 
-        min-height: calc(100vh - 120px); 
+    /* Kontainer utama chat */
+    .chat-container-main {
+        background: #fff3fb;
+        padding: 20px;
+        min-height: 80vh;
         display: flex;
         flex-direction: column;
-        position: relative !important; 
-        width: auto !important; /* Mengikuti container induk, bukan full screen */
     }
 
-    /* Perbaikan Layout Row agar tidak menutupi Sidebar */
-    .chat-main-row {
-        width: 100% !important;
-        margin: 0 !important;
-        position: relative;
-        z-index: 1; /* Pastikan berada di bawah level z-index sidebar */
-    }
-
-    .chat-row-layout {
-        width: 100%;
-        margin: 0;
+    /* Kartu Chat Room */
+    .chat-card {
+        background: #ffffff;
+        border-radius: 30px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         display: flex;
-        flex-grow: 1;
-    }
-
-    .sidebar .nav-item a.nav-link[href*="konsultasi"],
-    .sidebar .nav-link.active,
-    .main-sidebar .nav-link[href*="konsultasi"] {
-        background-color: rgba(255, 255, 255, 0.25) !important;
-        color: #FFFFFF !important;
-        font-weight: 600 !important;
-        border-radius: 12px !important;
-    }
-    .sidebar .nav-item a.nav-link[href*="konsultasi"] i,
-    .sidebar .nav-link.active i {
-        color: #FFFFFF !important;
-    }
-
-    /* STYLING CHAT ROOM (SISI KANAN) */
-    .chat-room-card {
-        background: #FFFFFF !important;
-        border-radius: 30px !important;
-        border: none !important;
-        height: 100% !important;
-        min-height: calc(100vh - 100px) !important;
+        flex-direction: column;
+        height: 75vh;
         overflow: hidden;
-        display: flex !important;
-        flex-direction: column; 
     }
 
-    .chat-header-custom {
-        background: #FFFFFF !important;
-        border-bottom: 1px solid #E2E8F0 !important;
-        padding: 15px 30px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: space-between !important;
-        flex-shrink: 0 !important; 
+    /* Area Pesan */
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px;
+        background: #fff0f5; /* Warna wallpaper */
     }
 
-    .btn-end-chat {
-        border: 2px solid #F84F8F !important; 
-        color: #F84F8F !important;
-        font-weight: 600 !important;
-        border-radius: 50px !important;
-        padding: 6px 22px !important;
-        background: transparent !important;
-        font-size: 14px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        transition: all 0.2s ease;
-    }
-
-    .btn-end-chat:hover {
-        background: #F84F8F !important;
-        color: #FFFFFF !important;
-    }
-
-    .chat-body-custom {
-        background: linear-gradient(150deg, #ffdfe5 0%, #ffe0e6 45%, #ffa9e4 45.2%, #ffa9e4 100%) !important;
-        padding: 25px 30px !important;
-        overflow-y: auto !important;
-        flex-grow: 1 !important; 
-        display: flex !important;
-        flex-direction: column !important;
-    }
+    /* Bubble Chat */
+    .row-bidan { display: flex; justify-content: flex-start; margin-bottom: 20px; }
+    .row-bumil { display: flex; justify-content: flex-end; margin-bottom: 20px; }
     
-    .chat-row-bumil {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: 25px;
-    }
-    .bubble-bumil {
-        background: #F5B6AE !important; 
-        color: #000000 !important;
-        border-radius: 25px 25px 0px 25px !important; 
-        padding: 18px 26px !important;
-        max-width: 70%;
-        position: relative;
-        box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
-    }
-    .bubble-bumil::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: -10px;
-        width: 0;
-        height: 0;
-        border-bottom: 15px solid #F5B6AE;
-        border-right: 15px solid transparent;
-    }
-
-    .chat-row-bidan {
-        display: flex;
-        justify-content: flex-start;
-        align-items: flex-end;
-        gap: 12px;
-        margin-bottom: 25px;
-    }
-    .bubble-bidan {
-        background: #FFFFFF !important;
-        color: #000000 !important;
-        border-radius: 25px 25px 25px 0px !important; 
-        padding: 18px 26px !important;
-        max-width: 70%;
-        position: relative;
-        box-shadow: -5px 5px 15px rgba(0, 0, 0, 0.1);
-    }
-    .bubble-bidan::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: -10px;
-        width: 0;
-        height: 0;
-        border-bottom: 15px solid #FFFFFF;
-        border-left: 15px solid transparent;
-    }
-
-    .chat-time {
-        font-size: 11px;
-        color: #666666;
-        display: block;
-        text-align: right;
-        margin-top: 8px;
-        font-weight: 400;
-    }
-
-    .avatar-chat-bidan {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background-color: #FFFFFF;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        border: 1.5px solid #7E7E7E;
-        overflow: hidden; 
-    }
-
-    .avatar-chat-bidan img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    /* FOOTER FORM INPUT CHAT */
-    .chat-footer-custom {
-        background: #FFFFFF !important;
-        padding: 15px 25px 20px 25px !important;
-        border-top: 1px solid #E2E8F0 !important;
-        flex-shrink: 0 !important; 
-    }
-
-    .input-wrapper-custom {
-        background: #F1F5F9 !important; 
-        border-radius: 50px !important;
-        padding: 6px 10px 6px 24px !important;
-        display: flex;
-        align-items: center;
-        border: 1px solid #E2E8F0;
-    }
-
-    .input-chat-field {
-        border: none !important;
-        background: transparent !important;
-        outline: none !important;
-        box-shadow: none !important;
+    .bubble {
+        padding: 15px 20px;
+        border-radius: 20px;
+        max-width: 60%;
         font-size: 14px;
-        color: #000000;
-        flex-grow: 1;
-        padding: 8px 0 !important;
-    }
-
-    .btn-clip-attachment {
-        background: transparent !important;
-        border: none !important;
-        color: #94A3B8 !important;
-        font-size: 20px !important;
-        margin-right: 15px !important;
-        cursor: pointer;
-    }
-
-    .btn-send-round {
-        background: #F84F8F !important; 
-        color: #FFFFFF !important;
-        width: 42px;
-        height: 42px;
-        border-radius: 50% !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none !important;
-        transition: transform 0.1s ease;
-    }
-    .btn-send-round:hover {
-        transform: scale(1.05);
-    }
-
-    /* MODAL POPUP & SPINNER STYLING */
-    .custom-modal-content {
-        border-radius: 40px !important; 
-        border: none !important;
-        padding: 45px 30px !important;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-    }
-    .modal-title-custom {
-        font-weight: 700;
-        font-size: 24px;
-        color: #000000;
-        line-height: 1.4;
-    }
-    .modal-desc-custom {
-        font-size: 14px;
-        color: #4A4A4A;
-        font-weight: 500;
-        line-height: 1.5;
-    }
-    
-    /* MODAL SPINNER TICK SPINNER */
-    .pink-spinner {
-        width: 70px;
-        height: 70px;
-        margin: 35px auto;
         position: relative;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='15' r='7' fill='%23F84F8F' opacity='1'/%3E%3Ccircle cx='75' cy='25' r='7' fill='%23F84F8F' opacity='0.85'/%3E%3Ccircle cx='85' cy='50' r='7' fill='%23F84F8F' opacity='0.7'/%3E%3Ccircle cx='75' cy='75' r='7' fill='%23F84F8F' opacity='0.55'/%3E%3Ccircle cx='50' cy='85' r='7' fill='%23F84F8F' opacity='0.4'/%3E%3Ccircle cx='25' cy='75' r='7' fill='%23F84F8F' opacity='0.3'/%3E%3Ccircle cx='15' cy='50' r='7' fill='%23F84F8F' opacity='0.2'/%3E%3Ccircle cx='25' cy='25' r='7' fill='%23F84F8F' opacity='0.1'/%3E%3C/svg%3E") no-repeat center;
-        background-size: contain;
-        animation: spin-dots 1s steps(8) infinite;
     }
-    @keyframes spin-dots {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+    .bubble-bidan { background: #fff; border-bottom-left-radius: 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .bubble-bumil { background: #F84F8F; color: white; border-bottom-right-radius: 0; }
+
+    /* Footer Input */
+    .chat-footer {
+        padding: 15px;
+        border-top: 1px solid #eee;
+        display: flex;
+        gap: 10px;
     }
 </style>
+
+<div class="chat-container-main">
+    <div class="card chat-card">
+        <div class="chat-header-custom p-3 border-bottom d-flex align-items-center" 
+     style="cursor: pointer; transition: background 0.3s;" 
+     data-bs-toggle="modal" 
+     data-bs-target="#modalDataBidan"
+     onmouseover="this.style.background='#fcfcfc'" 
+     onmouseout="this.style.background='transparent'">
     
-    {{-- FIX: Mengganti class row pembungkus agar melunak dan tidak menabrak sidebar --}}
-    <div class="chat-main-row">
-        
-        <div class="flex-grow-1">
-            <div class="row chat-row-layout g-4">
+    <div class="position-relative">
+        <img src="{{ asset('images/iconchatbidan.png') }}" width="50" height="50" class="rounded-circle shadow-sm" style="object-fit: cover; border: 2px solid #F84F8F;">
+        <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle" style="width: 12px; height: 12px;"></span>
+    </div>
+    
+    <div class="ms-3">
+        <h5 class="mb-0 fw-bold text-dark">Bidan Siti Fatimah, S.Tr.Keb</h5>
+        <p class="text-muted mb-0 small"><i class="fas fa-circle-notch fa-spin me-1" style="font-size: 8px;"></i> Online</p>
+    </div>
+</div>
 
-                {{-- SISI KANAN: CHAT ROOM UTAMA --}}
-                <div class="col-md-12">
-                    <div class="card chat-room-card">
-                        <div class="chat-header-custom">
-                            <div class="d-flex align-items-center">
-                                <div class="rounded-circle border overflow-hidden d-flex align-items-center justify-content-center bg-light me-3" style="width: 50px; height: 50px; border: 2.5px solid #7E7E7E !important;">
-                                    <img src="{{ asset('images/iconchatbidan.png') }}" alt="Icon Bidan" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
-                                <div>
-                                    <h6 class="fw-bold mb-0 text-dark" style="font-size: 20px;">Bidan Siti Fatimah, S.Tr.Keb</h6>
-                                </div>
-                            </div>
-                            <a href="{{ route('bumil.dashboard') }}" class="btn btn-end-chat">
-                                <i class="fas fa-sign-out-alt"></i> Akhiri chat
-                            </a>
+        <div class="chat-messages">
+            @forelse($pesans as $chat)
+                @if($chat->sender == 'bumil')
+                    <div class="row-bumil">
+                        <div class="bubble bubble-bumil">
+                            {{ $chat->pesan }}
+                            <small class="d-block mt-1 opacity-75">{{ \Carbon\Carbon::parse($chat->created_at)->format('H.i') }}</small>
                         </div>
+                    </div>
+                @else
+                    <div class="row-bidan">
+                        <div class="bubble bubble-bidan">
+                            @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
+                                <p class="mb-2">Bunda disarankan untuk melakukan pemeriksaan offline.</p>
+                                
+                                @php
+                                    $status = \DB::table('tb_pendaftaran')->where('user_id', auth()->id())->latest()->first()?->status_konsultasi;
+                                @endphp
 
-                        <div class="chat-body-custom">
-                            <div class="text-center mb-4"> {{-- Diubah ke mb-4 biar gak kejauhan dibanding mb-8 --}}
-                                <span class="badge bg-white text-dark border px-4 py-2 rounded-4" style="font-size: 11px; box-shadow: 0 1px 3px hsla(0, 0%, 0%, 0.05);">Hari ini</span>
-                            </div>
-
-                            @forelse($pesans as $chat)
-                                @if($chat->sender == 'bumil')
-                                    <div class="chat-row-bumil">
-                                        <div class="bubble-bumil">
-                                            <p class="mb-0" style="font-size: 13.5px; line-height: 1.6;">{{ $chat->pesan }}</p>
-                                            <span class="chat-time">{{ \Carbon\Carbon::parse($chat->created_at)->format('H.i') }}</span>
-                                        </div>
-                                    </div>
+                                @if(!$status)
+                                    <form action="{{ route('konsultasi.ajukan') }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-sm text-white w-100" style="background:#F84F8F; border-radius:10px;">Ajukan Jadwal Offline</button>
+                                    </form>
+                                @elseif($status == 'menunggu')
+                                    <button class="btn btn-sm btn-warning w-100" disabled>⏳ Menunggu Konfirmasi</button>
                                 @else
-                                    <div class="chat-row-bidan">
-                                        <div class="avatar-chat-bidan">
-                                            <img src="{{ asset('images/iconchatbidan.png') }}" alt="Bidan">
-                                        </div>
-                                        <div class="bubble-bidan">
-                                            @if(($chat->tipe_pesan ?? 'text') == 'request_offline')
-                                                <p class="mb-3 text-dark" style="font-size: 13.5px;">
-                                                    Bunda disarankan untuk melakukan konsultasi offline/pemeriksaan langsung. Silakan klik tombol Ajukan Jadwal Offline untuk mengajukan jadwal.
-                                                
-                                                @php
-                                                    $dataPendaftaran = \DB::table('tb_pendaftaran')
-                                                        ->where('user_id', auth()->id())
-                                                        ->latest()
-                                                        ->first();
-                                                @endphp
-
-                                                @if($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'menunggu')
-                                                    <button type="button" class="btn text-white w-100 py-2 fw-bold text-center" disabled
-                                                            style="background:#ffc107; border-radius:12px; font-size: 12px; cursor: not-allowed;">
-                                                        <i class="fas fa-spinner fa-spin me-1"></i> ⏳ Menunggu Konfirmasi Bidan
-                                                    </button>
-                                                @elseif($dataPendaftaran && $dataPendaftaran->status_konsultasi == 'terjadwal')
-                                                    <div class="alert alert-success text-center py-2 px-3 fw-bold m-0" 
-                                                         style="border-radius:12px; font-size: 12px; border: none; background-color: #d1fae5; color: #065f46;">
-                                                        <i class="fas fa-check-circle me-1"></i> Sudah Terjadwal
-                                                    </div>
-                                                @else
-                                                    <form action="{{ route('konsultasi.ajukan') }}" method="POST" id="formAjukanJadwal">
-                                                        @csrf
-                                                        <button type="submit" class="btn text-white w-100 py-2 fw-bold text-center"
-                                                                style="background:#F84F8F; border-radius:12px; font-size: 12px;">
-                                                            <i class="fas fa-calendar-alt me-1"></i> Ajukan Jadwal Offline
-                                                        </button>
-                                                    </form>
-                                                @endif
-
-                                            @else
-                                                <p class="mb-0" style="font-size: 13.5px; line-height: 1.6; white-space: pre-line;">{{ $chat->pesan }}</p>
-                                            @endif
-                                            <span class="chat-time">{{ \Carbon\Carbon::parse($chat->created_at)->format('H.i') }}</span>
-                                        </div>
-                                    </div>
+                                    <button class="btn btn-sm btn-success w-100" disabled>✅ Sudah Terjadwal</button>
                                 @endif
-                            @empty
-                                <div class="text-center w-100 mt-3">
-                                    <div class="text-muted" style="font-size: 13.5px; background: #FFFFFF; padding: 12px 35px; border-radius: 50px; display: inline-block; color: #000000 !important; font-weight: 500; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                                        Belum ada pesan konsultasi. Mulai obrolan dengan Bidan.
-                                    </div>
-                                </div>
-                            @endforelse
+                            @else
+                                {{ $chat->pesan }}
+                            @endif
+                            <small class="d-block mt-1 text-muted">{{ \Carbon\Carbon::parse($chat->created_at)->format('H.i') }}</small>
                         </div>
+                    </div>
+                @endif
+            @empty
+                <p class="text-center text-muted">Belum ada percakapan.</p>
+            @endforelse
+        </div>
 
-                        <div class="chat-footer-custom">
-                            <form action="{{ route('bumil.konsultasi.kirim') }}" method="POST" class="m-0">
-                                @csrf
-                                <div class="input-wrapper-custom">
-                                    <input type="text" name="pesan" class="input-chat-field" placeholder="Ketik pesan....." required autocomplete="off">
-                                    <button type="submit" class="btn-send-round">
-                                        <i class="fas fa-paper-plane" style="font-size: 13px; margin-left: -2px;"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+        <div class="chat-footer">
+            <form action="{{ route('bumil.konsultasi.kirim') }}" method="POST" class="w-100 d-flex">
+                @csrf
+                <input type="text" name="pesan" class="form-control rounded-pill me-2" placeholder="Tulis pesan..." required>
+                <button type="submit" class="btn rounded-circle" style="background:#F84F8F; color:white;"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" id="modalDataBidan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 30px;">
+            <div class="modal-body p-0 text-center overflow-hidden">
+                <div style="background: linear-gradient(135deg, #F84F8F, #ff9eb6); height: 120px;"></div>
+                
+                <img src="{{ asset('images/iconchatbidan.png') }}" class="rounded-circle border border-4 border-white shadow" 
+                     style="width: 110px; height: 110px; margin-top: -60px; object-fit: cover;">
+                
+                <div class="p-4">
+                    <h4 class="fw-bold mt-2">Bidan Siti Fatimah, S.Tr.Keb</h4>
+                    <p class="text-pink fw-semibold" style="color: #F84F8F;">Bidan Profesional & Konsultan Bumil</p>
+                    
+                    <div class="row text-start mt-4 bg-light p-3 rounded-4 mx-0">
+                        <div class="col-12 mb-2"><i class="fas fa-map-marker-alt me-2 text-pink"></i> Jl. Mastrip No. 5, Jember</div>
+                        <div class="col-12 mb-2"><i class="fas fa-id-card me-2 text-pink"></i> SIP: SIP/2023/05/001</div>
+                        <div class="col-12"><i class="fas fa-clock me-2 text-pink"></i> Senin - Jumat: 08.00 - 16.00</div>
                     </div>
                 </div>
-
-            </div>
-        </div>
-
-    </div>
-</div>
-
-{{-- MODAL POPUP LOADING SPIN PINK --}}
-<div class="modal fade" id="prosesJadwalModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content custom-modal-content">
-            <div class="modal-body text-center">
-                <h3 class="modal-title-custom mb-3">Pendaftaran Konsultasi Offline<br>Bunda Sedang Diproses</h3>
                 
-                <div class="pink-spinner"></div>
-                
-                <p class="modal-desc-custom m-0 mt-3">
-                    Mohon bersabar ya Bunda, jadwal akan muncul setelah dikonfirmasi oleh Bidan.
-                </p>
+                <div class="p-3">
+                    <button type="button" class="btn btn-secondary w-75 rounded-pill" data-bs-dismiss="modal">Tutup</button>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-{{-- JavaScript pemicu modal --}}
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const form = document.getElementById('formAjukanJadwal');
-        if(form) {
-            form.addEventListener('submit', function(e) {
-                var modalElement = document.getElementById('prosesJadwalModal');
-                var myModal = new bootstrap.Modal(modalElement);
-                myModal.show();
-            });
-        }
-    });
-</script>
 @endsection

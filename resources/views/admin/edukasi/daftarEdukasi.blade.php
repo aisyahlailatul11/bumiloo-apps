@@ -5,7 +5,7 @@
 @section('content')
 <style>
     .content-container {
-        padding: 15px 15px;;
+        padding: 0px 15px;;
         box-sizing: border-box;
         width: 100%;
     }
@@ -101,7 +101,7 @@
     }
 
     .btn-action-edit {
-        background-color: #fcf63d;
+        background-color: #FF9500;
         color: white;
         padding: 10px 16px;
         border-radius: 8px;

@@ -3,40 +3,71 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Artikel; 
+use App\Models\Edukasi; // Ganti dari Artikel ke Edukasi
 use Illuminate\Support\Facades\Storage;
 
 class ArtikelController extends Controller
 {
-    // 1. TAMPILAN SISI IBU HAMIL (BUMIL)
-    public function index()
+    //TAMPILAN SISI IBU HAMIL (DENGAN FILTER)
+    public function index(Request $request)
     {
-        $artikels = Artikel::latest()->get();
-        $populer = Artikel::latest()->take(3)->get();
+        $query = Edukasi::query();
 
-        return view('bumil.beranda', compact('artikels', 'populer'));
+        // Pencarian
+        if ($request->filled('search')) {
+            $query->where('judul_edukasi', 'LIKE', '%' . $request->search . '%');
+        }
+
+        // Filter Kategori
+        if ($request->filled('kategori')) {
+            $query->where('kategori', $request->kategori);
+        }
+
+        $artikels = $query->latest()->paginate(6)->withQueryString();
+        $populer = Edukasi::latest()->take(3)->get();
+        
+        // Ambil daftar kategori untuk dropdown
+        $kategoris = Edukasi::whereNotNull('kategori')->distinct()->pluck('kategori');
+
+        return view('bumil.beranda', compact('artikels', 'populer', 'kategoris'));
     }
 
-    // 2. TAMPILAN SISI ADMIN (Halaman Tabel Daftar Edukasi)
+    // TAMPILAN SISI ADMIN
     public function adminIndex()
     {
-        $artikels = Artikel::latest()->get();
-        
-        // Mengarah langsung ke file daftarEdukasi.blade.php kamu
+        $artikels = Edukasi::latest()->get(); 
         return view('admin.edukasi.daftarEdukasi', compact('artikels'));
     }
 
-    // 2b. TAMPILAN FORM INPUT (Saat tombol "+ Tambah Edukasi" diklik)
     public function create()
     {
-        // Mengarah langsung ke file inputEdukasi.blade.php kamu
         return view('admin.edukasi.inputEdukasi');
     }
 
-    // 3. PROSES SIMPAN ARTIKEL BARU DARI ADMIN
+    public function artikel(Request $request)
+{
+    // Menggunakan model Edukasi
+    $query = \App\Models\Edukasi::query();
+
+    //Logika Pencarian (Judul atau Konten)
+    if ($request->filled('search')) {
+        $searchTerm = '%' . $request->search . '%';
+        $query->where(function ($q) use ($searchTerm) {
+            $q->where('judul_edukasi', 'LIKE', $searchTerm)
+              ->orWhere('konten_edukasi', 'LIKE', $searchTerm);
+        });
+    }
+
+    // Mengambil data dengan pagination
+    $artikels = $query->latest()->paginate(6)->withQueryString();
+
+    // Kirim hanya data $artikels ke view
+    return view('bumil.artikel', compact('artikels'));
+}
+
+    //PROSES SIMPAN
     public function store(Request $request)
     {
-        // Validasi membaca input dari form blade
         $request->validate([
             'judul_edukasi'   => 'required|string|max:255',
             'kategori'        => 'required|string|max:100',
@@ -46,57 +77,45 @@ class ArtikelController extends Controller
 
         $imageName = null;
         if ($request->hasFile('gambar')) {
-            $imagePath = $request->file('gambar')->store('artikel-images', 'public');
-            $imageName = $imagePath;
+            $imageName = $request->file('gambar')->store('artikel-images', 'public');
         }
 
-        // Simpan data ke database
-        Artikel::create([
+        Edukasi::create([
             'judul_edukasi'  => $request->judul_edukasi,
             'kategori'       => $request->kategori,
             'konten_edukasi' => $request->konten_edukasi,
             'gambar'         => $imageName,
         ]);
 
-        // Dialihkan kembali ke rute daftar edukasi admin setelah sukses
-        return redirect()->route('admin.edukasi')->with('success', 'Artikel edukasi berhasil ditambahkan!');
+        return redirect()->route('admin.edukasi')->with('success', 'Artikel berhasil ditambahkan!');
     }
 
-    // 5. TAMPILAN FORM EDIT (Mengambil data lama berdasarkan ID)
+    //EDIT
     public function edit($id)
     {
-        $artikel = Artikel::findOrFail($id);
-        
-        // Mengarah ke file editEdukasi.blade.php kamu
+        $artikel = Edukasi::findOrFail($id);
         return view('admin.edukasi.editEdukasi', compact('artikel'));
     }
 
-    // 6. PROSES UPDATE DATA DI DATABASE
+    //UPDATE
     public function update(Request $request, $id)
     {
-        // Validasi input
         $request->validate([
             'judul_edukasi'   => 'required|string|max:255',
             'kategori'        => 'required|string|max:100',
             'konten_edukasi'  => 'required|string',
-            'gambar'          => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $artikel = Artikel::findOrFail($id);
-        $imageName = $artikel->gambar; // Simpan nama gambar lama dulu
+        $artikel = Edukasi::findOrFail($id);
+        $imageName = $artikel->gambar;
 
-        // Jika admin mengupload gambar baru
         if ($request->hasFile('gambar')) {
-            // Hapus gambar lama dari storage jika ada dan bukan gambar bawaan asset
             if ($artikel->gambar && !str_contains($artikel->gambar, 'build/images/')) {
                 Storage::disk('public')->delete($artikel->gambar);
             }
-            // Simpan gambar baru
-            $imagePath = $request->file('gambar')->store('artikel-images', 'public');
-            $imageName = $imagePath;
+            $imageName = $request->file('gambar')->store('artikel-images', 'public');
         }
 
-        // Update data ke database
         $artikel->update([
             'judul_edukasi'  => $request->judul_edukasi,
             'kategori'       => $request->kategori,
@@ -107,17 +126,15 @@ class ArtikelController extends Controller
         return redirect()->route('admin.edukasi')->with('success', 'Data berhasil diupdate!');
     }
 
-    // 4. PROSES HAPUS ARTIKEL (TIDAK DIUBAH SAMA SEKALI)
+    // 4. HAPUS
     public function destroy($id)
     {
-        $artikel = Artikel::findOrFail($id);
-
+        $artikel = Edukasi::findOrFail($id);
         if ($artikel->gambar && !str_contains($artikel->gambar, 'build/images/')) {
             Storage::disk('public')->delete($artikel->gambar);
         }
-
         $artikel->delete();
 
-        return redirect()->route('admin.edukasi')->with('success', 'Artikel edukasi berhasil dihapus!');
+        return redirect()->route('admin.edukasi')->with('success', 'Artikel berhasil dihapus!');
     }
 }

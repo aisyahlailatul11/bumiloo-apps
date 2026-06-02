@@ -6,8 +6,8 @@
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
 
 <style>
-    .content-container { padding: 40px; box-sizing: border-box; width: 100%; }
-    .form-card { background: #ffffff; border-radius: 20px; padding: 40px; border: 1px solid rgba(244, 114, 182, 0.15); width: 100%; box-sizing: border-box; }
+    .content-container { padding: 0px; box-sizing: border-box; width: 100%; }
+    .form-card { background: #ffffff; border-radius: 20px; padding: 30px; border: 1px solid rgba(244, 114, 182, 0.15); width: 100%; box-sizing: border-box; }
     .form-title { font-size: 32px; font-weight: 800; color: #1f2937; margin-bottom: 36px; }
     .form-row-grid { display: grid; grid-template-columns: 220px 1fr; align-items: center; gap: 20px; margin-bottom: 24px; }
     .form-row-grid-top { display: grid; grid-template-columns: 220px 1fr; align-items: flex-start; gap: 20px; margin-bottom: 24px; }

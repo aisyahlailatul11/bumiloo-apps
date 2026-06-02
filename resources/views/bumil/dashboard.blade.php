@@ -1,224 +1,79 @@
 @extends('layouts.masterBumil')
-
 @section('title', 'Beranda Bumiloo')
 
 @section('content')
-
 <style>
     .dashboard-bumil {
-        padding: 24px 36px;
-    }
-
-    .hero-banner {
-        background: linear-gradient(135deg, #FFD1E6 0%, #FFAEC9 100%);
-        border-radius: 26px;
-        padding: 30px 40px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-        margin-bottom: 28px;
+        padding: 24px;
         width: 100%;
-        box-sizing: border-box;
+    }
+    .artikel-horizontal-scroll {
+        display: flex; 
+        overflow-x: auto; 
+        gap: 20px; 
+        padding-bottom: 20px; 
+        scrollbar-width: none;
+        width: 100%; /* Pastikan full width */
     }
 
-    .banner-text {
-        flex: 1;
-        max-width: 100%;
+    .artikel-card-v2 {
+        min-width: 320px; /* Sedikit lebih lebar biar pas */
+        flex: 0 0 auto; 
     }
+    /* Hero Banner */
+    .hero-banner { background: linear-gradient(135deg, #FFD1E6 0%, #FFAEC9 100%); border-radius: 26px; padding: 30px 40px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px; }
+    .banner-title { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+    .banner-image-wrapper img { height: 220px; object-fit: contain; }
 
-    .banner-quote-icon {
-        font-size: 38px; /* Ukuran disesuaikan agar serasi dengan teks judul */
-        color: #222;
-        font-family: Georgia, serif;
-        font-weight: bold;
-        display: inline-block;
-        margin-right: 8px; /* Memberi jeda jarak tipis antara tanda petik dan huruf S */
-        vertical-align: middle; /* Memastikan tanda petik sejajar secara vertikal dengan teks */
-        line-height: 0; /* Mencegah tanda petik merusak tinggi baris kalimat */
-    }
+    /* Edukasi Section */
+    .edu-section { margin-top: 10px; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 
-    .banner-title {
-        font-size: 40px;
-        font-weight: 800;
-        color: #222;
-        line-height: 1.3;
-        margin-bottom: 15px;
-    }
-
-    .banner-sub {
-        font-size: 20px;
-        color: #444;
-        line-height: 1.5;
-        margin: 0;
-    }
-
-    .banner-image-wrapper {
-        flex-shrink: 0;
-        max-width: 35%;
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-    .banner-image-wrapper img {
-        width: auto;
-        height: 280px; /* Mengunci tinggi agar gambar tidak penyet */
-        object-fit: contain; /* Menjamin gambar tidak terpotong atau ketarik */
-    }
-
-    /* Responsif untuk Layar HP */
-    @media (max-width: 768px) {
-    .hero-banner {
-        flex-direction: column;
-        padding: 20px;
-        text-align: center;
-    }
-    .banner-text {
-        max-width: 100%;
-    }
-    .banner-image-wrapper {
-        max-width: 100%;
-    }
-    .banner-image-wrapper img {
-        height: 180px;
-    }
-}
-
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 28px 0 18px;
-    }
-
-    .section-title {
-        font-weight: 800;
-        color: #222;
-        margin: 0;
-    }
-
-    .btn-selengkapnya {
-        background: #f46aa8;
-        color: white;
-        border-radius: 30px;
-        padding: 10px 22px;
-        text-decoration: none;
-        font-weight: 700;
-        font-size: 14px;
-    }
-
-    .btn-selengkapnya:hover {
-        background: #e85b9c;
-        color: white;
-    }
-
-    .artikel-card {
-        background: white;
-        border-radius: 22px;
-        padding: 14px;
-        display: flex;
-        gap: 18px;
-        align-items: center;
-        text-decoration: none;
-        color: inherit;
-        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-        margin-bottom: 16px;
-        transition: 0.2s;
-    }
-
-    .artikel-card:hover {
-        transform: translateY(-3px);
-        color: inherit;
-    }
-
-    .artikel-img {
-        width: 155px;
-        height: 105px;
-        border-radius: 18px;
-        object-fit: cover;
-        flex-shrink: 0;
-    }
-
-    .artikel-kategori {
-        background: #ffe1ef;
-        color: #f062a6;
-        font-size: 12px;
-        padding: 5px 12px;
-        border-radius: 20px;
-        font-weight: 700;
-    }
-
-    .artikel-title {
-        font-size: 18px;
-        font-weight: 800;
-        margin: 8px 0 6px;
-        color: #222;
-    }
-
-    .artikel-desc {
-        color: #666;
-        font-size: 14px;
-        line-height: 1.5;
-    }
+    .artikel-card-v2:hover { transform: translateY(-5px); }
+    .artikel-img-v2 { width: 100%; height: 150px; object-fit: cover; border-radius: 20px 20px 0 0; }
+    .artikel-body-v2 { padding: 15px; }
+    .artikel-kategori { background: #fee2e2; color: #f84f8f; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
 </style>
 
 <div class="dashboard-bumil">
-
-        <div class="hero-banner">
-                <div class="banner-text">
-            <h2 class="banner-title">
-                <span class="banner-quote-icon">“</span>Setiap langkah kecil hari ini adalah awal dari masa depan Si Kecil yang indah.
-            </h2>
-            <p class="banner-sub">
-                Temani hari-hari Bunda dengan BUMILOO. Tempat berbagi cerita menyenangkan Si Kecil.
-            </p>
-        </div>
-
-        <div class="banner-image-wrapper">
-            <img src="{{ asset('images/gambardashboard.png') }}" alt="Ilustrasi Ibu Hamil">
-        </div>
+    {{-- Banner Utama --}}
+    <div class="hero-banner">
+    <div class="banner-text">
+        <h2 class="banner-title">
+    <span class="banner-quote-icon">“</span> 
+    Setiap detik yang Bunda lalui adalah perjalanan indah menuju pelukan Si Kecil. 
+    <span class="banner-quote-icon">”</span>
+</h2>
+        <p class="banner-sub">
+            Bumiloo hadir menemani setiap momen spesial kehamilan Bunda dengan edukasi terpercaya.
+        </p>
     </div>
-
-    <div class="section-header">
-        <h4 class="section-title">Edukasi untuk Bunda</h4>
-
-        <a href="{{ route('bumil.artikel') }}" class="btn-selengkapnya">
-            Selengkapnya
-        </a>
+    <div class="banner-image-wrapper">
+        <img src="{{ asset('images/gambardashboard.png') }}" alt="Ilustrasi Ibu Hamil">
     </div>
-
-    @forelse($artikels as $artikel)
-        <a href="{{ route('bumil.artikel.detail', $artikel->id) }}" class="artikel-card">
-
-            @if($artikel->gambar)
-                @if(str_contains($artikel->gambar, 'artikel-images/'))
-                    <img src="{{ Storage::url($artikel->gambar) }}" class="artikel-img" alt="{{ $artikel->judul_edukasi }}">
-                @else
-                    <img src="{{ asset('build/images/' . $artikel->gambar) }}" class="artikel-img" alt="{{ $artikel->judul_edukasi }}">
-                @endif
-            @else
-                <img src="{{ asset('build/images/usgibuhamil.png') }}" class="artikel-img" alt="Default">
-            @endif
-
-            <div>
-                <span class="artikel-kategori">{{ $artikel->kategori }}</span>
-
-                <div class="artikel-title">
-                    {{ $artikel->judul_edukasi }}
-                </div>
-
-                <div class="artikel-desc">
-                    {{ Str::limit(strip_tags($artikel->konten_edukasi), 130) }}
-                </div>
-            </div>
-        </a>
-    @empty
-        <div class="bg-white rounded-4 shadow-sm p-5 text-center">
-            <p class="text-muted mb-0">Belum ada artikel edukasi.</p>
-        </div>
-    @endforelse
-
 </div>
 
+    {{-- Section Edukasi --}}
+    <div class="edu-section">
+        <div class="section-header">
+            <h4 class="fw-bold mb-0">Edukasi untuk Bunda</h4>
+            <a href="{{ route('bumil.artikel') }}" class="btn btn-sm text-white px-3" style="background: #F84F8F; border-radius: 20px;">Selengkapnya</a>
+        </div>
+
+        <div class="artikel-horizontal-scroll">
+            @forelse($artikels as $artikel)
+                <a href="{{ route('bumil.artikel.detail', $artikel->id) }}" class="artikel-card-v2">
+                    <img src="{{ $artikel->gambar ? (str_contains($artikel->gambar, 'artikel-images/') ? Storage::url($artikel->gambar) : asset('build/images/'.$artikel->gambar)) : asset('build/images/usgibuhamil.png') }}" class="artikel-img-v2" alt="Artikel">
+                    <div class="artikel-body-v2">
+                        <span class="artikel-kategori">{{ $artikel->kategori }}</span>
+                        <div class="fw-bold mt-2" style="font-size: 15px; color: #333;">{{ Str::limit($artikel->judul_edukasi, 40) }}</div>
+                        <div class="text-muted" style="font-size: 12px; margin-top: 5px;">{{ Str::limit(strip_tags($artikel->konten_edukasi), 60) }}</div>
+                    </div>
+                </a>
+            @empty
+                <p class="text-muted">Belum ada artikel edukasi.</p>
+            @endforelse
+        </div>
+    </div>
+</div>
 @endsection

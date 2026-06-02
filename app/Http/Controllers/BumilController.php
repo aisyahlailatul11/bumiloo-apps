@@ -62,30 +62,7 @@ class BumilController extends Controller implements HasMiddleware // WAJIB ada "
 
     return view('bumil.dashboard', compact('data', 'artikels'));
 }
-public function artikel(Request $request)
-{
-    $query = Edukasi::query();
 
-    if ($request->filled('search')) {
-        $query->where(function ($q) use ($request) {
-            $q->where('judul_edukasi', 'like', '%' . $request->search . '%')
-              ->orWhere('konten_edukasi', 'like', '%' . $request->search . '%');
-        });
-    }
-
-    if ($request->filled('kategori')) {
-        $query->where('kategori', $request->kategori);
-    }
-
-    $artikels = $query->latest()->paginate(6)->withQueryString();
-
-    $kategoris = Edukasi::select('kategori')
-        ->whereNotNull('kategori')
-        ->distinct()
-        ->pluck('kategori');
-
-    return view('bumil.artikel', compact('artikels', 'kategoris'));
-}
 
 public function detailArtikel($id)
 {
