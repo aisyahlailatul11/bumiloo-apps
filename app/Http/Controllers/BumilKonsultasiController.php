@@ -12,56 +12,34 @@ class BumilKonsultasiController extends Controller
     /**
      * Fungsi untuk mengajukan jadwal offline
      */
-    public function ajukanJadwal(Request $request)
+    // CONTOH PERBAIKAN DI CONTROLLER
+public function ajukanOffline(Request $request) 
 {
-    $userId = Auth::id();
+    $userId = auth()->id();
 
-    // 1. Ambil data pendaftaran terakhir milik user ini
-    $pendaftaran = DB::table('tb_pendaftaran')
+    // Menggunakan ->first() agar menghasilkan satu data tunggal, BUKAN kumpulan data (Collection)
+    $cekPendaftaran = DB::table('tb_pendaftaran')
         ->where('user_id', $userId)
-        ->latest()
-        ->first();
+        ->orderBy('id', 'desc')
+        ->first(); 
 
-    // 2. Update status_konsultasi HANYA di tb_pendaftaran
-    if ($pendaftaran) {
+    if ($cekPendaftaran) {
+        // Jika data ada, langsung update berdasarkan ID uniknya
         DB::table('tb_pendaftaran')
-            ->where('id', $pendaftaran->id)
+            ->where('id', $cekPendaftaran->id)
             ->update([
                 'status_konsultasi' => 'menunggu',
-                'updated_at' => Carbon::now()
+                'updated_at'        => \Carbon\Carbon::now()
             ]);
     } else {
+        // Jika belum ada data, buat data baru
         DB::table('tb_pendaftaran')->insert([
-            'user_id' => $userId,
+            'user_id'           => $userId,
             'status_konsultasi' => 'menunggu',
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now()
+            'created_at'        => \Carbon\Carbon::now(),
+            'updated_at'        => \Carbon\Carbon::now()
         ]);
     }
-
-    // 3. Ambil data pesan terakhir dari bidan
-    $pesanBidan = DB::table('konsultasis')
-        ->where('user_id', $userId)
-        ->where('sender', 'bidan')
-        ->where('tipe_pesan', 'request_offline')
-        ->orderBy('id', 'desc')
-        ->first();
-
-    $bidanId = $pesanBidan ? $pesanBidan->bidan_id : null;
-
-    // 4. Tambahkan pesan ke tabel 'konsultasis'
-    DB::table('konsultasis')->insert([
-        'user_id'    => $userId,
-        'bidan_id'   => $bidanId,
-        'pesan'      => 'Bunda menyetujui pengajuan konsultasi offline dan sedang menunggu konfirmasi jadwal dari Bidan.',
-        'sender'     => 'bumil',
-        'tipe_pesan' => 'text',
-        'created_at' => now(),
-        'updated_at' => now(),
-    ]);
-
-    // 5. BLOK KODE UNTUK TABEL 'pasien' SUDAH DIHAPUS 
-    // karena status_konsultasi hanya ada di tb_pendaftaran.
 
     return redirect()->back()->with('success', 'Jadwal offline berhasil diajukan!');
 }

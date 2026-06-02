@@ -15,7 +15,6 @@ use App\Http\Controllers\ArtikelController;
 use App\Http\Controllers\DaftarPasienController;
 use App\Http\Controllers\LaporanBidanController;
 use App\Http\Controllers\BumilKonsultasiController;
-use App\Http\Controllers\DataBidanController;
 use Illuminate\Support\Facades\DB;
 
 // Rute Home / Landing Page
@@ -58,7 +57,7 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     // ARTIKEL / EDUKASI BUMIL
     Route::get('/artikel', [BumilController::class, 'artikel'])->name('bumil.artikel');
     Route::get('/artikel/{id}', [BumilController::class, 'detailArtikel'])->name('bumil.artikel.detail');
-
+    
     // RIWAYAT PERKEMBANGAN
     Route::get('/riwayat-perkembangan', [BumilController::class, 'riwayatPerkembangan'])->name('bumil.riwayatPerkembangan');
 
@@ -71,7 +70,7 @@ Route::middleware(['auth', 'verified'])->prefix('bumil')->group(function () {
     // KONSULTASI BUMIL
     Route::get('/konsultasi', [BumilController::class, 'konsultasi'])->name('bumil.konsultasi');
     Route::post('/konsultasi/kirim', [BumilController::class, 'kirimKonsultasi'])->name('bumil.konsultasi.kirim');
-    Route::post('/konsultasi-bumil/ajukan', [BumilKonsultasiController::class, 'ajukanJadwal'])->name('konsultasi.ajukan');
+    Route::post('/konsultasi/ajukan', [BumilKonsultasiController::class, 'ajukanOffline'])->name('konsultasi.ajukan');
 
     // REMINDER BUMIL
     Route::get('/reminder', [BumilController::class, 'reminder'])->name('bumil.reminder');
@@ -86,23 +85,14 @@ Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     // Master Data Admin
-Route::prefix('master')->group(function () {
-    // Ubah .pasien menjadi .dataPasien agar sama dengan yang dipanggil di layout
-    Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
-
-    //create data pasien
-    Route::post('/admin/master/pasien/store', [AdminController::class, 'storeDataPasien'])
-     ->name('admin.master.store');
-    Route::get('/admin/master/pasien/create', [AdminController::class, 'createDataPasien'])
-     ->name('master.createDataPasien'); 
-    Route::get('/admin/master/pasien', [AdminController::class, 'masterPasien'])
-     ->name('admin.master.pasien');
-
-    Route::get('/bidan', [DataBidanController::class, 'dataBidan'])->name('master.bidan');
-    
-    // Gunakan POST saja, tidak perlu Route::any agar lebih aman
-    Route::post('/bidan/update/{id}', [DataBidanController::class, 'updateBidan'])->name('bidan.update');
-});
+    Route::prefix('master')->group(function () {
+        Route::get('/pasien', [AdminController::class, 'masterPasien'])->name('master.pasien');
+        Route::get('/bidan', [AdminController::class, 'dataBidan'])->name('master.dataBidan');
+        Route::get('/bidan-alias', [AdminController::class, 'dataBidan'])->name('master.bidan');
+        Route::put('/bidan/{id}/update', function ($id) {
+            return redirect()->back()->with('success', 'Data bidan berhasil diperbarui! (Demo Mode)');
+        })->name('bidan.update');
+    });
 
     // Fitur Jadwal Kegiatan Admin
     Route::get('/jadwal', [AdminController::class, 'jadwalIndex'])->name('jadwal.index');
@@ -111,16 +101,10 @@ Route::prefix('master')->group(function () {
     Route::delete('/jadwal/{id}', [AdminController::class, 'jadwalDestroy'])->name('jadwal.destroy');
 
     // FITUR EDUKASI ADMIN
-    // Pastikan baris ini berada di dalam grup admin Anda yang sudah ada
-Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
-Route::get('/edukasi/create', [ArtikelController::class, 'create'])->name('admin.edukasi.create');
-Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
+    Route::get('/edukasi', [ArtikelController::class, 'adminIndex'])->name('admin.edukasi');
+    Route::post('/edukasi/store', [ArtikelController::class, 'store'])->name('admin.edukasi.store');
+    Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
 
-// TAMBAHKAN DUA ROUTE BARIS INI:
-Route::get('/edukasi/edit/{id}', [ArtikelController::class, 'edit'])->name('admin.edukasi.edit');
-Route::put('/edukasi/update/{id}', [ArtikelController::class, 'update'])->name('admin.edukasi.update');
-
-Route::delete('/edukasi/hapus/{id}', [ArtikelController::class, 'destroy'])->name('admin.edukasi.destroy');
     // Laporan Admin
     Route::get('/laporan', [LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/pdf', [LaporanController::class, 'exportPdf'])->name('admin.laporan.pdf');
@@ -152,8 +136,6 @@ Route::middleware(['auth'])->prefix('bidan')->group(function () {
     Route::get('/jadwal', [AdminController::class, 'jadwalBidan'])->name('bidan.jadwal');
     Route::get('/cek-kunjungan/{pasien_id}', [PerkembanganController::class, 'cekKunjungan'])
     ->name('bidan.cekKunjungan');
-    // routes/web.php
-    Route::get('/cek-kunjungan-pasien/{pasien_id}', [BidanController::class, 'cekKunjunganPasien'])->name('bidan.cekKunjunganPasien');
     // KONSULTASI BIDAN
     Route::get('/konsultasi', [BidanController::class, 'konsultasi'])->name('bidan.konsultasi');
     Route::get('/konsultasi/{user_id}', [BidanController::class, 'detailKonsultasi'])->name('bidan.konsultasi.detail');
@@ -193,7 +175,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/pengaturan/update-email', [PengaturanController::class, 'updateEmail'])->name('pengaturan.updateEmail');
     Route::post('/pengaturan/update-password', [PengaturanController::class, 'updatePassword'])->name('pengaturan.updatePassword');
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-    Route::delete('/pengaturan/hapus-akun', [PengaturanController::class, 'destroy'])->name('pengaturan.hapusAkun');
+    Route::delete('/pengaturan/hapus-akun', [PengaturanController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::delete('/pengaturan/hapus-akun', [PengaturanController::class, 'destroy'])->name('pengaturan.hapusAkun');
 
 require __DIR__.'/auth.php';

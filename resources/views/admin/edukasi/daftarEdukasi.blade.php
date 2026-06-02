@@ -5,7 +5,7 @@
 @section('content')
 <style>
     .content-container {
-        padding: 15px 15px;;
+        padding: 0px 15px;;
         box-sizing: border-box;
         width: 100%;
     }
