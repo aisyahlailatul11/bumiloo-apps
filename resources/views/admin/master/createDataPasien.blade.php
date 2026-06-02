@@ -25,7 +25,7 @@
         <div class="form-group"><label>Umur Ibu</label><input type="number" id="umur" name="umur" class="form-input readonly-medis" placeholder="Otomatis" readonly required></div>
 
         <div class="form-group"><label>Nomor WhatsApp</label><input type="text" name="no_hp" class="form-input" placeholder="Nomor Whatsapp" required></div>
-        <div class="form-group"><label>Email Pasien (Opsional)</label><input type="email" name="email" class="form-input" placeholder="Email"></div>
+        <div class="form-group"><label>Email</label><input type="email" name="email" class="form-input" placeholder="Email"></div>
         <div class="form-group"></div> <div class="form-group" style="grid-column: span 3;"><label>Alamat Domisili</label><input type="text" name="alamat" class="form-input" placeholder="Alamat Lengkap" required></div>
 
         <div class="form-group">

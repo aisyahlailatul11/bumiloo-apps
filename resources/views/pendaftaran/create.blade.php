@@ -117,7 +117,7 @@ select.form-input {
         border-left: 3px solid var(--bml-pink);
         padding-left: 10px; margin: 15px 0;
     }
-    .form-input { padding-right: 35px; width: 100%; }
+    .form-input { padding-right: 10px; width: 100%; box-sizing: border-box; }
 </style>
 </head>
 
@@ -139,6 +139,17 @@ select.form-input {
 
             <div class="form-grid-3">
                 <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" class="form-input readonly-medis" value="{{ Auth::user()->name }}" disabled>
+                    <input type="hidden" name="nama" value="{{ Auth::user()->name }}">
+                </div>
+
+                <div class="form-group">
+                <label>Email</label> 
+                <input type="email" name="email" class="form-input readonly-medis" value="{{ auth()->user()->email }}" readonly> 
+            </div>
+
+                <div class="form-group">
                     <label>NIK Pasien</label>
                     <input type="text" name="nik" value="{{ old('nik') }}" class="form-input" placeholder="16 Digit Nomor KTP" maxlength="16" required>
                 </div>
@@ -148,17 +159,11 @@ select.form-input {
                     <input type="text" name="no_hp" value="{{ old('no_hp') }}" class="form-input" placeholder="08XXXXXXXXXX" required>
                 </div>
 
-                <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" class="form-input readonly-medis" value="{{ Auth::user()->name }}" disabled>
-                    <input type="hidden" name="nama" value="{{ Auth::user()->name }}">
-                </div>
-
                 <!-- Agama -->
                  <div class="form-group dropdown-container">
                     <label>Agama</label>
                     <select name="agama" class="form-input" required>
-                        <option value="">--Pilih Agama--</option>
+                        <option value="">Pilih Agama</option>
                         <option value="Islam" {{ old('agama') == 'Islam' ? 'selected' : '' }}>Islam</option>
                         <option value="Kristen" {{ old('agama') == 'Kristen' ? 'selected' : '' }}>Kristen</option>
                         <option value="Katolik" {{ old('agama') == 'Katolik' ? 'selected' : '' }}>Katolik</option>
@@ -176,7 +181,7 @@ select.form-input {
                  <div class="form-group dropdown-container">
                     <label>Pendidikan</label>
                     <select name="pendidikan" class="form-input" required>
-                        <option value="">--Pilih Pendidikan--</option>
+                        <option value="">Pilih Pendidikan</option>
                         <option value="SD" {{ old('pendidikan') == 'SD' ? 'selected' : '' }}>SD / Sederajat</option>
                         <option value="SMP" {{ old('pendidikan') == 'SMP' ? 'selected' : '' }}>SMP / Sederajat</option>
                         <option value="SMA" {{ old('pendidikan') == 'SMA' ? 'selected' : '' }}>SMA / Sederajat</option>
@@ -196,7 +201,7 @@ select.form-input {
                 <div class="form-group dropdown-container">
                     <label>Golongan Darah</label>
                     <select name="gol_darah" class="form-input" required>
-                    <option value="">--Pilih Gol. Darah--</option>
+                    <option value="">Pilih Gol. Darah</option>
                     <option value="A" {{ old('gol_darah') == 'A' ? 'selected' : '' }}>A</option>
                     <option value="B" {{ old('gol_darah') == 'B' ? 'selected' : '' }}>B</option>
                     <option value="AB" {{ old('gol_darah') == 'AB' ? 'selected' : '' }}>AB</option>
@@ -211,7 +216,7 @@ select.form-input {
 
                 <!-- Pekerjaan Ibu -->
                  <div class="form-group dropdown-container">
-                    <label>--Pekerjaan Ibu--</label>
+                    <label>Pekerjaan Ibu</label>
                     <select id="pekerjaan_select" class="form-input" onchange="togglePekerjaan(this.value)">
                         <option value="">Pilih Pekerjaan</option>
                         <option value="Ibu Rumah Tangga">Ibu Rumah Tangga</option>
@@ -225,9 +230,9 @@ select.form-input {
     </div>
 </div>
 
-                <div class="form-group" style="grid-column: span 2;">
+                <div class="form-group" style="grid-column: 1 / -1;"> 
                     <label>Alamat Domisili</label>
-                    <input type="text" name="alamat" value="{{ old('alamat') }}" class="form-input" placeholder="Nama Jalan, RT/RW, Desa, Kecamatan" required>
+                    <input type="text" name="alamat" value="{{ old('alamat') }}" class="form-input" placeholder="Alamat Lengkap" style="width: 100%;" required>
                 </div>
 
                 <div class="section-divider">Data Suami</div>
