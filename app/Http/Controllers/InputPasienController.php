@@ -87,27 +87,28 @@ class InputPasienController extends Controller
         $no_pasien = '0' . str_pad($totalPasien, 4, '0', STR_PAD_LEFT);
     }
 
-    Pasien::updateOrCreate(
-        ['nik' => $request->nik],
-        [
-            'no_pasien'      => $no_pasien,
-            'nama_pasien'    => $request->nama_pasien,
-            'tempat_lahir'   => $request->tempat_lahir,
-            'tanggal_lahir'  => $request->tanggal_lahir,
-            'umur'           => $umur,
-            'golongan_darah' => $request->golongan_darah,
-            'alamat'         => $request->alamat,
-            'no_hp'          => $request->no_hp,
-            'pendidikan'     => $request->pendidikan,
-            'agama'          => $request->agama,
-            'pekerjaan'      => $pekerjaan,
-            'nama_suami'     => $request->nama_suami,
-        ]
-    );
+    $pasien = Pasien::updateOrCreate(
+    ['nik' => $request->nik],
+    [
+        'no_pasien'      => $no_pasien,
+        'nama_pasien'    => $request->nama_pasien,
+        'tempat_lahir'   => $request->tempat_lahir,
+        'tanggal_lahir'  => $request->tanggal_lahir,
+        'umur'           => $umur,
+        'golongan_darah' => $request->golongan_darah,
+        'alamat'         => $request->alamat,
+        'no_hp'          => $request->no_hp,
+        'pendidikan'     => $request->pendidikan,
+        'agama'          => $request->agama,
+        'pekerjaan'      => $pekerjaan,
+        'nama_suami'     => $request->nama_suami,
+    ]
+);
 
-    // Sekarang $request->pendaftaran_id dipastikan sudah ada isinya dan tidak akan kosong lagi
-    return redirect()->route('bidan.inputDaftarPasien', ['id' => $request->pendaftaran_id])
-        ->with('sukses', 'Data Pemeriksaan Ibu Hamil Berhasil Disimpan!');
+// Diperbaiki: Kirim pendaftaran_id DAN pasien_id yang asli agar dibaca oleh Blade & JavaScript
+return redirect()->route('bidan.inputDaftarPasien', ['id' => $request->pendaftaran_id])
+    ->with('sukses', 'Data Pemeriksaan Ibu Hamil Berhasil Disimpan!')
+    ->with('saved_pasien_id', $pasien->id); // ← Tambahkan flash session ini
 }
 
     public function showPasien($id)
