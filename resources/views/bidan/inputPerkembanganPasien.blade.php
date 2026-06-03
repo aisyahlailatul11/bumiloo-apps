@@ -458,11 +458,11 @@
     <circle cx="120" cy="120" r="108" fill="none" stroke="#f875aa" stroke-width="2.5"/>
     <circle cx="120" cy="120" r="82"  fill="none" stroke="#f875aa" stroke-width="1.2"/>
     <circle cx="120" cy="120" r="81" fill="white"/>
-    <text font-size="11.5" font-weight="700" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="3.5">
+    <text font-size="13" font-weight="1000" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="4.5">
         <textPath href="#arcAtas" startOffset="4%">TTD DIGITAL BIDAN SAH</textPath>
     </text>
-    <text font-size="11" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="2.5">
-        <textPath href="#arcBawah" startOffset="15%">• PUSKESMAS BUMILOO •</textPath>
+    <text font-size="13" fill="#f875aa" font-family="Arial, sans-serif" letter-spacing="2.5">
+        <textPath href="#arcBawah" startOffset="10%">• PRAKTIK BIDAN MANDIRI •</textPath>
     </text>
     <circle cx="120" cy="103" r="20" fill="#f875aa"/>
     <polyline points="110,103 118,112 132,93" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>

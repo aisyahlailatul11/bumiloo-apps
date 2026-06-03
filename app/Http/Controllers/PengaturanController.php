@@ -75,21 +75,26 @@ class PengaturanController extends Controller
 
     // Ganti email
     public function updateEmail(Request $request)
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user();
 
-        $request->validate([
-            'email' => 'required|email|unique:users,email,' . $user->id,
-        ], [
-            'email.required' => 'Email wajib diisi.',
-            'email.email'    => 'Format email tidak valid.',
-            'email.unique'   => 'Email sudah digunakan.',
-        ]);
-
-        $user->update(['email' => $request->email]);
-
-        return back()->with('success', 'Email berhasil diubah!');
+    // Bidan tidak boleh ganti email
+    if ($user->role === 'Bidan') {
+        return back()->with('error', 'Bidan tidak diizinkan mengubah email.');
     }
+
+    $request->validate([
+        'email' => 'required|email|unique:users,email,' . $user->id,
+    ], [
+        'email.required' => 'Email wajib diisi.',
+        'email.email'    => 'Format email tidak valid.',
+        'email.unique'   => 'Email sudah digunakan.',
+    ]);
+
+    $user->update(['email' => $request->email]);
+
+    return back()->with('success_email', 'Email berhasil diubah!');
+}
 
     // Hapus akun
     public function destroy(Request $request)

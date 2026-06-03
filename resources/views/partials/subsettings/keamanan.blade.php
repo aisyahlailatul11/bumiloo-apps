@@ -38,12 +38,15 @@
                     <div class="fw-semibold">{{ auth()->user()->email }}</div>
                 </div>
             </div>
-            <button class="btn btn-sm" style="color:#f875aa;" onclick="toggleEmail()">
-                <i class="fas fa-pen me-1"></i> Ubah
-            </button>
+            @if($role !== 'Bidan')
+    <button class="btn btn-sm" style="color:#f875aa;" onclick="toggleEmail()">
+        <i class="fas fa-pen me-1"></i> Ubah
+    </button>
+@endif
         </div>
 
         {{-- Form Ganti Email --}}
+        @if($role !== 'Bidan')
         <div id="formEmail" class="d-none mt-2 card border-0 shadow-sm p-4 mb-3">
             @if(session('success_email'))
                 <div class="alert alert-success small">{{ session('success_email') }}</div>
@@ -64,6 +67,7 @@
                 </div>
             </form>
         </div>
+        @endif
     </div>
 
     {{-- GANTI PASSWORD --}}

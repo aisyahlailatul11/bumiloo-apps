@@ -22,12 +22,11 @@
 
     html, body {
         margin: 0; padding: 0; min-height: 100vh;
-        background: linear-gradient(135deg, #FFB6C1 0%, #FFD1DC 40%, #FFF0F5 100%) !important;
+        background: linear-gradient(135deg, #fcc7ce 0%, #FFD1DC 40%, #FFF0F5 100%) !important;
         display: flex; align-items: center; justify-content: center;
         overflow-x: hidden;
     }
 
-    /* Floating Blobs */
     .floating-blobs {
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
         z-index: 1; pointer-events: none;
@@ -51,8 +50,10 @@
         background: rgba(255, 255, 255, 0.9);
         backdrop-filter: blur(20px);
         border-radius: 30px;
-        width: 95%; max-width: 900px;
-        margin: 40px auto; padding: 50px;
+        width: 100%; 
+        width: 1100px; 
+        margin: 30px auto; 
+        padding: 40px; 
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); 
         position: relative; z-index: 10;
     }
@@ -63,23 +64,29 @@
 
     .form-grid-3 {
         display: grid;
-        grid-template-columns: repeat(1, 1fr);
-        gap: 20px;
+        grid-template-columns: repeat(3, 1fr); 
+        gap: 20px 15px; 
+        margin-bottom: 10px;
     }
+
+.full-width {
+    grid-column: span 3;
+}
     @media (min-width: 768px) { .form-grid-3 { grid-template-columns: repeat(3, 1fr); } }
 
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; margin-bottom: 2px; }
     
-    /* Pastikan ini ada di style kamu */
 .form-input { 
-    width: 100%; padding: 12px 16px; 
-    border: 1px solid #E2E8F0; 
-    border-radius: 12px; font-size: 13px;
-    background: #FDFDFD;
+    width: 100%; 
+    padding: 14px 16px; 
+    border: 2px solid #CBD5E1; 
+    border-radius: 12px; 
+    font-size: 14px; 
+    background: #FFFFFF;
+    transition: all 0.2s ease;
 }
 
-/* Hanya tambahkan panah jika dia adalah select */
 select.form-input {
     appearance: none;
     background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
@@ -88,16 +95,19 @@ select.form-input {
     background-size: 16px;
     padding-right: 40px;
 }
-.form-input:focus { border-color: var(--bml-pink); outline: none; }
+.form-input:focus { 
+    border-color: var(--bml-pink); 
+    outline: none; 
+    box-shadow: 0 0 0 3px rgba(248, 117, 170, 0.2); /* Bayangan halus saat fokus */
+}
 .readonly-medis { background-color: #F8FAFC !important; color: #64748B !important; border-style: dashed; }
 
     .kalkulator-medis-box {
-        grid-column: 1 / -1;
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-        margin-top: 10px;
-    }
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Ubah jadi 3 kolom agar sebaris dengan form lain */
+    gap: 15px;
+}
 
     .hidden-pekerjaan { display: none; margin-top: 10px; }
 
@@ -111,12 +121,15 @@ select.form-input {
     .btn-submit-premium:hover { opacity: 0.9; }
 
     .section-divider {
-        grid-column: 1 / -1;
-        font-size: 11px; font-weight: 800; color: var(--text-main);
-        text-transform: uppercase;
-        border-left: 3px solid var(--bml-pink);
-        padding-left: 10px; margin: 15px 0;
-    }
+    grid-column: 1 / -1;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-main);
+    text-transform: uppercase;
+    border-left: 4px solid var(--bml-pink); /* Border kiri dipertebal */
+    padding-left: 12px; 
+    margin: 10px 0;
+}
     .form-input { padding-right: 10px; width: 100%; box-sizing: border-box; }
 </style>
 </head>
