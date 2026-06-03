@@ -13,6 +13,18 @@
     <h3 class="fw-bold mb-4 text-dark">Input Rekam Medis Pasien</h3>
     @include('partials.alerts')
 
+    <div class="d-flex justify-content-start gap-2 mb-4">
+        @if(request()->query('pasien_id'))
+            <a href="{{ route('bidan.inputDaftarPasien', ['id' => request()->query('pasien_id')]) }}" class="btn btn-secondary rounded-3">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
+        @else
+            <a href="{{ route('bidan.daftarPasien') }}" class="btn btn-secondary rounded-3">
+                <i class="fas fa-arrow-left me-1"></i> Kembali
+            </a>
+        @endif
+    </div>
+    {{-- Tag form Anda di bawahnya otomatis akan berjarak rapi --}}
     <form action="{{ route('bidan.inputPerkembangan') }}" method="POST" id="formPerkembangan" 
           onsubmit="return validasiFormPerkembangan(event)" class="card shadow rounded-4 p-4 mb-4 border-0">
         @csrf
