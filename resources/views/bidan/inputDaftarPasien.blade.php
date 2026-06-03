@@ -42,7 +42,7 @@
         @csrf
         
         <input type="hidden" name="pendaftaran_id" value="{{ $pendaftaran_id }}">
-        <input type="hidden" id="id_pasien" name="id_pasien" value="">
+        <input type="hidden" id="id_pasien" name="id_pasien" value="{{ session('saved_pasien_id') ?? ($pasien->id ?? '') }}">
 
         <input type="hidden" name="golongan_darah" value="{{ old('golongan_darah', $pasien->golongan_darah ?? '') }}">
         <input type="hidden" name="pendidikan" value="{{ old('pendidikan', $pasien->pendidikan ?? '') }}">
@@ -330,19 +330,17 @@ function isiForm(id) {
 
 function keHalamanSelanjutnya() {
     let pasienId = document.getElementById('id_pasien').value;
+    
+    // Jika input kosong, coba cek apakah variabel dari backend menyediakan ID pasien
     if (!pasienId) {
-        const urlPath = window.location.pathname;
-        const segments = urlPath.split('/');
-        const idFromUrl = segments[segments.length - 1];
-        if (idFromUrl && !isNaN(idFromUrl)) {
-            pasienId = idFromUrl;
-        }
+        pasienId = "{{ $pasien->id ?? '' }}"; 
     }
     
-    if (!pasienId) {
-        alert('Pilih pasien terlebih dahulu dari tabel di bawah!');
+    if (!pasienId || pasienId === '') {
+        alert('Data pasien belum disimpan atau belum dipilih dari tabel!');
         return;
     }
+    
     window.location.href = "{{ route('bidan.inputPerkembanganPasien') }}?pasien_id=" + pasienId;
 }
 
